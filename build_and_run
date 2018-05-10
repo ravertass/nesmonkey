@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+
+NESASM3 main.asm && fceux main.nes
