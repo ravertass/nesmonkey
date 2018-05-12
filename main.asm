@@ -42,6 +42,12 @@ monkeyDir   .rs 1  ; Current monkey direction.
 
 controller1 .rs 1  ; Last input from controller 1.
 
+
+; Variables set before updating sprites
+currentEntityY    .rs 2
+currentEntityX    .rs 2
+currentMetaSprite .rs 2
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;; Setup ;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -102,45 +108,74 @@ UpdateGraphics:
     RTS
 
 UpdateMonkeySprites:
-    LDY #$00
+    LDY monkeyY
+    STY currentEntityY
+    LDY monkeyX
+    STY currentEntityX
+
     LDA monkeyDir
     CMP #DIR_DOWN
-    BEQ UpdateMonkeySpritesDown
-UpdateMonkeySpritesDone:
-    RTS
+    JSR SetMonkeySpritesDown
 
-UpdateMonkeySpritesDown:
+    JSR UpdateCurrentEntitySprites
+    RTS
+SetMonkeySpritesDown:
     LDA monkeyState
     CMP #IDLE
-    BEQ UpdateMonkeySpritesDownIdle
-UpdateMonkeySpritesDownIdle:
-    LDA spr_monkey_down_idle, y
+    JSR SetMonkeySpritesDownIdle
+    RTS
+SetMonkeySpritesDownIdle:
+    LDA #LOW(sprMonkeyDownIdle)
+    STA currentMetaSprite
+    LDA #HIGH(sprMonkeyDownIdle)
+    LDY #$01
+    STA currentMetaSprite, y
+    RTS
+
+UpdateCurrentEntitySprites:
+    LDY #$00
+UpdateCurrentEntitySpritesLoop:
+    ; Y coordinate
+    LDA [currentMetaSprite], y
     CMP #$FF ; No more sprites!
-    BEQ UpdateMonkeySpritesDone
+    BEQ UpdateCurrentEntitySpritesDone
     CLC
-    ADC monkeyY
+    ADC currentEntityY
     STA $0200, x
     INX
     INY
 
-    LDA spr_monkey_down_idle, y
+    ; Tile
+    LDA [currentMetaSprite], y
     STA $0200, x
     INX
     INY
 
-    LDA spr_monkey_down_idle, y
+    ; Attribute
+    LDA [currentMetaSprite], y
     STA $0200, x
     INX
     INY
 
-    LDA spr_monkey_down_idle, y
+    ; X coordinate
+    LDA [currentMetaSprite], y
     CLC
-    ADC monkeyX
+    ADC currentEntityX
     STA $0200, x
     INX
     INY
 
-    JMP UpdateMonkeySpritesDownIdle
+    JMP UpdateCurrentEntitySpritesLoop
+
+UpdateCurrentEntitySpritesDone:
+    RTS
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;; Input logic ;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+GetInput:
+    RTI
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;; VBlank ;;;;;;;;;;
@@ -148,6 +183,7 @@ UpdateMonkeySpritesDownIdle:
 
 NMI:
     JSR UpdateGraphics
+    JSR GetInput
 
     RTI
 
@@ -164,7 +200,7 @@ palette:
     ; Sprite palette
     .db $22,$17,$37,$0F,  $22,$00,$00,$00,  $00,$00,$00,$00,  $00,$00,$00,$00
 
-spr_monkey_down_idle:
+sprMonkeyDownIdle:
     ; Format: $y-offs, $tile-no, %attr, $x-offs
     ; Upper sprite
     .db $00, $14, %00000000, $00
@@ -173,7 +209,7 @@ spr_monkey_down_idle:
     ; End of sprites
     .db $FF
 
-spr_monkey_down_walking:
+sprMonkeyDownWalking:
     ; Number of sprites in meta-sprite
     .db $02
     ; Number of sprites in animation
