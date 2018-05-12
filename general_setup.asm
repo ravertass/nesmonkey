@@ -1,4 +1,4 @@
-;;;;;;;; Setup ;;;;;;;;
+;;;;;;;; General setup ;;;;;;;;
 ;; Code to be performed after a reset.
 ;; Performs general stuff that you would typically want
 ;; done in any NES game.
