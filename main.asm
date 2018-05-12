@@ -23,8 +23,8 @@ DIR_DOWN  = $01
 DIR_LEFT  = $02
 DIR_RIGHT = $03
 
-IDLE    = $00
-WALKING = $01
+IDLE   = $00
+MOVING = $01
 
 ; Graphics constants
 
@@ -35,18 +35,24 @@ WALKING = $01
 
   .rsset $0000
 
-monkeyY     .rs 1  ; Current Y coordinate of monkey.
-monkeyX     .rs 1  ; Current X coordinate of monkey.
-monkeyState .rs 1  ; Current monkey state (idle/walking).
-monkeyDir   .rs 1  ; Current monkey direction.
+monkeyY              .rs 1  ; Current Y coordinate of monkey.
+monkeyX              .rs 1  ; Current X coordinate of monkey.
+monkeyState          .rs 1  ; Current monkey state (idle/walking).
+monkeyDir            .rs 1  ; Current monkey direction.
+monkeyMoveCounter    .rs 1  ; Counter used to update animation frame counter.
+monkeyAnimationFrame .rs 1  ; Current frame in monkey's animation.
 
 controller1 .rs 1  ; Last input from controller 1.
 
 
 ; Variables set before updating sprites
-currentEntityY    .rs 2
-currentEntityX    .rs 2
-currentMetaSprite .rs 2
+currentEntityY           .rs 1
+currentEntityX           .rs 1
+currentMetaSpritePointer .rs 2
+currentAnimationFrame    .rs 1
+
+; Counter used during animation (due to lack of registers...)
+frameCounter .rs 1
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;; Setup ;;;;;;;;;;
@@ -84,6 +90,10 @@ LoadPalettesLoop:
     STA monkeyDir
     LDA #IDLE
     STA monkeyState
+    LDA #$00
+    STA monkeyAnimationFrame
+    LDA #$00
+    STA monkeyMoveCounter
 
 Forever:
     JMP Forever
@@ -108,10 +118,13 @@ UpdateGraphics:
     RTS
 
 UpdateMonkeySprites:
-    LDY monkeyY
-    STY currentEntityY
-    LDY monkeyX
-    STY currentEntityX
+    LDA monkeyY
+    STA currentEntityY
+    LDA monkeyX
+    STA currentEntityX
+
+    LDA monkeyAnimationFrame
+    STA currentAnimationFrame
 
     LDA monkeyDir
     CMP #DIR_UP
@@ -130,68 +143,141 @@ UpdateMonkeySprites:
     BEQ SetMonkeySpritesRight
 
 MonkeySpritesSet:
-    JSR UpdateCurrentEntitySprites
+    JSR UpdateEntitySprites
     RTS
+
 
 SetMonkeySpritesUp:
     LDA monkeyState
     CMP #IDLE
-    JSR SetMonkeySpritesUpIdle
+    BEQ SetMonkeySpritesUpIdle
+    ; Else: monkeyState == #MOVING
+SetMonkeySpritesUpMoving:
+    LDA #LOW(sprMonkeyUpMoving)
+    STA currentMetaSpritePointer
+
+    LDA #HIGH(sprMonkeyUpMoving)
+    LDY #$01
+    STA currentMetaSpritePointer, y
+
     JMP MonkeySpritesSet
 SetMonkeySpritesUpIdle:
     LDA #LOW(sprMonkeyUpIdle)
-    STA currentMetaSprite
+    STA currentMetaSpritePointer
+
     LDA #HIGH(sprMonkeyUpIdle)
     LDY #$01
-    STA currentMetaSprite, y
-    RTS
+    STA currentMetaSpritePointer, y
+
+    JMP MonkeySpritesSet
+
 
 SetMonkeySpritesDown:
     LDA monkeyState
     CMP #IDLE
-    JSR SetMonkeySpritesDownIdle
+    BEQ SetMonkeySpritesDownIdle
+    ; Else: monkeyState == #MOVING
+SetMonkeySpritesDownMoving:
+    LDA #LOW(sprMonkeyDownMoving)
+    STA currentMetaSpritePointer
+
+    LDA #HIGH(sprMonkeyDownMoving)
+    LDY #$01
+    STA currentMetaSpritePointer, y
+
     JMP MonkeySpritesSet
 SetMonkeySpritesDownIdle:
     LDA #LOW(sprMonkeyDownIdle)
-    STA currentMetaSprite
+    STA currentMetaSpritePointer
+
     LDA #HIGH(sprMonkeyDownIdle)
     LDY #$01
-    STA currentMetaSprite, y
-    RTS
+    STA currentMetaSpritePointer, y
+
+    JMP MonkeySpritesSet
+
 
 SetMonkeySpritesLeft:
     LDA monkeyState
     CMP #IDLE
-    JSR SetMonkeySpritesLeftIdle
+    BEQ SetMonkeySpritesLeftIdle
+    ; Else: monkeyState == #MOVING
+SetMonkeySpritesLeftMoving:
+    LDA #LOW(sprMonkeyLeftMoving)
+    STA currentMetaSpritePointer
+
+    LDA #HIGH(sprMonkeyLeftMoving)
+    LDY #$01
+    STA currentMetaSpritePointer, y
+
     JMP MonkeySpritesSet
 SetMonkeySpritesLeftIdle:
     LDA #LOW(sprMonkeyLeftIdle)
-    STA currentMetaSprite
+    STA currentMetaSpritePointer
+
     LDA #HIGH(sprMonkeyLeftIdle)
     LDY #$01
-    STA currentMetaSprite, y
-    RTS
+    STA currentMetaSpritePointer, y
+
+    JMP MonkeySpritesSet
 
 SetMonkeySpritesRight:
     LDA monkeyState
     CMP #IDLE
-    JSR SetMonkeySpritesRightIdle
+    BEQ SetMonkeySpritesRightIdle
+    ; Else: monkeyState == #MOVING
+SetMonkeySpritesRightMoving:
+    LDA #LOW(sprMonkeyRightMoving)
+    STA currentMetaSpritePointer
+
+    LDA #HIGH(sprMonkeyRightMoving)
+    LDY #$01
+    STA currentMetaSpritePointer, y
+
     JMP MonkeySpritesSet
 SetMonkeySpritesRightIdle:
     LDA #LOW(sprMonkeyRightIdle)
-    STA currentMetaSprite
+    STA currentMetaSpritePointer
+
     LDA #HIGH(sprMonkeyRightIdle)
     LDY #$01
-    STA currentMetaSprite, y
-    RTS
+    STA currentMetaSpritePointer, y
 
-UpdateCurrentEntitySprites:
+    JMP MonkeySpritesSet
+
+
+UpdateEntitySprites:
     LDY #$00
-UpdateCurrentEntitySpritesLoop:
+
+    ; if currentAnimationFrame == 0
+    ; then we will NOT have to loop through so we draw the next frame
+    LDA currentAnimationFrame
+    BEQ UpdateEntitySpritesFrameFound
+
+UpdateEntitySpritesFindFrame:
+    LDA currentAnimationFrame
+    STA frameCounter
+UpdateEntitySpritesFindFrameLoop:
+    LDA [currentMetaSpritePointer], y
+    CMP #$FE
+    BEQ UpdateEntitySpritesFrameEnded
+    INY
+    JMP UpdateEntitySpritesFindFrameLoop
+UpdateEntitySpritesFrameEnded:
+    INY
+    LDA frameCounter
+    SEC
+    SBC #$01
+    BEQ UpdateEntitySpritesFrameFound
+    JMP UpdateEntitySpritesFindFrameLoop
+
+UpdateEntitySpritesFrameFound:
+UpdateEntitySpritesLoop:
     ; Y coordinate
-    LDA [currentMetaSprite], y
-    CMP #$FF ; No more sprites!
-    BEQ UpdateCurrentEntitySpritesDone
+    LDA [currentMetaSpritePointer], y
+    AND #$FE
+    CMP #$FE ; No more sprites of frame!
+    BEQ UpdateEntitySpritesDone
     CLC
     ADC currentEntityY
     STA $0200, x
@@ -199,28 +285,28 @@ UpdateCurrentEntitySpritesLoop:
     INY
 
     ; Tile
-    LDA [currentMetaSprite], y
+    LDA [currentMetaSpritePointer], y
     STA $0200, x
     INX
     INY
 
     ; Attribute
-    LDA [currentMetaSprite], y
+    LDA [currentMetaSpritePointer], y
     STA $0200, x
     INX
     INY
 
     ; X coordinate
-    LDA [currentMetaSprite], y
+    LDA [currentMetaSpritePointer], y
     CLC
     ADC currentEntityX
     STA $0200, x
     INX
     INY
 
-    JMP UpdateCurrentEntitySpritesLoop
+    JMP UpdateEntitySpritesLoop
 
-UpdateCurrentEntitySpritesDone:
+UpdateEntitySpritesDone:
     RTS
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -255,6 +341,7 @@ BUTTON_UP     = %00001000
 BUTTON_DOWN   = %00000100
 BUTTON_LEFT   = %00000010
 BUTTON_RIGHT  = %00000001
+BUTTON_DIRS   = %00001111
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;; Game logic ;;;;;;;;
@@ -266,30 +353,91 @@ UpdateGame:
     RTS
 
 UpdateMonkey:
+; Monkey is standing still: this will be written over if he is actually going somewhere
+
+; Is monkey moving?
+    LDA controller1
+    AND #BUTTON_DIRS
+    BEQ UpdateMonkeyNotMoving
+    JSR UpdateMonkeyMoving
+    JMP UpdateMonkeyMovingDone
+UpdateMonkeyNotMoving:
+    LDA #IDLE
+    STA monkeyState
+    LDA #$00
+    STA monkeyMoveCounter
+    STA monkeyAnimationFrame
+UpdateMonkeyMovingDone:
+
+; Is monkey going up?
     LDA controller1
     AND #BUTTON_UP
     BEQ UpdateMonkeyUpDone
     JSR UpdateMonkeyGoUp
 UpdateMonkeyUpDone:
 
+; Is monkey going down?
     LDA controller1
     AND #BUTTON_DOWN
     BEQ UpdateMonkeyDownDone
     JSR UpdateMonkeyGoDown
 UpdateMonkeyDownDone:
 
+; Is monkey going left?
     LDA controller1
     AND #BUTTON_LEFT
     BEQ UpdateMonkeyLeftDone
     JSR UpdateMonkeyGoLeft
 UpdateMonkeyLeftDone:
 
+; Is monkey going right?
     LDA controller1
     AND #BUTTON_RIGHT
     BEQ UpdateMonkeyRightDone
     JSR UpdateMonkeyGoRight
 UpdateMonkeyRightDone:
 
+    RTS
+
+;TODO These should not be hard-coded here...
+MAX_MONKEY_FRAMES = $02
+MOVE_COUNTS_PER_ANIMATION_FRAME = $08
+
+UpdateMonkeyMoving:
+    LDA #MOVING
+    STA monkeyState
+
+    JSR UpdateMonkeyMoveCounter
+
+    RTS
+
+UpdateMonkeyMoveCounter:
+    LDA monkeyMoveCounter
+    CLC
+    ADC #$01
+    CMP #MOVE_COUNTS_PER_ANIMATION_FRAME
+    BEQ UpdateMonkeyMoveCounterReset
+    STA monkeyMoveCounter
+    JMP UpdateMonkeyMoveCounterDone
+UpdateMonkeyMoveCounterReset:
+    LDA #$00
+    STA monkeyMoveCounter
+    JSR UpdateMonkeyAnimationFrame
+UpdateMonkeyMoveCounterDone:
+    RTS
+
+UpdateMonkeyAnimationFrame:
+    LDA monkeyAnimationFrame
+    CLC
+    ADC #$01
+    CMP #MAX_MONKEY_FRAMES
+    BEQ UpdateMonkeyAnimationFrameReset
+    STA monkeyAnimationFrame
+    JMP UpdateMonkeyAnimationFrameDone
+UpdateMonkeyAnimationFrameReset:
+    LDA #$00
+    STA monkeyAnimationFrame
+UpdateMonkeyAnimationFrameDone:
     RTS
 
 MONKEY_SPEED = $01
@@ -407,16 +555,65 @@ sprMonkeyRightIdle:
     ; End of sprites
     .db $FF
 
-sprMonkeyDownWalking:
-    ; Number of sprites in meta-sprite
-    .db $02
-    ; Number of sprites in animation
-    .db $02
-    ; Format: $x-offs, $y-offs, [$tile-no, %attr]
+sprMonkeyUpMoving:
+    ; Format: $y-offs, $tile-no, %attr, $x-offs
     ; Upper sprite
-    .db $00, $00,    $15, %00000000,  $15, %01000000
+    .db $00, $17, %00000000, $00
     ; Lower sprite
-    .db $00, $08,    $25, %00000000,  $25, %01000000
+    .db $08, $27, %00000000, $00
+    ; End of animation frame
+    .db $FE
+    ; Upper sprite
+    .db $00, $17, %01000000, $00
+    ; Lower sprite
+    .db $08, $27, %01000000, $00
+    ; End of sprites
+    .db $FF
+
+sprMonkeyDownMoving:
+    ; Format: $y-offs, $tile-no, %attr, $x-offs
+    ; Upper sprite
+    .db $00, $15, %00000000, $00
+    ; Lower sprite
+    .db $08, $25, %00000000, $00
+    ; End of animation frame
+    .db $FE
+    ; Upper sprite
+    .db $00, $15, %01000000, $00
+    ; Lower sprite
+    .db $08, $25, %01000000, $00
+    ; End of sprites
+    .db $FF
+
+sprMonkeyLeftMoving:
+    ; Format: $y-offs, $tile-no, %attr, $x-offs
+    ; Upper sprite
+    .db $00, $19, %01000000, $00
+    ; Lower sprite
+    .db $08, $29, %01000000, $00
+    ; End of animation frame
+    .db $FE
+    ; Upper sprite
+    .db $00, $1A, %01000000, $00
+    ; Lower sprite
+    .db $08, $2A, %01000000, $00
+    ; End of sprites
+    .db $FF
+
+sprMonkeyRightMoving:
+    ; Format: $y-offs, $tile-no, %attr, $x-offs
+    ; Upper sprite
+    .db $00, $19, %00000000, $00
+    ; Lower sprite
+    .db $08, $29, %00000000, $00
+    ; End of animation frame
+    .db $FE
+    ; Upper sprite
+    .db $00, $1A, %00000000, $00
+    ; Lower sprite
+    .db $08, $2A, %00000000, $00
+    ; End of sprites
+    .db $FF
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Interrupt vectors ;;;;
