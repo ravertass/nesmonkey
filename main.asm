@@ -369,13 +369,6 @@ UpdateMonkeyNotMoving:
     STA monkeyAnimationFrame
 UpdateMonkeyMovingDone:
 
-; Is monkey going up?
-    LDA controller1
-    AND #BUTTON_UP
-    BEQ UpdateMonkeyUpDone
-    JSR UpdateMonkeyGoUp
-UpdateMonkeyUpDone:
-
 ; Is monkey going down?
     LDA controller1
     AND #BUTTON_DOWN
@@ -396,6 +389,14 @@ UpdateMonkeyLeftDone:
     BEQ UpdateMonkeyRightDone
     JSR UpdateMonkeyGoRight
 UpdateMonkeyRightDone:
+
+; Is monkey going up?
+; Up is put last, to make the up animation prioritized.
+    LDA controller1
+    AND #BUTTON_UP
+    BEQ UpdateMonkeyUpDone
+    JSR UpdateMonkeyGoUp
+UpdateMonkeyUpDone:
 
     RTS
 
@@ -442,17 +443,6 @@ UpdateMonkeyAnimationFrameDone:
 
 MONKEY_SPEED = $01
 
-UpdateMonkeyGoUp:
-    LDA monkeyY
-    SEC
-    SBC #MONKEY_SPEED
-    STA monkeyY
-
-    LDA #DIR_UP
-    STA monkeyDir
-
-    RTS
-
 UpdateMonkeyGoDown:
     LDA monkeyY
     CLC
@@ -482,6 +472,17 @@ UpdateMonkeyGoRight:
     STA monkeyX
 
     LDA #DIR_RIGHT
+    STA monkeyDir
+
+    RTS
+
+UpdateMonkeyGoUp:
+    LDA monkeyY
+    SEC
+    SBC #MONKEY_SPEED
+    STA monkeyY
+
+    LDA #DIR_UP
     STA monkeyDir
 
     RTS
