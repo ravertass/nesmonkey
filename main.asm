@@ -114,20 +114,73 @@ UpdateMonkeySprites:
     STY currentEntityX
 
     LDA monkeyDir
-    CMP #DIR_DOWN
-    JSR SetMonkeySpritesDown
+    CMP #DIR_UP
+    BEQ SetMonkeySpritesUp
 
+    LDA monkeyDir
+    CMP #DIR_DOWN
+    BEQ SetMonkeySpritesDown
+
+    LDA monkeyDir
+    CMP #DIR_LEFT
+    BEQ SetMonkeySpritesLeft
+
+    LDA monkeyDir
+    CMP #DIR_RIGHT
+    BEQ SetMonkeySpritesRight
+
+MonkeySpritesSet:
     JSR UpdateCurrentEntitySprites
     RTS
+
+SetMonkeySpritesUp:
+    LDA monkeyState
+    CMP #IDLE
+    JSR SetMonkeySpritesUpIdle
+    JMP MonkeySpritesSet
+SetMonkeySpritesUpIdle:
+    LDA #LOW(sprMonkeyUpIdle)
+    STA currentMetaSprite
+    LDA #HIGH(sprMonkeyUpIdle)
+    LDY #$01
+    STA currentMetaSprite, y
+    RTS
+
 SetMonkeySpritesDown:
     LDA monkeyState
     CMP #IDLE
     JSR SetMonkeySpritesDownIdle
-    RTS
+    JMP MonkeySpritesSet
 SetMonkeySpritesDownIdle:
     LDA #LOW(sprMonkeyDownIdle)
     STA currentMetaSprite
     LDA #HIGH(sprMonkeyDownIdle)
+    LDY #$01
+    STA currentMetaSprite, y
+    RTS
+
+SetMonkeySpritesLeft:
+    LDA monkeyState
+    CMP #IDLE
+    JSR SetMonkeySpritesLeftIdle
+    JMP MonkeySpritesSet
+SetMonkeySpritesLeftIdle:
+    LDA #LOW(sprMonkeyLeftIdle)
+    STA currentMetaSprite
+    LDA #HIGH(sprMonkeyLeftIdle)
+    LDY #$01
+    STA currentMetaSprite, y
+    RTS
+
+SetMonkeySpritesRight:
+    LDA monkeyState
+    CMP #IDLE
+    JSR SetMonkeySpritesRightIdle
+    JMP MonkeySpritesSet
+SetMonkeySpritesRightIdle:
+    LDA #LOW(sprMonkeyRightIdle)
+    STA currentMetaSprite
+    LDA #HIGH(sprMonkeyRightIdle)
     LDY #$01
     STA currentMetaSprite, y
     RTS
@@ -248,7 +301,7 @@ UpdateMonkeyGoUp:
     STA monkeyY
 
     LDA #DIR_UP
-    STA monkeyState
+    STA monkeyDir
 
     RTS
 
@@ -259,7 +312,7 @@ UpdateMonkeyGoDown:
     STA monkeyY
 
     LDA #DIR_DOWN
-    STA monkeyState
+    STA monkeyDir
 
     RTS
 
@@ -270,7 +323,7 @@ UpdateMonkeyGoLeft:
     STA monkeyX
 
     LDA #DIR_LEFT
-    STA monkeyState
+    STA monkeyDir
 
     RTS
 
@@ -281,7 +334,7 @@ UpdateMonkeyGoRight:
     STA monkeyX
 
     LDA #DIR_RIGHT
-    STA monkeyState
+    STA monkeyDir
 
     RTS
 
@@ -309,12 +362,48 @@ palette:
     ; Sprite palette
     .db $22,$17,$37,$0F,  $22,$00,$00,$00,  $00,$00,$00,$00,  $00,$00,$00,$00
 
+; Sprite attribute bits:
+; 76543210
+; ||||||||
+; ||||||++- Palette (4 to 7) of sprite
+; |||+++--- Unimplemented
+; ||+------ Priority (0: in front of background; 1: behind background)
+; |+------- Flip sprite horizontally
+; +-------- Flip sprite vertically
+
+sprMonkeyUpIdle:
+    ; Format: $y-offs, $tile-no, %attr, $x-offs
+    ; Upper sprite
+    .db $00, $16, %00000000, $00
+    ; Lower sprite
+    .db $08, $26, %00000000, $00
+    ; End of sprites
+    .db $FF
+
 sprMonkeyDownIdle:
     ; Format: $y-offs, $tile-no, %attr, $x-offs
     ; Upper sprite
     .db $00, $14, %00000000, $00
     ; Lower sprite
     .db $08, $24, %00000000, $00
+    ; End of sprites
+    .db $FF
+
+sprMonkeyLeftIdle:
+    ; Format: $y-offs, $tile-no, %attr, $x-offs
+    ; Upper sprite
+    .db $00, $18, %01000000, $00
+    ; Lower sprite
+    .db $08, $28, %01000000, $00
+    ; End of sprites
+    .db $FF
+
+sprMonkeyRightIdle:
+    ; Format: $y-offs, $tile-no, %attr, $x-offs
+    ; Upper sprite
+    .db $00, $18, %00000000, $00
+    ; Lower sprite
+    .db $08, $28, %00000000, $00
     ; End of sprites
     .db $FF
 
