@@ -176,7 +176,6 @@ UpdateCurrentEntitySpritesDone:
 
 ; At the end of GetInput, controller1 will contain
 ; the button presses from the first controller.
-; Bit order: A- B- Se St Up Do Le Ri
 GetInput:
     ; This tells the controller's to latch the buttons' current status.
     LDA #$01
@@ -194,6 +193,98 @@ GetInputLoop:
 
     RTS
 
+; Bit order: A- B- Se St Up Do Le Ri
+BUTTON_A      = %10000000
+BUTTON_B      = %01000000
+BUTTON_SELECT = %00100000
+BUTTON_START  = %00010000
+BUTTON_UP     = %00001000
+BUTTON_DOWN   = %00000100
+BUTTON_LEFT   = %00000010
+BUTTON_RIGHT  = %00000001
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;; Game logic ;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+UpdateGame:
+    JSR UpdateMonkey
+
+    RTS
+
+UpdateMonkey:
+    LDA controller1
+    AND #BUTTON_UP
+    BEQ UpdateMonkeyUpDone
+    JSR UpdateMonkeyGoUp
+UpdateMonkeyUpDone:
+
+    LDA controller1
+    AND #BUTTON_DOWN
+    BEQ UpdateMonkeyDownDone
+    JSR UpdateMonkeyGoDown
+UpdateMonkeyDownDone:
+
+    LDA controller1
+    AND #BUTTON_LEFT
+    BEQ UpdateMonkeyLeftDone
+    JSR UpdateMonkeyGoLeft
+UpdateMonkeyLeftDone:
+
+    LDA controller1
+    AND #BUTTON_RIGHT
+    BEQ UpdateMonkeyRightDone
+    JSR UpdateMonkeyGoRight
+UpdateMonkeyRightDone:
+
+    RTS
+
+MONKEY_SPEED = $01
+
+UpdateMonkeyGoUp:
+    LDA monkeyY
+    SEC
+    SBC #MONKEY_SPEED
+    STA monkeyY
+
+    LDA #DIR_UP
+    STA monkeyState
+
+    RTS
+
+UpdateMonkeyGoDown:
+    LDA monkeyY
+    CLC
+    ADC #MONKEY_SPEED
+    STA monkeyY
+
+    LDA #DIR_DOWN
+    STA monkeyState
+
+    RTS
+
+UpdateMonkeyGoLeft:
+    LDA monkeyX
+    SEC
+    SBC #MONKEY_SPEED
+    STA monkeyX
+
+    LDA #DIR_LEFT
+    STA monkeyState
+
+    RTS
+
+UpdateMonkeyGoRight:
+    LDA monkeyX
+    CLC
+    ADC #MONKEY_SPEED
+    STA monkeyX
+
+    LDA #DIR_RIGHT
+    STA monkeyState
+
+    RTS
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;; VBlank ;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -201,6 +292,7 @@ GetInputLoop:
 NMI:
     JSR UpdateGraphics
     JSR GetInput
+    JSR UpdateGame
 
     RTI
 
