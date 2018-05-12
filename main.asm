@@ -174,8 +174,25 @@ UpdateCurrentEntitySpritesDone:
 ;;;;;;; Input logic ;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+; At the end of GetInput, controller1 will contain
+; the button presses from the first controller.
+; Bit order: A- B- Se St Up Do Le Ri
 GetInput:
-    RTI
+    ; This tells the controller's to latch the buttons' current status.
+    LDA #$01
+    STA $4016
+    LDA #$00
+    STA $4016
+
+    LDX #$08
+GetInputLoop:
+    LDA $4016
+    LSR A            ; bit0 -> carry
+    ROL controller1  ; controller1 <- carry
+    DEX
+    BNE GetInputLoop
+
+    RTS
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;; VBlank ;;;;;;;;;;
