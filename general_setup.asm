@@ -3,6 +3,7 @@
 ;; Performs general stuff that you would typically want
 ;; done in any NES game.
 
+SetupGeneral:    .macro
     SEI          ; Disable IRQs.
     CLD          ; Disable decimal mode.
     LDX #$40
@@ -35,3 +36,5 @@ clrmem:
 vblankwait2:     ; Second wait for vblank, PPU is ready after this.
     BIT $2002
     BPL vblankwait2
+
+    .endm

@@ -11,6 +11,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
     .include "header.asm"
+    Header
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;; Constants ;;;;;;;;
@@ -30,43 +31,45 @@ MOVING = $01
 ;;;;;; RAM variables ;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-  .rsset $0000
+    .zp
 
-monkeyY              .rs 1  ; Current Y coordinate of monkey.
-monkeyX              .rs 1  ; Current X coordinate of monkey.
-monkeyState          .rs 1  ; Current monkey state (idle/walking).
-monkeyDir            .rs 1  ; Current monkey direction.
-monkeyMoveCounter    .rs 1  ; Counter used to update animation frame counter.
-monkeyAnimationFrame .rs 1  ; Current frame in monkey's animation.
+monkeyY              .ds 1  ; Current Y coordinate of monkey.
+monkeyX              .ds 1  ; Current X coordinate of monkey.
+monkeyState          .ds 1  ; Current monkey state (idle/walking).
+monkeyDir            .ds 1  ; Current monkey direction.
+monkeyMoveCounter    .ds 1  ; Counter used to update animation frame counter.
+monkeyAnimationFrame .ds 1  ; Current frame in monkey's animation.
 
-controller1 .rs 1  ; Last input from controller 1.
-
+controller1 .ds 1  ; Last input from controller 1.
 
 ; Variables set before updating sprites
-currentEntityY           .rs 1
-currentEntityX           .rs 1
-currentMetaSpritePointer .rs 2
-currentAnimationFrame    .rs 1
+currentEntityY           .ds 1
+currentEntityX           .ds 1
+currentMetaSpritePointer .ds 2
+currentAnimationFrame    .ds 1
 
 ; Counter used during animation (due to lack of registers...)
-frameCounter .rs 1
+frameCounter .ds 1
+
+; Pointer used during graphics setup.
+bgPointerLow  .ds 1
+bgPointerHigh .ds 1
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;; Setup ;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+    .code
     .bank 0
     .org $C000
 
-    .include "palette_setup.asm"
+    .include "general_setup.asm"
+    .include "graphics_setup.asm"
     .include "game_setup.asm"
 
 RESET:
-    ; This has to be an include, instead of a subroutine,
-    ; since it does stuff like disabling interrupts, which
-    ; must be done immediately.
-    .include "general_setup.asm"
-    JSR SetupPalette
+    SetupGeneral
+    JSR SetupGraphics
     JSR SetupGame
 
 Forever:
@@ -91,11 +94,16 @@ NMI:
 ; Background and sprites ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+    .data
     .bank 1
     .org $E000
 
     .include "palette.asm"
     .include "sprites.asm"
+
+    .org $EA00    ; kind of arbitrarily chosen (but the lower byte must be $00)
+
+    .include "background.asm"
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Interrupt vectors ;;;;
