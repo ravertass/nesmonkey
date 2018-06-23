@@ -27,26 +27,55 @@ DIR_RIGHT = $03
 IDLE   = $00
 MOVING = $01
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;; Structs ;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; Entity
+
+    .rsset $0
+entityActive          .rs 1
+entityType            .rs 1
+entityX               .rs 1
+entityY               .rs 1
+entityDir             .rs 1
+entityDX              .rs 1
+entityDY              .rs 1
+entityAnimationCount  .rs 1
+entityAnimationMax    .rs 1
+entityAnimationFrame  .rs 1
+entityOverridePalette .rs 1
+entityState           .rs 1
+entityAnimationsTable .rs 2
+entitySize            .rs 0
+
+;; Animations table
+
+    .rsset $0
+animationsUpIdle      .rs 2
+animationsDownIdle    .rs 2
+animationsLeftIdle    .rs 2
+animationsRightIdle   .rs 2
+animationsUpMoving    .rs 2
+animationsDownMoving  .rs 2
+animationsLeftMoving  .rs 2
+animationsRightMoving .rs 2
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;; RAM variables ;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
     .zp
 
-monkeyY              .ds 1  ; Current Y coordinate of monkey.
-monkeyX              .ds 1  ; Current X coordinate of monkey.
-monkeyState          .ds 1  ; Current monkey state (idle/walking).
-monkeyDir            .ds 1  ; Current monkey direction.
-monkeyMoveCounter    .ds 1  ; Counter used to update animation frame counter.
-monkeyAnimationFrame .ds 1  ; Current frame in monkey's animation.
+currentEntity .ds 2
+monkeyEntity  .ds entitySize
 
 controller1 .ds 1  ; Last input from controller 1.
 
 ; Variables set before updating sprites
-currentEntityY           .ds 1
-currentEntityX           .ds 1
 currentMetaSpritePointer .ds 2
-currentAnimationFrame    .ds 1
+currentMetaSpriteOffset  .ds 1
+currentAnimationsTable   .ds 2
 
 ; Counter used during animation (due to lack of registers...)
 frameCounter .ds 1

@@ -10,6 +10,10 @@
 ; |+------- Flip sprite horizontally
 ; +-------- Flip sprite vertically
 
+monkeyAnimationsTable:
+    .dw sprMonkeyUpIdle,   sprMonkeyDownIdle,   sprMonkeyLeftIdle,   sprMonkeyRightIdle
+    .dw sprMonkeyUpMoving, sprMonkeyDownMoving, sprMonkeyLeftMoving, sprMonkeyRightMoving
+
 sprMonkeyUpIdle:
     ; Format: $y-offs, $tile-no, %attr, $x-offs
     ; Upper sprite

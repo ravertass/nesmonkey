@@ -1,8 +1,8 @@
 ;;;;;;;; Graphics logic ;;;;;;;;
 ;; Logic related to drawing graphics goes here.
 
-    .include "graphics_logic_sprites.asm"
-    .include "graphics_logic_monkey.asm"
+    .include "graphics_logic_animations.asm"
+    .include "graphics_logic_entities.asm"
 
 UpdateGraphics:
     ; Start DMA transfer from $0200
