@@ -4,8 +4,6 @@
 ;;TODO:
 ;; - Code not related to the monkey (animation counter/frame handling + actual movement)
 ;;   should be generalized.
-;; - The number of frames in the current animation must be taken from the current animation
-;;   data, not from an arbitrary constant.
 ;; - Just make sure to be very clear with what code is controller-related and what is not.
 ;; - entityDX and entityDY should not be used the way they are now. Instead, they should
 ;;   be set dynamically when the entity actually moves.
@@ -66,9 +64,6 @@ UpdateMonkey:
 
     RTS
 
-;TODO This should not be hard-coded here...
-MAX_MONKEY_FRAMES = $02
-
 .UpdateMonkeyMoving:
     LDA #MOVING
     LDY #entityState
@@ -102,12 +97,15 @@ MAX_MONKEY_FRAMES = $02
     LDA [currentEntity],Y
     CLC
     ADC #$01
-    CMP #MAX_MONKEY_FRAMES ; TODO: This is no good
+    LDY #entityAnimationLength
+    CMP [currentEntity],Y
     BEQ .UpdateMonkeyAnimationFrameReset
+    LDY #entityAnimationFrame
     STA [currentEntity],Y
     JMP .UpdateMonkeyAnimationFrameDone
 .UpdateMonkeyAnimationFrameReset:
     LDA #$00
+    LDY #entityAnimationFrame
     STA [currentEntity],Y
 .UpdateMonkeyAnimationFrameDone:
     RTS

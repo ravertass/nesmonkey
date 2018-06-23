@@ -108,7 +108,12 @@ UpdateMonkeySprites:
 
 ; SUBROUTINE
 ; Input:
+;     currentEntity: The entity we're working with.
+;     currentAnimationsTable: The animations table under use right now.
 ;     Reg Y: Animations table offset (e.g. #animationsRightIdle)
+; Output:
+;     currentMetaSpritePointer: Pointer to the meta sprite in the animations table that we want.
+;     currentEntity.entityAnimationLength: The number of frames in the current animation.
 .SetMetaSpritePointer:
     LDA [currentAnimationsTable],Y
     STA currentMetaSpritePointer
@@ -117,5 +122,28 @@ UpdateMonkeySprites:
     LDA [currentAnimationsTable],Y
     LDY #$01
     STA currentMetaSpritePointer,Y
+
+    JMP .SetCurrentAnimationLength
+
+.SetCurrentAnimationLength:
+    LDA #$01 ; Animation is at least of length 1
+    LDY #entityAnimationLength
+    STA [currentEntity],Y
+    LDY #$FF
+    JMP .SetCurrentAnimationLengthLoop
+.SetCurrentAnimationLengthIncrement:
+    LDY #entityAnimationLength
+    LDA [currentEntity],Y
+    CLC
+    ADC #$01
+    STA [currentEntity],Y
+.SetCurrentAnimationLengthLoop:
+    INY
+    LDA [currentMetaSpritePointer],Y
+    CMP #$FE
+    BEQ .SetCurrentAnimationLengthIncrement ; Another frame found!
+    CMP #$FF
+    BNE .SetCurrentAnimationLengthLoop
+    ; We've looped through the whole animation
 
     RTS

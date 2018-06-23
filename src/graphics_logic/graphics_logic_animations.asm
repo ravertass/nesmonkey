@@ -2,9 +2,6 @@
 ;; General logic for animations and loading sprites into memory goes here.
 
 AnimateEntitySprites:
-    LDA #$AC
-    LDA #$AC
-    LDA #$AC
     LDA #$00
     STA currentMetaSpriteOffset
 
@@ -39,9 +36,6 @@ AnimateEntitySprites:
 
 .UpdateEntitySpritesFrameFound:
 .UpdateEntitySpritesLoop:
-    LDA #$AB
-    LDA #$AB
-    LDA #$AB
     ; Y coordinate
     LDY currentMetaSpriteOffset
     LDA [currentMetaSpritePointer],Y

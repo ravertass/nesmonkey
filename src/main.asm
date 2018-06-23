@@ -44,6 +44,7 @@ entityDY              .rs 1
 entityAnimationCount  .rs 1
 entityAnimationMax    .rs 1
 entityAnimationFrame  .rs 1
+entityAnimationLength .rs 1
 entityOverridePalette .rs 1
 entityState           .rs 1
 entityAnimationsTable .rs 2
