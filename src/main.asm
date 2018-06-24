@@ -27,8 +27,10 @@ DIR_RIGHT = $03
 IDLE   = $00
 MOVING = $01
 
-MONKEY_SPEED = $01
-MONKEY_NEG_SPEED = $00 - MONKEY_SPEED
+MONKEY_SPEED_LOW  = $03
+MONKEY_SPEED_HIGH = $00
+MONKEY_NEG_SPEED_LOW  = $00 - MONKEY_SPEED_LOW
+MONKEY_NEG_SPEED_HIGH = $FF
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;; Structs ;;;;;;;;;;
@@ -39,11 +41,11 @@ MONKEY_NEG_SPEED = $00 - MONKEY_SPEED
     .rsset $0
 entityActive          .rs 1
 entityType            .rs 1
-entityX               .rs 1
-entityY               .rs 1
+entityX               .rs 2
+entityY               .rs 2
 entityDir             .rs 1
-entityDX              .rs 1
-entityDY              .rs 1
+entityDX              .rs 2
+entityDY              .rs 2
 entityAnimationCount  .rs 1
 entityAnimationMax    .rs 1
 entityAnimationFrame  .rs 1
@@ -83,6 +85,8 @@ currentAnimationsTable   .ds 2
 
 ; Counter used during animation (due to lack of registers...)
 frameCounter .ds 1
+
+tempCoordinate .ds 1
 
 ; Pointer used during graphics setup.
 bgPointerLow  .ds 1

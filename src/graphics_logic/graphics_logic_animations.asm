@@ -36,15 +36,19 @@ AnimateEntitySprites:
 
 .UpdateEntitySpritesFrameFound:
 .UpdateEntitySpritesLoop:
-    ; Y coordinate
     LDY currentMetaSpriteOffset
     LDA [currentMetaSpritePointer],Y
     AND #$FE
     CMP #$FE ; No more sprites of frame!
     BEQ .UpdateEntitySpritesDone
-    CLC
+
+    ; Y coordinate
     LDY #entityY
-    ADC [currentEntity],Y
+    JSR .DivideByFour ; Will put 2-byte y coordinate divided by four into A register
+    CLC
+    LDY currentMetaSpriteOffset
+    ADC [currentMetaSpritePointer],Y
+
     STA $0200,X
     INX
     LDY currentMetaSpriteOffset
@@ -65,10 +69,12 @@ AnimateEntitySprites:
     STY currentMetaSpriteOffset
 
     ; X coordinate
-    LDA [currentMetaSpritePointer],Y
-    CLC
     LDY #entityX
-    ADC [currentEntity],Y
+    JSR .DivideByFour ; Will put 2-byte y coordinate divided by four into A register
+    CLC
+    LDY currentMetaSpriteOffset
+    ADC [currentMetaSpritePointer],Y
+
     STA $0200,X
     INX
     LDY currentMetaSpriteOffset
@@ -78,4 +84,29 @@ AnimateEntitySprites:
     JMP .UpdateEntitySpritesLoop
 
 .UpdateEntitySpritesDone:
+    RTS
+
+;; SUBROUTINE
+;; Input:
+;;     Y register: Pointer to least significant byte of 2-byte value that should be divided by 4.
+;; Output:
+;;     A register: The value divided by four (least significant bytes).
+.DivideByFour:
+    ; This mess should divide the 2 byte coordinate by 4, taking the least significant byte as
+    ; the actual coordinate.
+    INY
+    LDA [currentEntity],Y
+    LSR A
+    DEY
+    LDA [currentEntity],Y
+    ROR A
+    STA tempCoordinate
+    INY
+    LDA [currentEntity],Y
+    LSR A
+    LSR A
+    LDA tempCoordinate
+    ROR A
+    ADC #$00 ; add the carry for more correct rounding
+
     RTS

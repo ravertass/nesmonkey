@@ -13,7 +13,11 @@ UpdateMonkey:
     LDA #$00
     LDY #entityDY
     STA [currentEntity],Y
+    INY
+    STA [currentEntity],Y
     LDY #entityDX
+    STA [currentEntity],Y
+    INY
     STA [currentEntity],Y
 
 ; Is monkey moving?
@@ -74,8 +78,12 @@ UpdateMonkey:
 
 
 .UpdateMonkeyGoDown:
-    LDA #MONKEY_SPEED
+    LDA #MONKEY_SPEED_LOW
     LDY #entityDY
+    STA [currentEntity],Y
+    LDA #MONKEY_SPEED_HIGH
+    LDY #entityDY
+    INY
     STA [currentEntity],Y
 
     LDA #DIR_DOWN
@@ -85,8 +93,12 @@ UpdateMonkey:
     RTS
 
 .UpdateMonkeyGoLeft:
-    LDA #MONKEY_NEG_SPEED
+    LDA #MONKEY_NEG_SPEED_LOW
     LDY #entityDX
+    STA [currentEntity],Y
+    LDA #MONKEY_NEG_SPEED_HIGH
+    LDY #entityDX
+    INY
     STA [currentEntity],Y
 
     LDA #DIR_LEFT
@@ -96,8 +108,12 @@ UpdateMonkey:
     RTS
 
 .UpdateMonkeyGoRight:
-    LDA #MONKEY_SPEED
+    LDA #MONKEY_SPEED_LOW
     LDY #entityDX
+    STA [currentEntity],Y
+    LDA #MONKEY_SPEED_HIGH
+    LDY #entityDX
+    INY
     STA [currentEntity],Y
 
     LDA #DIR_RIGHT
@@ -107,8 +123,12 @@ UpdateMonkey:
     RTS
 
 .UpdateMonkeyGoUp:
-    LDA #MONKEY_NEG_SPEED
+    LDA #MONKEY_NEG_SPEED_LOW
     LDY #entityDY
+    STA [currentEntity],Y
+    LDA #MONKEY_NEG_SPEED_HIGH
+    LDY #entityDY
+    INY
     STA [currentEntity],Y
 
     LDA #DIR_UP
@@ -166,7 +186,9 @@ UpdateMonkey:
 .UpdateEntityAnimationFrameDone:
     RTS
 
+; TODO: Handle negative numbers correctly...
 .UpdateEntityPosition:
+    ; Add lower DY to lower Y byte
     LDY #entityY
     LDA [currentEntity],Y
     CLC
@@ -175,12 +197,35 @@ UpdateMonkey:
     LDY #entityY
     STA [currentEntity],Y
 
+    ; Add higher DY with carry to higher Y byte
+    LDY #entityY
+    INY
+    LDA [currentEntity],Y
+    LDY #entityDY
+    INY
+    ADC [currentEntity],Y
+    LDY #entityY
+    INY
+    STA [currentEntity],Y
+
+    ; Add lower DX to lower X byte
     LDY #entityX
     LDA [currentEntity],Y
     CLC
     LDY #entityDX
     ADC [currentEntity],Y
     LDY #entityX
+    STA [currentEntity],Y
+
+    ; Add higher DX with carry to higher X byte
+    LDY #entityX
+    INY
+    LDA [currentEntity],Y
+    LDY #entityDX
+    INY
+    ADC [currentEntity],Y
+    LDY #entityX
+    INY
     STA [currentEntity],Y
 
     RTS

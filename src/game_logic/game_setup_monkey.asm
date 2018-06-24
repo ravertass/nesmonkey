@@ -8,10 +8,17 @@ SetupMonkey:
     LDA #HIGH(monkeyEntity)
     STA currentEntity,Y
 
-    LDA #$80
+    LDA #$00
     LDY #entityX
     STA [currentEntity],Y
     LDY #entityY
+    STA [currentEntity],Y
+    LDA #$02
+    LDY #entityX
+    INY
+    STA [currentEntity],Y
+    LDY #entityY
+    INY
     STA [currentEntity],Y
 
     LDA #$01
