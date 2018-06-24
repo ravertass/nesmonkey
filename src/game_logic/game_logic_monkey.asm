@@ -1,14 +1,7 @@
 ;;;;;;;; Game logic -- Monkey ;;;;;;;;
 ;; Game logic related to the monkey goes here.
 
-;;TODO:
-;; - Code not related to the monkey (animation counter/frame handling + actual movement)
-;;   should be generalized.
-;; - Just make sure to be very clear with what code is controller-related and what is not.
-;; - entityDX and entityDY should not be used the way they are now. Instead, they should
-;;   be set dynamically when the entity actually moves.
-;; - Come up with some good way to handle negative entityDX/entityDY values...
-
+;; Checks the controller input and updates the monkey accordingly.
 UpdateMonkey:
     LDA #LOW(monkeyEntity)
     STA currentEntity
@@ -16,22 +9,21 @@ UpdateMonkey:
     LDA #HIGH(monkeyEntity)
     STA currentEntity,Y
 
+    ; Start by setting Monkey's speed to 0
+    LDA #$00
+    LDY #entityDY
+    STA [currentEntity],Y
+    LDY #entityDX
+    STA [currentEntity],Y
+
 ; Is monkey moving?
     LDA controller1
     AND #BUTTON_DIRS
-    BEQ .UpdateMonkeyNotMoving
-    JSR .UpdateMonkeyMoving
-    JMP .UpdateMonkeyMovingDone
-.UpdateMonkeyNotMoving:
-    LDA #IDLE
+    BEQ .UpdateMonkeyNotMoving ; if monkey isn't moving, skip most of the code below
+
+    LDA #MOVING
     LDY #entityState
     STA [currentEntity],Y
-    LDA #$00
-    LDY #entityAnimationCount
-    STA [currentEntity],Y
-    LDY #entityAnimationFrame
-    STA [currentEntity],Y
-.UpdateMonkeyMovingDone:
 
 ; Is monkey going down?
     LDA controller1
@@ -61,62 +53,29 @@ UpdateMonkey:
     BEQ .UpdateMonkeyUpDone
     JSR .UpdateMonkeyGoUp
 .UpdateMonkeyUpDone:
+    JMP .UpdateMonkeyNotMovingDone
 
-    RTS
-
-.UpdateMonkeyMoving:
-    LDA #MOVING
+.UpdateMonkeyNotMoving:
+    LDA #IDLE
     LDY #entityState
     STA [currentEntity],Y
-
-    JSR .UpdateMonkeyMoveCounter
-
-    RTS
-
-.UpdateMonkeyMoveCounter:
-    LDY #entityAnimationCount
-    LDA [currentEntity],Y
-    CLC
-    ADC #$01
-    LDY #entityAnimationMax
-    CMP [currentEntity],Y
-    BEQ .UpdateMonkeyMoveCounterReset
-    LDY #entityAnimationCount
-    STA [currentEntity],Y
-    JMP .UpdateMonkeyMoveCounterDone
-.UpdateMonkeyMoveCounterReset:
     LDA #$00
     LDY #entityAnimationCount
     STA [currentEntity],Y
-    JSR .UpdateMonkeyAnimationFrame
-.UpdateMonkeyMoveCounterDone:
+    LDY #entityAnimationFrame
+    STA [currentEntity],Y
+.UpdateMonkeyNotMovingDone:
+
+    ; TODO: This should be done for every entity, every loop.
+    ;       Thus, it should be moved to somewhere where all entities are handled.
+    JSR .UpdateEntityMoving
+
     RTS
 
-.UpdateMonkeyAnimationFrame:
-    LDY #entityAnimationFrame
-    LDA [currentEntity],Y
-    CLC
-    ADC #$01
-    LDY #entityAnimationLength
-    CMP [currentEntity],Y
-    BEQ .UpdateMonkeyAnimationFrameReset
-    LDY #entityAnimationFrame
-    STA [currentEntity],Y
-    JMP .UpdateMonkeyAnimationFrameDone
-.UpdateMonkeyAnimationFrameReset:
-    LDA #$00
-    LDY #entityAnimationFrame
-    STA [currentEntity],Y
-.UpdateMonkeyAnimationFrameDone:
-    RTS
 
 .UpdateMonkeyGoDown:
-    LDY #entityY
-    LDA [currentEntity],Y
-    CLC
+    LDA #MONKEY_SPEED
     LDY #entityDY
-    ADC [currentEntity],Y
-    LDY #entityY
     STA [currentEntity],Y
 
     LDA #DIR_DOWN
@@ -126,12 +85,8 @@ UpdateMonkey:
     RTS
 
 .UpdateMonkeyGoLeft:
-    LDY #entityX
-    LDA [currentEntity],Y
-    SEC
+    LDA #MONKEY_NEG_SPEED
     LDY #entityDX
-    SBC [currentEntity],Y
-    LDY #entityX
     STA [currentEntity],Y
 
     LDA #DIR_LEFT
@@ -141,12 +96,8 @@ UpdateMonkey:
     RTS
 
 .UpdateMonkeyGoRight:
-    LDY #entityX
-    LDA [currentEntity],Y
-    CLC
+    LDA #MONKEY_SPEED
     LDY #entityDX
-    ADC [currentEntity],Y
-    LDY #entityX
     STA [currentEntity],Y
 
     LDA #DIR_RIGHT
@@ -156,16 +107,80 @@ UpdateMonkey:
     RTS
 
 .UpdateMonkeyGoUp:
-    LDY #entityY
-    LDA [currentEntity],Y
-    SEC
+    LDA #MONKEY_NEG_SPEED
     LDY #entityDY
-    SBC [currentEntity],Y
-    LDY #entityY
     STA [currentEntity],Y
 
     LDA #DIR_UP
     LDY #entityDir
+    STA [currentEntity],Y
+
+    RTS
+
+
+
+;;; The code below is more general entity moving code,
+;;; and should be moved to somewhere where it can be
+;;; run for every entity every loop.
+
+.UpdateEntityMoving:
+    JSR .UpdateEntityMoveCounter
+    JSR .UpdateEntityPosition
+
+    RTS
+
+.UpdateEntityMoveCounter:
+    LDY #entityAnimationCount
+    LDA [currentEntity],Y
+    CLC
+    ADC #$01
+    LDY #entityAnimationMax
+    CMP [currentEntity],Y
+    BEQ .UpdateEntityMoveCounterReset
+    LDY #entityAnimationCount
+    STA [currentEntity],Y
+    JMP .UpdateEntityMoveCounterDone
+.UpdateEntityMoveCounterReset:
+    LDA #$00
+    LDY #entityAnimationCount
+    STA [currentEntity],Y
+    JSR .UpdateEntityAnimationFrame
+.UpdateEntityMoveCounterDone:
+    RTS
+
+.UpdateEntityAnimationFrame:
+    LDY #entityAnimationFrame
+    LDA [currentEntity],Y
+    CLC
+    ADC #$01
+    LDY #entityAnimationLength
+    CMP [currentEntity],Y
+    BEQ .UpdateEntityAnimationFrameReset
+    LDY #entityAnimationFrame
+    STA [currentEntity],Y
+    JMP .UpdateEntityAnimationFrameDone
+.UpdateEntityAnimationFrameReset:
+    LDA #$00
+    LDY #entityAnimationFrame
+    STA [currentEntity],Y
+.UpdateEntityAnimationFrameDone:
+    RTS
+
+.UpdateEntityPosition:
+    LDY #entityY
+    LDA [currentEntity],Y
+    CLC
+    LDY #entityDY
+    ADC [currentEntity],Y
+    LDY #entityY
+    STA [currentEntity],Y
+
+    LDY #entityX
+    LDA [currentEntity],Y
+    CLC
+    LDY #entityDX
+    ADC [currentEntity],Y
+    LDY #entityX
     STA [currentEntity],Y
 
     RTS

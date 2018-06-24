@@ -27,6 +27,9 @@ DIR_RIGHT = $03
 IDLE   = $00
 MOVING = $01
 
+MONKEY_SPEED = $01
+MONKEY_NEG_SPEED = $00 - MONKEY_SPEED
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;; Structs ;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
