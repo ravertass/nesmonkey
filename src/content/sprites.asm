@@ -10,6 +10,10 @@
 ; |+------- Flip sprite horizontally
 ; +-------- Flip sprite vertically
 
+; To be used in cases that are not relevant (e.g. seagull has no idle animations)
+dummySprites:
+    .db $FF
+
 monkeyAnimationsTable:
     .dw sprMonkeyUpIdle,   sprMonkeyDownIdle,   sprMonkeyLeftIdle,   sprMonkeyRightIdle
     .dw sprMonkeyUpMoving, sprMonkeyDownMoving, sprMonkeyLeftMoving, sprMonkeyRightMoving
@@ -107,5 +111,54 @@ sprMonkeyRightMoving:
     .db $00, $1A, %00000000, $00
     ; Lower sprite
     .db $08, $2A, %00000000, $00
+    ; End of sprites
+    .db $FF
+
+
+seagullAnimationsTable:
+    .dw dummySprites, dummySprites, dummySprites, dummySprites
+    .dw sprSeagullUpMoving, sprSeagullDownMoving, sprSeagullLeftMoving, sprSeagullRightMoving
+
+sprSeagullUpMoving:
+    ; Format: $y-offs, $tile-no, %attr, $x-offs
+    ; Sprite
+    .db $00, $7A, %00000000, $00
+    ; End of animation frame
+    .db $FE
+    ; Sprite
+    .db $00, $8A, %01000000, $00
+    ; End of sprites
+    .db $FF
+
+sprSeagullDownMoving:
+    ; Format: $y-offs, $tile-no, %attr, $x-offs
+    ; Sprite
+    .db $00, $79, %00000000, $00
+    ; End of animation frame
+    .db $FE
+    ; Sprite
+    .db $00, $89, %01000000, $00
+    ; End of sprites
+    .db $FF
+
+sprSeagullLeftMoving:
+    ; Format: $y-offs, $tile-no, %attr, $x-offs
+    ; Sprite
+    .db $00, $78, %01000000, $00
+    ; End of animation frame
+    .db $FE
+    ; Sprite
+    .db $00, $88, %01000000, $00
+    ; End of sprites
+    .db $FF
+
+sprSeagullRightMoving:
+    ; Format: $y-offs, $tile-no, %attr, $x-offs
+    ; Sprite
+    .db $00, $78, %00000000, $00
+    ; End of animation frame
+    .db $FE
+    ; Sprite
+    .db $00, $88, %00000000, $00
     ; End of sprites
     .db $FF

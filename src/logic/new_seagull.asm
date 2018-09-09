@@ -1,45 +1,49 @@
-;;;;;;;; Game setup -- Monkey ;;;;;;;;
-;; Setup for the monkey.
+;;;;;;;; New seagull ;;;;;;;;
+;; Subroutines for adding a new seagull to entity space.
 
-SetupMonkey:
-    LDA #LOW(monkeyEntity)
-    STA currentEntity
-    LDY #$01
-    LDA #HIGH(monkeyEntity)
-    STA currentEntity,Y
+NewSeagull:
+    JSR GetFreeEntitySlot
+    LDA #HIGH(currentEntity)
+    CMP #$FF
+    BEQ .NewSeagullDone ; no free entity slot was found :(
 
     LDA #$01
     LDY #entityActive
     STA [currentEntity],Y
 
-    LDA #TYPE_MONKEY
+    LDA #TYPE_SEAGULL
     LDY #entityType
     STA [currentEntity],Y
 
+    ; TODO: Most of the stuff below is just copied from the monkey.
+
     LDA #$00
     LDY #entityX
     STA [currentEntity],Y
+    LDA #$70
     LDY #entityY
     STA [currentEntity],Y
-    LDA #$02
+    LDA #$00
     LDY #entityX
     INY
     STA [currentEntity],Y
+    LDA #$01
     LDY #entityY
     INY
     STA [currentEntity],Y
 
-    LDA #$00
+    LDA #$04
     LDY #entityDX
     STA [currentEntity],Y
+    LDA #$01
     LDY #entityDY
     STA [currentEntity],Y
 
-    LDA #DIR_DOWN
+    LDA #DIR_RIGHT
     LDY #entityDir
     STA [currentEntity],Y
 
-    LDA #IDLE
+    LDA #MOVING
     LDY #entityState
     STA [currentEntity],Y
 
@@ -55,11 +59,12 @@ SetupMonkey:
     LDY #entityAnimationMax
     STA [currentEntity],Y
 
-    LDA #LOW(monkeyAnimationsTable)
+    LDA #LOW(seagullAnimationsTable)
     LDY #entityAnimationsTable
     STA [currentEntity],Y
-    LDA #HIGH(monkeyAnimationsTable)
+    LDA #HIGH(seagullAnimationsTable)
     INY
     STA [currentEntity],Y
 
+.NewSeagullDone
     RTS

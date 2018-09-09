@@ -33,7 +33,8 @@ MONKEY_NEG_SPEED_LOW  = $00 - MONKEY_SPEED_LOW
 MONKEY_NEG_SPEED_HIGH = $FF
 
     .rsset $0
-TYPE_MONKEY .rs 1
+TYPE_MONKEY  .rs 1
+TYPE_SEAGULL .rs 1
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;; Structs ;;;;;;;;;;

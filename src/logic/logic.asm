@@ -3,6 +3,8 @@
 ;; Graphics and input logic does NOT go here.
 
     .include "logic/monkey.asm"
+    .include "logic/entity.asm"
+    .include "logic/entity_space.asm"
 
 UpdateGame:
     ; set pointer to first entity in the entity list.
@@ -23,9 +25,19 @@ UpdateGame:
     CMP #TYPE_MONKEY
     BEQ .JsrUpdateMonkey
 
+    ; If this entity's type has no logic implemented, simply do the general update.
+    JMP .GeneralEntityUpdate
+
 .JsrUpdateMonkey:
     JSR UpdateMonkey
-    JMP .NextEntity
+    JMP .GeneralEntityUpdate
+
+.GeneralEntityUpdate:
+    ; General update for entities goes here.
+    ; UpdateEntityMoving handles X and Y movement according
+    ; to DX and DY, and updating the animationCount value.
+    JSR UpdateEntityMoving
+
 
 .NextEntity:
     ; increment currentEntity pointer so we point to the next entity.

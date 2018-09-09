@@ -51,7 +51,7 @@ UpdateMonkey:
     BEQ .UpdateMonkeyUpDone
     JSR .UpdateMonkeyGoUp
 .UpdateMonkeyUpDone:
-    JMP .UpdateMonkeyNotMovingDone
+    RTS
 
 .UpdateMonkeyNotMoving:
     LDA #IDLE
@@ -63,11 +63,6 @@ UpdateMonkey:
     LDY #entityAnimationFrame
     STA [currentEntity],Y
 .UpdateMonkeyNotMovingDone:
-
-    ; TODO: This should be done for every entity, every loop.
-    ;       Thus, it should be moved to somewhere where all entities are handled.
-    JSR .UpdateEntityMoving
-
     RTS
 
 
@@ -127,99 +122,6 @@ UpdateMonkey:
 
     LDA #DIR_UP
     LDY #entityDir
-    STA [currentEntity],Y
-
-    RTS
-
-
-
-;;; The code below is more general entity moving code,
-;;; and should be moved to somewhere where it can be
-;;; run for every entity every loop.
-
-.UpdateEntityMoving:
-    JSR .UpdateEntityMoveCounter
-    JSR .UpdateEntityPosition
-
-    RTS
-
-.UpdateEntityMoveCounter:
-    LDY #entityAnimationCount
-    LDA [currentEntity],Y
-    CLC
-    ADC #$01
-    LDY #entityAnimationMax
-    CMP [currentEntity],Y
-    BEQ .UpdateEntityMoveCounterReset
-    LDY #entityAnimationCount
-    STA [currentEntity],Y
-    JMP .UpdateEntityMoveCounterDone
-.UpdateEntityMoveCounterReset:
-    LDA #$00
-    LDY #entityAnimationCount
-    STA [currentEntity],Y
-    JSR .UpdateEntityAnimationFrame
-.UpdateEntityMoveCounterDone:
-    RTS
-
-.UpdateEntityAnimationFrame:
-    LDY #entityAnimationFrame
-    LDA [currentEntity],Y
-    CLC
-    ADC #$01
-    LDY #entityAnimationLength
-    CMP [currentEntity],Y
-    BEQ .UpdateEntityAnimationFrameReset
-    LDY #entityAnimationFrame
-    STA [currentEntity],Y
-    JMP .UpdateEntityAnimationFrameDone
-.UpdateEntityAnimationFrameReset:
-    LDA #$00
-    LDY #entityAnimationFrame
-    STA [currentEntity],Y
-.UpdateEntityAnimationFrameDone:
-    RTS
-
-; TODO: Handle negative numbers correctly...
-.UpdateEntityPosition:
-    ; Add lower DY to lower Y byte
-    LDY #entityY
-    LDA [currentEntity],Y
-    CLC
-    LDY #entityDY
-    ADC [currentEntity],Y
-    LDY #entityY
-    STA [currentEntity],Y
-
-    ; Add higher DY with carry to higher Y byte
-    LDY #entityY
-    INY
-    LDA [currentEntity],Y
-    LDY #entityDY
-    INY
-    ADC [currentEntity],Y
-    LDY #entityY
-    INY
-    STA [currentEntity],Y
-
-    ; Add lower DX to lower X byte
-    LDY #entityX
-    LDA [currentEntity],Y
-    CLC
-    LDY #entityDX
-    ADC [currentEntity],Y
-    LDY #entityX
-    STA [currentEntity],Y
-
-    ; Add higher DX with carry to higher X byte
-    LDY #entityX
-    INY
-    LDA [currentEntity],Y
-    LDY #entityDX
-    INY
-    ADC [currentEntity],Y
-    LDY #entityX
-    INY
     STA [currentEntity],Y
 
     RTS
