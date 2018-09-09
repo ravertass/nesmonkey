@@ -1,16 +1,7 @@
 ;;;;;;;; Graphics logic -- Entities ;;;;;;;;
 ;; Logic related to drawing entities goes here.
 
-UpdateMonkeySprites:
-    LDA #LOW(monkeyEntity)
-    STA currentEntity
-    LDY #$01
-    LDA #HIGH(monkeyEntity)
-    STA currentEntity,Y
-
-    JMP .UpdateEntitySprites
-
-.UpdateEntitySprites:
+UpdateEntitySprites:
     LDY #entityAnimationsTable
     LDA [currentEntity],Y
     STA currentAnimationsTable
