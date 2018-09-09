@@ -3,12 +3,6 @@
 
 ;; Checks the controller input and updates the monkey accordingly.
 UpdateMonkey:
-    LDA #LOW(monkeyEntity)
-    STA currentEntity
-    LDY #$01
-    LDA #HIGH(monkeyEntity)
-    STA currentEntity,Y
-
     ; Start by setting Monkey's speed to 0
     LDA #$00
     LDY #entityDY

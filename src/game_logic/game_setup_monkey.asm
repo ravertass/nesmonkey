@@ -8,6 +8,14 @@ SetupMonkey:
     LDA #HIGH(monkeyEntity)
     STA currentEntity,Y
 
+    LDA #$01
+    LDY #entityActive
+    STA [currentEntity],Y
+
+    LDA #TYPE_MONKEY
+    LDY #entityType
+    STA [currentEntity],Y
+
     LDA #$00
     LDY #entityX
     STA [currentEntity],Y
