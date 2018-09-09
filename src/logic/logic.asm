@@ -1,20 +1,10 @@
-;;;;;;;; Graphics logic ;;;;;;;;
-;; Logic related to drawing graphics goes here.
+;;;;;;;; Game logic ;;;;;;;;
+;; All game logic goes here.
+;; Graphics and input logic does NOT go here.
 
-    .include "graphics_logic/graphics_logic_animations.asm"
-    .include "graphics_logic/graphics_logic_entities.asm"
+    .include "logic/monkey.asm"
 
-UpdateGraphics:
-    ; Start DMA transfer from $0200
-    LDA #$00
-    STA $2003
-    LDA #$02
-    STA $4014
-
-    ; X will be the offset used to store all sprites at the correct
-    ; place in memory.
-    LDX #$00
-
+UpdateGame:
     ; set pointer to first entity in the entity list.
     LDA #LOW(firstEntity)
     STA currentEntity
@@ -22,14 +12,20 @@ UpdateGraphics:
     LDA #HIGH(firstEntity)
     STA currentEntity,Y
 
-; The loop here is more or less copy-pasted from the game logic update subroutine.
-.UpdateGraphicsLoop:
+.UpdateEntitiesLoop:
     ; if entity is not active: continue to next entity.
     LDY #entityActive
     LDA [currentEntity],Y
     BEQ .NextEntity
 
-    JSR UpdateEntitySprites
+    LDY #entityType
+    LDA [currentEntity],Y
+    CMP #TYPE_MONKEY
+    BEQ .JsrUpdateMonkey
+
+.JsrUpdateMonkey:
+    JSR UpdateMonkey
+    JMP .NextEntity
 
 .NextEntity:
     ; increment currentEntity pointer so we point to the next entity.
@@ -47,14 +43,14 @@ UpdateGraphics:
     LDA currentEntity
     CMP #LOW(endOfEntitySpace)
     BEQ .CompareHigh
-    JMP .UpdateGraphicsLoop
+    JMP .UpdateEntitiesLoop
 .CompareHigh:
     ; the lower byte was equal: let's check if the higher byte is equal, too.
     LDY #$01
     LDA currentEntity,Y
     CMP #HIGH(endOfEntitySpace)
-    BEQ .UpdateGraphicsDone
-    JMP .UpdateGraphicsLoop
+    BEQ .UpdateEntitiesDone
+    JMP .UpdateEntitiesLoop
 
-.UpdateGraphicsDone:
+.UpdateEntitiesDone:
     RTS

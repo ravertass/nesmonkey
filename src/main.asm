@@ -107,8 +107,8 @@ bgPointerHigh .ds 1
     .org $C000
 
     .include "general_setup.asm"
-    .include "graphics_logic/graphics_setup.asm"
-    .include "game_logic/game_setup.asm"
+    .include "graphics/setup.asm"
+    .include "logic/setup.asm"
 
 RESET:
     SetupGeneral
@@ -122,9 +122,9 @@ Forever:
 ;;;;;;;;; VBlank ;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-    .include "graphics_logic/graphics_logic.asm"
+    .include "graphics/graphics.asm"
     .include "input/input_logic.asm"
-    .include "game_logic/game_logic.asm"
+    .include "logic/logic.asm"
 
 NMI:
     JSR UpdateGraphics
