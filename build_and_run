@@ -1,8 +1,4 @@
 #!/usr/bin/env bash
 
 export NES_INCLUDE="src"
-export NES_INCLUDE="$NES_INCLUDE;src/game_logic"
-export NES_INCLUDE="$NES_INCLUDE;src/graphics_logic"
-export NES_INCLUDE="$NES_INCLUDE;src/input"
-export NES_INCLUDE="$NES_INCLUDE;src/content"
 NESASM3 main.asm && fceux main.nes

@@ -39,19 +39,19 @@ MONKEY_NEG_SPEED_HIGH = $FF
 ;; Entity
 
     .rsset $0
-entityActive          .rs 1
+entityActive          .rs 1 ; TODO: Change this into entityFlags
 entityType            .rs 1
 entityX               .rs 2
 entityY               .rs 2
-entityDir             .rs 1
 entityDX              .rs 2
 entityDY              .rs 2
+entityDir             .rs 1 ; TODO: Dir and State could be one.
+entityState           .rs 1 ; They could also be put into entityFlags.
 entityAnimationCount  .rs 1
 entityAnimationMax    .rs 1
 entityAnimationFrame  .rs 1
 entityAnimationLength .rs 1
 entityOverridePalette .rs 1
-entityState           .rs 1
 entityAnimationsTable .rs 2
 entitySize            .rs 0
 
@@ -75,6 +75,7 @@ animationsRightMoving .rs 2
 
 currentEntity .ds 2
 monkeyEntity  .ds entitySize
+entitySpace   .ds entitySize*11
 
 controller1 .ds 1  ; Last input from controller 1.
 
@@ -101,8 +102,8 @@ bgPointerHigh .ds 1
     .org $C000
 
     .include "general_setup.asm"
-    .include "graphics_setup.asm"
-    .include "game_setup.asm"
+    .include "graphics_logic/graphics_setup.asm"
+    .include "game_logic/game_setup.asm"
 
 RESET:
     SetupGeneral
@@ -116,9 +117,9 @@ Forever:
 ;;;;;;;;; VBlank ;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-    .include "graphics_logic.asm"
-    .include "input_logic.asm"
-    .include "game_logic.asm"
+    .include "graphics_logic/graphics_logic.asm"
+    .include "input/input_logic.asm"
+    .include "game_logic/game_logic.asm"
 
 NMI:
     JSR UpdateGraphics
@@ -135,12 +136,12 @@ NMI:
     .bank 1
     .org $E000
 
-    .include "palette.asm"
-    .include "sprites.asm"
+    .include "content/palette.asm"
+    .include "content/sprites.asm"
 
     .org $EA00    ; kind of arbitrarily chosen (but the lower byte must be $00)
 
-    .include "background.asm"
+    .include "content/background.asm"
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Interrupt vectors ;;;;
@@ -158,4 +159,4 @@ NMI:
     .bank 2
     .org $0000
 
-    .incbin "monkey.chr"
+    .incbin "content/monkey.chr"

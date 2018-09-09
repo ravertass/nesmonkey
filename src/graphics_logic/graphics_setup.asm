@@ -1,7 +1,7 @@
 ;;;;;;;; Graphics setup ;;;;;;;;
 ;; Code for setting up graphics.
 
-    .include "graphics_setup_background.asm"
+    .include "graphics_logic/graphics_setup_background.asm"
 
 SetupGraphics:
     JSR SetupPalette

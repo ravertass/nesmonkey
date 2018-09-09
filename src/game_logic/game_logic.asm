@@ -2,7 +2,7 @@
 ;; All game logic goes here.
 ;; Graphics and input logic does NOT go here.
 
-    .include "game_logic_monkey.asm"
+    .include "game_logic/game_logic_monkey.asm"
 
 UpdateGame:
     JSR UpdateMonkey
