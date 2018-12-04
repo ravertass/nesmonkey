@@ -5,6 +5,7 @@
     .include "logic/monkey.asm"
     .include "logic/entity.asm"
     .include "logic/entity_space.asm"
+    .include "util/random.asm"
 
 UpdateGame:
     ; set pointer to first entity in the entity list.

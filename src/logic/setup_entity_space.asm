@@ -17,7 +17,7 @@ SetupEntitySpace:
 .NextByte:
     INY
     ; if we have looped through all of entity space: break loop.
-    CPY #endOfEntitySpace
+    CPY #(endOfEntitySpace - entitySpace)
     BEQ .SetupEntitySpaceDone
     JMP .SetupEntitySpaceLoop
 

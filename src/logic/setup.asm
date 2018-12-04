@@ -7,6 +7,12 @@
 
 SetupGame:
     JSR SetupMonkey
+
+    LDA #$04 ; number chosen randomly
+    STA rngSeed
+    LDA #$E0
+    STA rngSeed+1
+
     JSR SetupEntitySpace
     JSR NewSeagull ; TODO: Seagulls should be added dynamically.
 

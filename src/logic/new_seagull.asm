@@ -17,17 +17,17 @@ NewSeagull:
 
     ; TODO: Most of the stuff below is just copied from the monkey.
 
-    LDA #$00
+    JSR RandomByte
     LDY #entityX
     STA [currentEntity],Y
-    LDA #$70
+    JSR RandomByte
     LDY #entityY
     STA [currentEntity],Y
-    LDA #$00
+    JSR RandomByte
     LDY #entityX
     INY
     STA [currentEntity],Y
-    LDA #$01
+    JSR RandomByte
     LDY #entityY
     INY
     STA [currentEntity],Y

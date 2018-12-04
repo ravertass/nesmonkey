@@ -95,6 +95,9 @@ frameCounter .ds 1
 
 tempCoordinate .ds 1
 
+; Seed for random number generation.
+rngSeed .ds 2
+
 ; Pointer used during graphics setup.
 bgPointerLow  .ds 1
 bgPointerHigh .ds 1
