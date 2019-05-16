@@ -8,7 +8,7 @@ SetupGraphics:
 
     JSR DrawTheBackground
 
-    LDA #%10000000   ; enable NMI, both sprites and background from pattern table 0 
+    LDA #%10000000   ; enable NMI, both sprites and background from pattern table 0
     STA $2000
     LDA #%00011110   ; Enable sprites, enable background, no clipping on left side.
     STA $2001

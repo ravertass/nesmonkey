@@ -2,6 +2,7 @@
 ;; Subroutines for generating random numbers.
 
 ; SUBROUTINE
+; Used to generate a random byte into the A register based on a seed in the rngSeed variable.
 ; Input:
 ;   variable rngSeed: Seed used for generating random number.
 ; Output:
