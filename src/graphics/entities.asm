@@ -1,6 +1,13 @@
 ;;;;;;;; Graphics logic -- Entities ;;;;;;;;
 ;; Logic related to drawing entities goes here.
 
+; SUBROUTINE
+; Input:
+;     currentEntity: The entity we're working with.
+; Clobbers:
+;     Reg A, ?Reg X?, Reg Y
+; Side-effects:
+;     Draws currentEntity's current sprite to the screen.
 UpdateEntitySprites:
     LDY #entityAnimationsTable
     LDA [currentEntity],Y

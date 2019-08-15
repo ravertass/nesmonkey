@@ -5,7 +5,7 @@
 ; 76543210
 ; ||||||||
 ; ||||||++- Palette (4 to 7) of sprite
-; |||+++--- Unimplemented
+; |||+++--- Not used
 ; ||+------ Priority (0: in front of background; 1: behind background)
 ; |+------- Flip sprite horizontally
 ; +-------- Flip sprite vertically
@@ -24,7 +24,7 @@ sprMonkeyUpIdle:
     .db $00, $16, %00000000, $00
     ; Lower sprite
     .db $08, $26, %00000000, $00
-    ; End of sprites
+    ; End of animation
     .db $FF
 
 sprMonkeyDownIdle:
@@ -33,7 +33,7 @@ sprMonkeyDownIdle:
     .db $00, $14, %00000000, $00
     ; Lower sprite
     .db $08, $24, %00000000, $00
-    ; End of sprites
+    ; End of animation
     .db $FF
 
 sprMonkeyLeftIdle:
@@ -42,7 +42,7 @@ sprMonkeyLeftIdle:
     .db $00, $18, %01000000, $00
     ; Lower sprite
     .db $08, $28, %01000000, $00
-    ; End of sprites
+    ; End of animation
     .db $FF
 
 sprMonkeyRightIdle:
@@ -51,7 +51,7 @@ sprMonkeyRightIdle:
     .db $00, $18, %00000000, $00
     ; Lower sprite
     .db $08, $28, %00000000, $00
-    ; End of sprites
+    ; End of animation
     .db $FF
 
 sprMonkeyUpMoving:
@@ -66,7 +66,7 @@ sprMonkeyUpMoving:
     .db $00, $17, %01000000, $00
     ; Lower sprite
     .db $08, $27, %01000000, $00
-    ; End of sprites
+    ; End of animation
     .db $FF
 
 sprMonkeyDownMoving:
@@ -81,7 +81,7 @@ sprMonkeyDownMoving:
     .db $00, $15, %01000000, $00
     ; Lower sprite
     .db $08, $25, %01000000, $00
-    ; End of sprites
+    ; End of animation
     .db $FF
 
 sprMonkeyLeftMoving:
@@ -96,7 +96,7 @@ sprMonkeyLeftMoving:
     .db $00, $1A, %01000000, $00
     ; Lower sprite
     .db $08, $2A, %01000000, $00
-    ; End of sprites
+    ; End of animation
     .db $FF
 
 sprMonkeyRightMoving:
@@ -111,7 +111,7 @@ sprMonkeyRightMoving:
     .db $00, $1A, %00000000, $00
     ; Lower sprite
     .db $08, $2A, %00000000, $00
-    ; End of sprites
+    ; End of animation
     .db $FF
 
 
@@ -127,7 +127,7 @@ sprSeagullUpMoving:
     .db $FE
     ; Sprite
     .db $00, $8A, %01000000, $00
-    ; End of sprites
+    ; End of animation
     .db $FF
 
 sprSeagullDownMoving:
@@ -138,7 +138,7 @@ sprSeagullDownMoving:
     .db $FE
     ; Sprite
     .db $00, $89, %01000000, $00
-    ; End of sprites
+    ; End of animation
     .db $FF
 
 sprSeagullLeftMoving:
@@ -149,7 +149,7 @@ sprSeagullLeftMoving:
     .db $FE
     ; Sprite
     .db $00, $88, %01000000, $00
-    ; End of sprites
+    ; End of animation
     .db $FF
 
 sprSeagullRightMoving:
@@ -160,5 +160,5 @@ sprSeagullRightMoving:
     .db $FE
     ; Sprite
     .db $00, $88, %00000000, $00
-    ; End of sprites
+    ; End of animation
     .db $FF

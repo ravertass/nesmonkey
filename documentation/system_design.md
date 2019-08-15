@@ -14,8 +14,8 @@ The `src` directory contains the following subdirectories:
 
 In addition, the directory contains a few asm files:
 
-- **main.asm** -- Main file. Contains basically everything.
-- **header.asm** -- Contains assembler directives defining memory properties.
+- **main.asm** -- Main file. Contains all top-level code.
+- **header.asm** -- Contains assembler directives defining memory properties (e.g. what mapper to use).
 - **general\_setup.asm** -- Contains general setup that you'd typically want done in any NES game.
 
 The code in `header.asm` and `general_setup.asm` should be pretty generic and reusable for other games (for the header, this depends on what memory properties the game needs).
@@ -67,8 +67,8 @@ All code in this directory should also be generic enough to be reusable within o
 All code within the `logic` directory is for directly game-related logic. It contains the following files:
 
 -  **logic.asm** -- Contains the *UpdateGame* subroutine called each vblank, which loops through each entity in entity space and calls its related update subroutine, as well as a general entity update subroutine.
--  **entity.asm** -- Contains general entity updating logic, that is, movement-related logic.
--  **monkey.asm** -- Contains logic for the main character (the monkey), reading the latest controller input and updating the monkey's state accordingly.
+-  **entity.asm** -- Contains general entity updating logic (which right now only is movement-related).
+-  **monkey.asm** -- Contains logic for the main character (the monkey). Reads the latest controller input and updates the monkey's state accordingly.
 -  **new\_seagull.asm** -- Adds a new seagull entity to the entity space, choosing properties for it randomly.
 -  **entity\_space.asm** -- Logic for getting a free slot within entity space.
 -  **setup.asm** -- Sets up game logic (monkey, entity space and random seed (which probably should be done elsewhere, to make `util` more generic)).
@@ -85,6 +85,94 @@ The entity concept should be reusable within other NES games using a similar arc
 ## Sprites and animation
 
 **TODO** -- Write about animation table and metasprite data structures, and how these are drawn.
+
+An entity's sprite data come in the form of an *animations table*.
+An animation table consists of *animations*.
+An animation consists of a number of *frames*, also called *metasprites*.
+A *metasprite* consists of multiple *sprites*.
+A *sprite* (the data structure representing the data to draw NES sprites) consists of four bytes in the following order:
+
+- y offset
+- tile number (as found in the graphics tileset `monkey.chr`)
+- attribute byte
+- x offset
+
+Further explanation follows.
+
+### Animations tables
+
+An animation table is a list of animations, in the form of memory locations (symbols) for the animations.
+Each animation table has the following form:
+
+```
+foobarAnimationsTable:
+    .dw sprFoobarUpIdle,   sprFoobarDownIdle,   sprFoobarLeftIdle,   sprFoobarRightIdle
+    .dw sprFoobarUpMoving, sprFoobarDownMoving, sprFoobarLeftMoving, sprFoobarRightMoving
+```
+
+Each animation corresponds to a "state" (e.g. idle turned left).
+All animation tables must contain animations corresponding to the same states, in the same order.
+However, if some state is not applicable for an entity, the animation table might simply contain references to an empty animation (one such animation called `dummySprites` can be found in the code).
+
+### Animations & metasprites
+
+An animation is a list of frames/metasprites.
+Metasprites consist of sprites, and sprites are four bytes long.
+The sprite bytes of a metasprite follow directly on each other in memory.
+A metasprite may consist of 0 to *a large number* of sprites.
+The end of a metasprite is denoted by an `$FE` byte (mnemonic: can be read as "frame end") (meaning that `FE` could never be the y offset of a sprite).
+A metasprite could also end with an `$FF` byte, which also indicates the end of the whole animation (meaning that `$FF` also cannot be the y offset of a sprite).
+An example follows:
+
+```
+sprFoobarDownMoving:
+    ; Format: $y-offs, $tile-no, %attr, $x-offs
+    ; Upper sprite
+    .db $00, $15, %00000000, $00
+    ; Lower sprite
+    .db $08, $25, %00000000, $00
+    ; End of animation frame
+    .db $FE
+    ; Upper sprite
+    .db $00, $15, %01000000, $00
+    ; Lower sprite
+    .db $08, $25, %01000000, $00
+    ; End of animation
+    .db $FF
+```
+
+Since NES sprites are only 8x8 pixels, to draw larger objects, multiple sprites must be used.
+This is the purpose of metasprites.
+
+### Sprites
+
+As mentioned above, the sprite data structure consists of four bytes in the following order: *y offset*, *tile number*, *attribute byte* and *x offset*.
+
+X and Y offsets are the pixel offset from the entity's current X and Y coordinates.
+For sprites to not overlap, these will typically be a number divisible by 8.
+
+The tile number is where the sprite data (the actual pixel data for the sprite) can be found in the tileset (`content/monkey.chr` for this game).
+
+The attribute byte contains bits for a few different properties.
+The attribute byte has the following form:
+
+```
+; 76543210
+; ||||||||
+; ||||||++- Palette (4 to 7) of sprite
+; |||+++--- Not used
+; ||+------ Priority (0: in front of background; 1: behind background)
+; |+------- Flip sprite horizontally
+; +-------- Flip sprite vertically
+```
+
+An example sprite follows:
+
+```
+    .db $00, $15, %10000000, $00
+```
+
+Here, `$08` is the y offset (indicating that the sprite is located one "step" down), `$15` is the location of the sprite data in the tileset, `%10000000` is the attribute byte (indicating that his sprite is flipped vertically) and `$00` is the x offset.
 
 ## Game update
 

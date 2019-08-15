@@ -4,6 +4,11 @@
     .include "graphics/animations.asm"
     .include "graphics/entities.asm"
 
+; SUBROUTINE
+; Clobbers:
+;     Reg A, Reg X, Reg Y
+; Side-effects:
+;     Draws all entities' graphics to the screen.
 UpdateGraphics:
     ; Start DMA transfer from $0200
     LDA #$00
