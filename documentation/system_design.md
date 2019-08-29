@@ -81,6 +81,142 @@ The entity concept should be reusable within other NES games using a similar arc
 ## Entities and entity space
 
 **TODO** -- Write about the entity concept, the entity data structure, the structure of entity space.
+Any "physical" thing appearing in the game is represented as an *entity*.
+Examples of entities are the player avatar (i.e. the monkey), enemies, the monkey's boomerang, and banana pickups.
+
+The same data structure is used for each entity.
+The *entity space* is the area of memory containing all entities.
+Further explanation follows.
+
+### Entity data structure
+
+The entity data structure contains the following fields:
+
+- entityActive (1 byte)
+- entityType (1 byte)
+- entityX (2 byte)
+- entityY (2 byte)
+- entityDX (2 byte)
+- entityDY (2 byte)
+- entityDir (1 byte)
+- entityState (1 byte)
+- entityAnimationCount (1 byte)
+- entityAnimationMax (1 byte)
+- entityAnimationFrame (1 byte)
+- entityAnimationLength (1 byte)
+- entityOverridePalette (1 byte)
+- entityAnimationsTable (2 byte)
+- entitySize (1 byte)
+
+Details follow.
+
+#### entityActive
+
+Is equal to `$00` if this entity's location in entity space is not active.
+If the entity is active, then this is equal to `$01`.
+
+#### entityType
+
+Describes what this entity is, e.g. the monkey, a seagull enemy, or a banana pickup.
+Each type of entity has a corresponding constant value, and this field will be set to one of these type constants.
+
+#### entityX
+
+**TODO**
+
+#### entityY
+
+**TODO**
+
+#### entityDX
+
+**TODO**
+
+#### entityDY
+
+**TODO**
+
+#### entityDir
+
+**TODO**
+
+#### entityState
+
+**TODO**
+
+#### entityAnimationCount
+
+**TODO**
+
+#### entityAnimationMax
+
+**TODO**
+
+#### entityAnimationFrame
+
+**TODO**
+
+#### entityAnimationLength
+
+**TODO**
+
+#### entityOverridePalette
+
+**TODO**
+
+#### entityAnimationsTable
+
+**TODO**
+
+#### entitySize
+
+**TODO**
+
+### Accessing an entity field
+
+If `currentEntity` (and `currentEntity+1`) contains a pointer to an entity, then the 1-byte field `entityField` is accessed like this:
+
+```
+    LDY #entityField
+    LDA [currentEntity],Y
+```
+
+For example, `entityActive` would be accessed like this:
+
+```
+    LDY #entityActive
+    LDA [currentEntity],Y
+```
+
+A 2-byte field, such as `entityX` or `entityDX`, would have to be accessed 1 byte at a time.
+An example of how `entityX` is updated using `entityDX` follows:
+
+
+```
+    ; Add lower DX to lower X byte
+    LDY #entityX
+    LDA [currentEntity],Y
+    CLC
+    LDY #entityDX
+    ADC [currentEntity],Y
+    LDY #entityX
+    STA [currentEntity],Y
+
+    ; Add higher DX with carry to higher X byte
+    LDY #entityX
+    INY
+    LDA [currentEntity],Y
+    LDY #entityDX
+    INY
+    ADC [currentEntity],Y
+    LDY #entityX
+    INY
+    STA [currentEntity],Y
+```
+
+### Entity space
+
+**TODO**
 
 ## Sprites and animation
 

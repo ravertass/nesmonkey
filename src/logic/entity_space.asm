@@ -1,9 +1,11 @@
 ;;;;;;;; Entity space;;;;;;;;
 ;; Some subroutines regarding the entity space goes here.
 
-; Subroutine for getting a pointer to a free slot in entity space.
+; SUBROUTINE
+; Gets a pointer to a free slot in entity space.
 ; If no space is free, the return value is $FFFF.
-; The return value is stored in the currentEntity variable.
+; Output:
+;     currentEntity: Free entity slot pointer
 GetFreeEntitySlot:
     LDA #LOW(entitySpace)
     STA currentEntity
@@ -11,7 +13,9 @@ GetFreeEntitySlot:
     LDA #HIGH(entitySpace)
     STA currentEntity,Y
 
+    ; Loop through all of entity space, until an inactive entity slot is found.
 .GetFreeEntitySlotLoop:
+    ; If entityActive is 0, then the entity slot is free!
     LDY #entityActive
     LDA [currentEntity],Y
     BEQ .GetFreeEntitySlotDone ; free slot was found!

@@ -5,6 +5,7 @@
     .include "graphics/entities.asm"
 
 ; SUBROUTINE
+; Main subroutine for drawing entities to the screen.
 ; Clobbers:
 ;     Reg A, Reg X, Reg Y
 ; Side-effects:
