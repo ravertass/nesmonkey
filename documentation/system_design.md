@@ -84,22 +84,18 @@ The entity concept should be reusable within other NES games using a similar arc
 
 ## Sprites and animation
 
-**TODO** -- Write about animation table and metasprite data structures, and how these are drawn.
-
-An entity's sprite data come in the form of an *animations table*.
-An animation table consists of *animations*.
-An animation consists of a number of *frames*, also called *metasprites*.
-A *metasprite* consists of multiple *sprites*.
-A *sprite* (the data structure representing the data to draw NES sprites) consists of four bytes in the following order:
+An entity's sprite data comes in the form of an *animation table*.
+An animation table consists of *animations*, which in turn each consists of a number of *frames*, also called *metasprites*.
+A *metasprite* consists of multiple *sprites*, and a *sprite* (the data structure representing the data to draw NES sprites) consists of four bytes in the following order:
 
 - y offset
-- tile number (as found in the graphics tileset `monkey.chr`)
+- tile number (referring to the graphics tileset `monkey.chr`)
 - attribute byte
 - x offset
 
 Further explanation follows.
 
-### Animations tables
+### Animation tables
 
 An animation table is a list of animations, in the form of memory locations (symbols) for the animations.
 Each animation table has the following form:
@@ -111,7 +107,7 @@ foobarAnimationsTable:
 ```
 
 Each animation corresponds to a "state" (e.g. idle turned left).
-All animation tables must contain animations corresponding to the same states, in the same order.
+All animation tables must contain animations for each state, in the same order.
 However, if some state is not applicable for an entity, the animation table might simply contain references to an empty animation (one such animation called `dummySprites` can be found in the code).
 
 ### Animations & metasprites
@@ -120,7 +116,7 @@ An animation is a list of frames/metasprites.
 Metasprites consist of sprites, and sprites are four bytes long.
 The sprite bytes of a metasprite follow directly on each other in memory.
 A metasprite may consist of 0 to *a large number* of sprites.
-The end of a metasprite is denoted by an `$FE` byte (mnemonic: can be read as "frame end") (meaning that `FE` could never be the y offset of a sprite).
+The end of a metasprite is denoted by an `$FE` byte (mnemonic: can be read as "frame end") (meaning that `$FE` could never be the y offset of a sprite).
 A metasprite could also end with an `$FF` byte, which also indicates the end of the whole animation (meaning that `$FF` also cannot be the y offset of a sprite).
 An example follows:
 
@@ -169,10 +165,10 @@ The attribute byte has the following form:
 An example sprite follows:
 
 ```
-    .db $00, $15, %10000000, $00
+    .db $08, $15, %10000000, $00
 ```
 
-Here, `$08` is the y offset (indicating that the sprite is located one "step" down), `$15` is the location of the sprite data in the tileset, `%10000000` is the attribute byte (indicating that his sprite is flipped vertically) and `$00` is the x offset.
+Here, `$08` is the y offset (indicating that the sprite is located one "step" down), `$15` is the location of the sprite data in the tileset, `%10000000` is the attribute byte (indicating that this sprite is flipped vertically) and `$00` is the x offset.
 
 ## Game update
 
