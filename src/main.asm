@@ -33,8 +33,9 @@ MONKEY_NEG_SPEED_LOW  = $00 - MONKEY_SPEED_LOW
 MONKEY_NEG_SPEED_HIGH = $FF
 
     .rsset $0
-TYPE_MONKEY  .rs 1
-TYPE_SEAGULL .rs 1
+TYPE_MONKEY    .rs 1
+TYPE_SEAGULL   .rs 1
+TYPE_BOOMERANG .rs 1
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;; Structs ;;;;;;;;;;
@@ -80,6 +81,7 @@ animationsRightMoving .rs 2
 currentEntity    .ds 2
 firstEntity      .ds 0
 monkeyEntity     .ds entitySize
+boomerangEntity  .ds entitySize
 entitySpace      .ds entitySize*10
 endOfEntitySpace .ds 0
 

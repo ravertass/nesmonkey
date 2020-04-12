@@ -2,6 +2,7 @@
 ;; All game logic goes here.
 ;; Graphics and input logic does NOT go here.
 
+    .include "logic/boomerang.asm"
     .include "logic/monkey.asm"
     .include "logic/entity.asm"
     .include "logic/entity_space.asm"
@@ -26,11 +27,20 @@ UpdateGame:
     CMP #TYPE_MONKEY
     BEQ .JsrUpdateMonkey
 
+    LDY #entityType
+    LDA [currentEntity],Y
+    CMP #TYPE_BOOMERANG
+    BEQ .JsrUpdateBoomerang
+
     ; If this entity's type has no logic implemented, simply do the general update.
     JMP .GeneralEntityUpdate
 
 .JsrUpdateMonkey:
     JSR UpdateMonkey
+    JMP .GeneralEntityUpdate
+
+.JsrUpdateBoomerang:
+    JSR UpdateBoomerang
     JMP .GeneralEntityUpdate
 
 .GeneralEntityUpdate:

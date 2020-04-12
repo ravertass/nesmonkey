@@ -1,3 +1,6 @@
+    .ifndef SRC_UTIL_MACROS_
+SRC_UTIL_MACROS:
+
 ;;;;;;;; Utility macros ;;;;;;;;
 
 LoadEntity: .macro
@@ -7,3 +10,5 @@ LoadEntity: .macro
     LDA #HIGH(\1)
     STA currentEntity,Y
     .endm
+
+    .endif
