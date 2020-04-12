@@ -1,12 +1,10 @@
 ;;;;;;;; Game setup -- Monkey ;;;;;;;;
 ;; Setup for the monkey.
 
+    .include "util/macros.asm"
+
 SetupMonkey:
-    LDA #LOW(monkeyEntity)
-    STA currentEntity
-    LDY #$01
-    LDA #HIGH(monkeyEntity)
-    STA currentEntity,Y
+    LoadEntity monkeyEntity
 
     LDA #$01
     LDY #entityActive
