@@ -7,14 +7,11 @@ AnimateEntitySprites:
 
     ; if currentAnimationFrame == 0
     ; then we will NOT have to loop through so we draw the next frame
-    LDY #entityAnimationFrame
-    LDA [currentEntity],Y
-
+    ReadMemberToA entityAnimationFrame
     BEQ .UpdateEntitySpritesFrameFound
 
 .UpdateEntitySpritesFindFrame:
-    LDY #entityAnimationFrame
-    LDA [currentEntity],Y
+    ReadMemberToA entityAnimationFrame
     STA frameCounter
 .UpdateEntitySpritesFindFrameLoop:
     LDY currentMetaSpriteOffset

@@ -21,18 +21,12 @@ UpdateGraphics:
     ; place in memory.
     LDX #$00
 
-    ; set pointer to first entity in the entity list.
-    LDA #LOW(firstEntity)
-    STA currentEntity
-    LDY #$01
-    LDA #HIGH(firstEntity)
-    STA currentEntity,Y
+    LoadEntity firstEntity
 
 ; The loop here is more or less copy-pasted from the game logic update subroutine.
 .UpdateGraphicsLoop:
     ; if entity is not active: continue to next entity.
-    LDY #entityActive
-    LDA [currentEntity],Y
+    ReadMemberToA entityActive
     BEQ .NextEntity
 
     JSR UpdateEntitySprites
@@ -43,10 +37,9 @@ UpdateGraphics:
     CLC
     ADC #entitySize
     STA currentEntity
-    LDY #$01
-    LDA currentEntity,Y
+    LDA currentEntity+1
     ADC #$00 ; add carry to high byte of pointer
-    STA currentEntity,Y
+    STA currentEntity+1
 
     ; if we have looped through all entities: break loop.
     ; we must check both the low and the high byte of the currentEntity pointer.

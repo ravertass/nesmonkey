@@ -8,39 +8,23 @@ UpdateEntityMoving:
     RTS
 
 .UpdateEntityMoveCounter:
-    LDY #entityAnimationCount
-    LDA [currentEntity],Y
-    CLC
-    ADC #$01
-    LDY #entityAnimationMax
-    CMP [currentEntity],Y
+    IncrementMember entityAnimationCount
+    CompareMember entityAnimationMax
     BEQ .UpdateEntityMoveCounterReset
-    LDY #entityAnimationCount
-    STA [currentEntity],Y
     JMP .UpdateEntityMoveCounterDone
 .UpdateEntityMoveCounterReset:
-    LDA #$00
-    LDY #entityAnimationCount
-    STA [currentEntity],Y
+    WriteMember entityAnimationCount, #$00
     JSR .UpdateEntityAnimationFrame
 .UpdateEntityMoveCounterDone:
     RTS
 
 .UpdateEntityAnimationFrame:
-    LDY #entityAnimationFrame
-    LDA [currentEntity],Y
-    CLC
-    ADC #$01
-    LDY #entityAnimationLength
-    CMP [currentEntity],Y
+    IncrementMember entityAnimationFrame
+    CompareMember entityAnimationLength
     BEQ .UpdateEntityAnimationFrameReset
-    LDY #entityAnimationFrame
-    STA [currentEntity],Y
     JMP .UpdateEntityAnimationFrameDone
 .UpdateEntityAnimationFrameReset:
-    LDA #$00
-    LDY #entityAnimationFrame
-    STA [currentEntity],Y
+    WriteMember entityAnimationFrame, #$00
 .UpdateEntityAnimationFrameDone:
     RTS
 
