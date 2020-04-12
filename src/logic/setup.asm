@@ -16,6 +16,10 @@ SetupGame:
     STA rngSeed+1
 
     JSR SetupEntitySpace
-    JSR NewSeagull ; TODO: Seagulls should be added dynamically.
+
+    ; TODO: Seagulls should be added dynamically.
+    JSR NewSeagull
+    JSR NewSeagull
+    JSR NewSeagull
 
     RTS

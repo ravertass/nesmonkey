@@ -63,4 +63,21 @@ CompareMember: .macro
     CMP [currentEntity],Y
     .endm
 
+AddAToMember: .macro
+    LDY #\1
+    ADC [currentEntity],Y
+    STA [currentEntity],Y
+    .endm
+
 ;;; Other macros
+
+AddToPointer: .macro
+    LDA \1
+    CLC
+    ADC \2
+    STA \1
+
+    LDA \1+1
+    ADC #$00 ; add carry to high byte of pointer
+    STA \1+1
+    .endm

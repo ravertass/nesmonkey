@@ -30,43 +30,21 @@ UpdateEntityMoving:
 
 .UpdateEntityPosition:
     ; Add lower DY to lower Y byte
-    LDY #entityY
-    LDA [currentEntity],Y
+    ReadMemberToA entityDY
     CLC
-    LDY #entityDY
-    ADC [currentEntity],Y
-    LDY #entityY
-    STA [currentEntity],Y
+    AddAToMember entityY
 
     ; Add higher DY with carry to higher Y byte
-    LDY #entityY
-    INY
-    LDA [currentEntity],Y
-    LDY #entityDY
-    INY
-    ADC [currentEntity],Y
-    LDY #entityY
-    INY
-    STA [currentEntity],Y
+    ReadMemberToA entityDY+1
+    AddAToMember entityY+1
 
     ; Add lower DX to lower X byte
-    LDY #entityX
-    LDA [currentEntity],Y
+    ReadMemberToA entityDX
     CLC
-    LDY #entityDX
-    ADC [currentEntity],Y
-    LDY #entityX
-    STA [currentEntity],Y
+    AddAToMember entityX
 
     ; Add higher DX with carry to higher X byte
-    LDY #entityX
-    INY
-    LDA [currentEntity],Y
-    LDY #entityDX
-    INY
-    ADC [currentEntity],Y
-    LDY #entityX
-    INY
-    STA [currentEntity],Y
+    ReadMemberToA entityDX+1
+    AddAToMember entityX+1
 
     RTS
