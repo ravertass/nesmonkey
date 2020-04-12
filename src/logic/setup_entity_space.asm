@@ -4,11 +4,7 @@
 ; In the below subroutine, currentEntity is used as pointer
 ; for each byte in entity space.
 SetupEntitySpace:
-    LDA #LOW(entitySpace)
-    STA currentEntity
-    LDY #$01
-    LDA #HIGH(entitySpace)
-    STA currentEntity,Y
+    LoadEntity entitySpace
 
 .SetupEntitySpaceLoop:
     LDA #$00

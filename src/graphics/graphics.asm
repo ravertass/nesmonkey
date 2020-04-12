@@ -42,17 +42,9 @@ UpdateGraphics:
     STA currentEntity+1
 
     ; if we have looped through all entities: break loop.
-    ; we must check both the low and the high byte of the currentEntity pointer.
-    LDA currentEntity
-    CMP #LOW(endOfEntitySpace)
-    BEQ .CompareHigh
-    JMP .UpdateGraphicsLoop
-.CompareHigh:
-    ; the lower byte was equal: let's check if the higher byte is equal, too.
-    LDY #$01
-    LDA currentEntity,Y
-    CMP #HIGH(endOfEntitySpace)
+    ComparePointer16 currentEntity, endOfEntitySpace
     BEQ .UpdateGraphicsDone
+
     JMP .UpdateGraphicsLoop
 
 .UpdateGraphicsDone:

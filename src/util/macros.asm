@@ -10,6 +10,11 @@ LoadEntity: .macro
     STA currentEntity,Y
     .endm
 
+WriteAToMember: .macro
+    LDY #\1
+    STA [currentEntity],Y
+    .endm
+
 WriteMember: .macro
     LDA \2
     LDY #\1
@@ -71,7 +76,7 @@ AddAToMember: .macro
 
 ;;; Other macros
 
-AddToPointer: .macro
+AddToPointer16: .macro
     LDA \1
     CLC
     ADC \2
@@ -80,4 +85,14 @@ AddToPointer: .macro
     LDA \1+1
     ADC #$00 ; add carry to high byte of pointer
     STA \1+1
+    .endm
+
+ComparePointer16: .macro
+    LDA \1
+    CMP #LOW(\2)
+    BNE .Done\@
+    ; the lower byte was equal: let's check if the higher byte is equal, too.
+    LDA currentEntity+1
+    CMP #HIGH(\2)
+.Done\@:
     .endm

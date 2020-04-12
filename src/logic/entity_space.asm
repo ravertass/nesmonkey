@@ -18,7 +18,7 @@ GetFreeEntitySlot:
     ; That entity was alive: let's keep looking at the next entity...
 
     ; increment currentEntity pointer so we point to the next entity.
-    AddToPointer currentEntity, #entitySize
+    AddToPointer16 currentEntity, #entitySize
 
     ; if we have looped through all entities: break loop.
     ; we must check both the low and the high byte of the currentEntity pointer.

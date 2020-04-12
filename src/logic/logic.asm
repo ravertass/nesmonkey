@@ -9,26 +9,18 @@
     .include "util/random.asm"
 
 UpdateGame:
-    ; set pointer to first entity in the entity list.
-    LDA #LOW(firstEntity)
-    STA currentEntity
-    LDY #$01
-    LDA #HIGH(firstEntity)
-    STA currentEntity,Y
+    LoadEntity firstEntity
 
 .UpdateEntitiesLoop:
     ; if entity is not active: continue to next entity.
-    LDY #entityActive
-    LDA [currentEntity],Y
+    ReadMemberToA entityActive
     BEQ .NextEntity
 
-    LDY #entityType
-    LDA [currentEntity],Y
+    ReadMemberToA entityType
     CMP #TYPE_MONKEY
     BEQ .JsrUpdateMonkey
 
-    LDY #entityType
-    LDA [currentEntity],Y
+    ReadMemberToA entityType
     CMP #TYPE_BOOMERANG
     BEQ .JsrUpdateBoomerang
 
@@ -52,26 +44,11 @@ UpdateGame:
 
 .NextEntity:
     ; increment currentEntity pointer so we point to the next entity.
-    LDA currentEntity
-    CLC
-    ADC #entitySize
-    STA currentEntity
-    LDY #$01
-    LDA currentEntity,Y
-    ADC #$00 ; add carry to high byte of pointer
-    STA currentEntity,Y
+    AddToPointer16 currentEntity, #entitySize
 
     ; if we have looped through all entities: break loop.
     ; we must check both the low and the high byte of the currentEntity pointer.
-    LDA currentEntity
-    CMP #LOW(endOfEntitySpace)
-    BEQ .CompareHigh
-    JMP .UpdateEntitiesLoop
-.CompareHigh:
-    ; the lower byte was equal: let's check if the higher byte is equal, too.
-    LDY #$01
-    LDA currentEntity,Y
-    CMP #HIGH(endOfEntitySpace)
+    ComparePointer16 currentEntity, endOfEntitySpace
     BEQ .UpdateEntitiesDone
     JMP .UpdateEntitiesLoop
 
