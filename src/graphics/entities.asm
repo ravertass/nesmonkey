@@ -102,8 +102,7 @@ UpdateEntitySprites:
 
     INY
     LDA [currentAnimationsTable],Y
-    LDY #$01
-    STA currentMetaSpritePointer,Y
+    STA currentMetaSpritePointer+1
 
     JMP .SetCurrentAnimationLength
 

@@ -22,22 +22,14 @@ GetFreeEntitySlot:
 
     ; if we have looped through all entities: break loop.
     ; we must check both the low and the high byte of the currentEntity pointer.
-    LDA currentEntity
-    CMP #LOW(endOfEntitySpace)
-    BEQ .CompareHigh
-    JMP .GetFreeEntitySlotLoop
-.CompareHigh:
-    ; the lower byte was equal: let's check if the higher byte is equal, too.
-    LDA currentEntity+1
-    CMP #HIGH(endOfEntitySpace)
+    ComparePointer16 currentEntity, endOfEntitySpace
     BEQ .NoFreeEntitySlot
     JMP .GetFreeEntitySlotLoop
 
 .NoFreeEntitySlot:
     LDA #$FF
     STA currentEntity
-    LDY #$01
-    STA currentEntity,Y
+    STA currentEntity+1
 
 .GetFreeEntitySlotDone:
     ; The pointer to the entity slot is in currentEntity.
