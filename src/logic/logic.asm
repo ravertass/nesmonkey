@@ -13,14 +13,14 @@ UpdateGame:
 
 .UpdateEntitiesLoop:
     ; if entity is not active: continue to next entity.
-    ReadMemberToA entityActive
+    EReadMemberToA entityActive
     BEQ .NextEntity
 
-    ReadMemberToA entityType
+    EReadMemberToA entityType
     CMP #TYPE_MONKEY
     BEQ .JsrUpdateMonkey
 
-    ReadMemberToA entityType
+    EReadMemberToA entityType
     CMP #TYPE_BOOMERANG
     BEQ .JsrUpdateBoomerang
 

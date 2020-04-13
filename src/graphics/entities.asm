@@ -9,21 +9,21 @@
 ; Side-effects:
 ;     Draws currentEntity's current sprite to the screen.
 UpdateEntitySprites:
-    ReadMember16ToP entityAnimationsTable, currentAnimationsTable
+    EReadMember16ToP entityAnimationsTable, currentAnimationsTable
 
-    ReadMemberToA entityDir
+    EReadMemberToA entityDir
     CMP #DIR_UP
     BEQ .SetEntitySpritesUp
 
-    ReadMemberToA entityDir
+    EReadMemberToA entityDir
     CMP #DIR_DOWN
     BEQ .SetEntitySpritesDown
 
-    ReadMemberToA entityDir
+    EReadMemberToA entityDir
     CMP #DIR_LEFT
     BEQ .SetEntitySpritesLeft
 
-    ReadMemberToA entityDir
+    EReadMemberToA entityDir
     CMP #DIR_RIGHT
     BEQ .SetEntitySpritesRight
 
@@ -32,7 +32,7 @@ UpdateEntitySprites:
     RTS
 
 .SetEntitySpritesUp:
-    ReadMemberToA entityState
+    EReadMemberToA entityState
     CMP #IDLE
     BEQ .SetEntitySpritesUpIdle
     ; Else: monkeyState == #MOVING
@@ -46,7 +46,7 @@ UpdateEntitySprites:
     JMP .EntitySpritesSet
 
 .SetEntitySpritesDown:
-    ReadMemberToA entityState
+    EReadMemberToA entityState
     CMP #IDLE
     BEQ .SetEntitySpritesDownIdle
     ; Else: monkeyState == #MOVING
@@ -60,7 +60,7 @@ UpdateEntitySprites:
     JMP .EntitySpritesSet
 
 .SetEntitySpritesLeft:
-    ReadMemberToA entityState
+    EReadMemberToA entityState
     CMP #IDLE
     BEQ .SetEntitySpritesLeftIdle
     ; Else: monkeyState == #MOVING
@@ -74,7 +74,7 @@ UpdateEntitySprites:
     JMP .EntitySpritesSet
 
 .SetEntitySpritesRight:
-    ReadMemberToA entityState
+    EReadMemberToA entityState
     CMP #IDLE
     BEQ .SetEntitySpritesRightIdle
     ; Else: monkeyState == #MOVING
@@ -108,11 +108,11 @@ UpdateEntitySprites:
 
 .SetCurrentAnimationLength:
     ; Animation is at least of length 1
-    WriteMember entityAnimationLength, #$01
+    EWriteMember entityAnimationLength, #$01
     LDY #$FF
     JMP .SetCurrentAnimationLengthLoop
 .SetCurrentAnimationLengthIncrement:
-    IncrementMember entityAnimationLength
+    EIncrementMember entityAnimationLength
 .SetCurrentAnimationLengthLoop:
     INY
     LDA [currentMetaSpritePointer],Y

@@ -10,42 +10,42 @@ LoadEntity: .macro
     STA currentEntity,Y
     .endm
 
-WriteAToMember: .macro
+EWriteAToMember: .macro
     LDY #\1
     STA [currentEntity],Y
     .endm
 
-WriteMember: .macro
+EWriteMember: .macro
     LDA \2
     LDY #\1
     STA [currentEntity],Y
     .endm
 
-WriteMember16: .macro
-    WriteMember \1, LOW(\2)
+EWriteMember16: .macro
+    EWriteMember \1, LOW(\2)
     LDA HIGH(\2)
     INY
     STA [currentEntity],Y
     .endm
 
-WriteMember16P: .macro
-    WriteMember \1, #LOW(\2)
+EWriteMember16P: .macro
+    EWriteMember \1, #LOW(\2)
     LDA #HIGH(\2)
     INY
     STA [currentEntity],Y
     .endm
 
-ReadMemberToA: .macro
+EReadMemberToA: .macro
     LDY #\1
     LDA [currentEntity],Y
     .endm
 
-ReadMemberToP: .macro
-    ReadMemberToA \1
+EReadMemberToP: .macro
+    EReadMemberToA \1
     STA \2
     .endm
 
-ReadMember16ToP: .macro
+EReadMember16ToP: .macro
     LDY #\1
     LDA [currentEntity],Y
     STA \2
@@ -55,20 +55,20 @@ ReadMember16ToP: .macro
     .endm
 
 ; Also keeps the incremented member in A (compare with postfix ++ operator)
-IncrementMember: .macro
-    ReadMemberToA \1
+EIncrementMember: .macro
+    EReadMemberToA \1
     CLC
     ADC #$01
     STA [currentEntity],Y
     .endm
 
 ; Compares with A
-CompareMember: .macro
+ECompareMember: .macro
     LDY #\1
     CMP [currentEntity],Y
     .endm
 
-AddAToMember: .macro
+EAddAToMember: .macro
     LDY #\1
     ADC [currentEntity],Y
     STA [currentEntity],Y

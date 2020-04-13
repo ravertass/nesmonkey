@@ -7,28 +7,28 @@ NewSeagull:
     CMP #$FF
     BEQ .NewSeagullDone ; no free entity slot was found :(
 
-    WriteMember entityActive, #$01
-    WriteMember entityType, #TYPE_SEAGULL
+    EWriteMember entityActive, #$01
+    EWriteMember entityType, #TYPE_SEAGULL
 
     JSR RandomByte
-    WriteAToMember entityX
+    EWriteAToMember entityX
     JSR RandomByte
-    WriteAToMember entityY
+    EWriteAToMember entityY
     JSR RandomByte
-    WriteAToMember entityX+1
+    EWriteAToMember entityX+1
     JSR RandomByte
-    WriteAToMember entityY+1
+    EWriteAToMember entityY+1
 
     ; TODO: These should be randomized
-    WriteMember entityDX, #$04
-    WriteMember entityDY, #$01
-    WriteMember entityDir, #DIR_RIGHT
-    WriteMember entityState, #MOVING
+    EWriteMember entityDX, #$04
+    EWriteMember entityDY, #$01
+    EWriteMember entityDir, #DIR_RIGHT
+    EWriteMember entityState, #MOVING
 
-    WriteMember entityAnimationFrame, #$00
-    WriteMember entityAnimationCount, #$00
-    WriteMember entityAnimationMax, #$08
-    WriteMember16P entityAnimationsTable, seagullAnimationsTable
+    EWriteMember entityAnimationFrame, #$00
+    EWriteMember entityAnimationCount, #$00
+    EWriteMember entityAnimationMax, #$08
+    EWriteMember16P entityAnimationsTable, seagullAnimationsTable
 
 .NewSeagullDone
     RTS

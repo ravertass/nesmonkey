@@ -4,17 +4,17 @@
 SetupMonkey:
     LoadEntity monkeyEntity
 
-    WriteMember entityActive, #$01
-    WriteMember entityType, #TYPE_MONKEY
-    WriteMember16 entityX, #$0002
-    WriteMember16 entityY, #$0002
-    WriteMember entityDX, #$00
-    WriteMember entityDY, #$00
-    WriteMember entityDir, #DIR_DOWN
-    WriteMember entityState, #IDLE
-    WriteMember entityAnimationFrame, #00
-    WriteMember entityAnimationCount, #00
-    WriteMember entityAnimationMax, #08
-    WriteMember16P entityAnimationsTable, monkeyAnimationsTable
+    EWriteMember entityActive, #$01
+    EWriteMember entityType, #TYPE_MONKEY
+    EWriteMember16 entityX, #$0002
+    EWriteMember16 entityY, #$0002
+    EWriteMember entityDX, #$00
+    EWriteMember entityDY, #$00
+    EWriteMember entityDir, #DIR_DOWN
+    EWriteMember entityState, #IDLE
+    EWriteMember entityAnimationFrame, #00
+    EWriteMember entityAnimationCount, #00
+    EWriteMember entityAnimationMax, #08
+    EWriteMember16P entityAnimationsTable, monkeyAnimationsTable
 
     RTS

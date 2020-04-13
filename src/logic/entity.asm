@@ -8,43 +8,43 @@ UpdateEntityMoving:
     RTS
 
 .UpdateEntityMoveCounter:
-    IncrementMember entityAnimationCount
-    CompareMember entityAnimationMax
+    EIncrementMember entityAnimationCount
+    ECompareMember entityAnimationMax
     BEQ .UpdateEntityMoveCounterReset
     JMP .UpdateEntityMoveCounterDone
 .UpdateEntityMoveCounterReset:
-    WriteMember entityAnimationCount, #$00
+    EWriteMember entityAnimationCount, #$00
     JSR .UpdateEntityAnimationFrame
 .UpdateEntityMoveCounterDone:
     RTS
 
 .UpdateEntityAnimationFrame:
-    IncrementMember entityAnimationFrame
-    CompareMember entityAnimationLength
+    EIncrementMember entityAnimationFrame
+    ECompareMember entityAnimationLength
     BEQ .UpdateEntityAnimationFrameReset
     JMP .UpdateEntityAnimationFrameDone
 .UpdateEntityAnimationFrameReset:
-    WriteMember entityAnimationFrame, #$00
+    EWriteMember entityAnimationFrame, #$00
 .UpdateEntityAnimationFrameDone:
     RTS
 
 .UpdateEntityPosition:
     ; Add lower DY to lower Y byte
-    ReadMemberToA entityDY
+    EReadMemberToA entityDY
     CLC
-    AddAToMember entityY
+    EAddAToMember entityY
 
     ; Add higher DY with carry to higher Y byte
-    ReadMemberToA entityDY+1
-    AddAToMember entityY+1
+    EReadMemberToA entityDY+1
+    EAddAToMember entityY+1
 
     ; Add lower DX to lower X byte
-    ReadMemberToA entityDX
+    EReadMemberToA entityDX
     CLC
-    AddAToMember entityX
+    EAddAToMember entityX
 
     ; Add higher DX with carry to higher X byte
-    ReadMemberToA entityDX+1
-    AddAToMember entityX+1
+    EReadMemberToA entityDX+1
+    EAddAToMember entityX+1
 
     RTS

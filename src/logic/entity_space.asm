@@ -12,7 +12,7 @@ GetFreeEntitySlot:
     ; Loop through all of entity space, until an inactive entity slot is found.
 .GetFreeEntitySlotLoop:
     ; If entityActive is 0, then the entity slot is free!
-    ReadMemberToA entityActive
+    EReadMemberToA entityActive
     BEQ .GetFreeEntitySlotDone ; free slot was found!
 
     ; That entity was alive: let's keep looking at the next entity...
