@@ -4,24 +4,15 @@
 ;; Checks the controller input and updates the monkey accordingly.
 UpdateMonkey:
     ; Start by setting Monkey's speed to 0
-    LDA #$00
-    LDY #entityDY
-    STA [currentEntity],Y
-    INY
-    STA [currentEntity],Y
-    LDY #entityDX
-    STA [currentEntity],Y
-    INY
-    STA [currentEntity],Y
+    EWriteMember16 entityDX, #$0000
+    EWriteMember16 entityDY, #$0000
 
 ; Is monkey moving?
     LDA controller1
     AND #BUTTON_DIRS
     BEQ .UpdateMonkeyNotMoving ; if monkey isn't moving, skip most of the code below
 
-    LDA #MOVING
-    LDY #entityState
-    STA [currentEntity],Y
+    EWriteMember entityState, #MOVING
 
 ; Is monkey going down?
     LDA controller1
@@ -57,71 +48,31 @@ UpdateMonkey:
     LDA #IDLE
     LDY #entityState
     STA [currentEntity],Y
-    LDA #$00
-    LDY #entityAnimationCount
-    STA [currentEntity],Y
-    LDY #entityAnimationFrame
-    STA [currentEntity],Y
-.UpdateMonkeyNotMovingDone:
+    EWriteMember entityAnimationCount, #$00
+    EWriteMember entityAnimationFrame, #$00
     RTS
 
 
 .UpdateMonkeyGoDown:
-    LDA #MONKEY_SPEED_LOW
-    LDY #entityDY
-    STA [currentEntity],Y
-    LDA #MONKEY_SPEED_HIGH
-    LDY #entityDY
-    INY
-    STA [currentEntity],Y
-
-    LDA #DIR_DOWN
-    LDY #entityDir
-    STA [currentEntity],Y
+    EWriteMember16 entityDY, MONKEY_SPEED
+    EWriteMember entityDir, #DIR_DOWN
 
     RTS
 
 .UpdateMonkeyGoLeft:
-    LDA #MONKEY_NEG_SPEED_LOW
-    LDY #entityDX
-    STA [currentEntity],Y
-    LDA #MONKEY_NEG_SPEED_HIGH
-    LDY #entityDX
-    INY
-    STA [currentEntity],Y
-
-    LDA #DIR_LEFT
-    LDY #entityDir
-    STA [currentEntity],Y
+    EWriteMember16 entityDX, MONKEY_NEG_SPEED
+    EWriteMember entityDir, #DIR_LEFT
 
     RTS
 
 .UpdateMonkeyGoRight:
-    LDA #MONKEY_SPEED_LOW
-    LDY #entityDX
-    STA [currentEntity],Y
-    LDA #MONKEY_SPEED_HIGH
-    LDY #entityDX
-    INY
-    STA [currentEntity],Y
-
-    LDA #DIR_RIGHT
-    LDY #entityDir
-    STA [currentEntity],Y
+    EWriteMember16 entityDX, MONKEY_SPEED
+    EWriteMember entityDir, #DIR_RIGHT
 
     RTS
 
 .UpdateMonkeyGoUp:
-    LDA #MONKEY_NEG_SPEED_LOW
-    LDY #entityDY
-    STA [currentEntity],Y
-    LDA #MONKEY_NEG_SPEED_HIGH
-    LDY #entityDY
-    INY
-    STA [currentEntity],Y
-
-    LDA #DIR_UP
-    LDY #entityDir
-    STA [currentEntity],Y
+    EWriteMember16 entityDY, MONKEY_NEG_SPEED
+    EWriteMember entityDir, #DIR_UP
 
     RTS

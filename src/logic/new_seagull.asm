@@ -3,45 +3,36 @@
 
 NewSeagull:
     JSR GetFreeEntitySlot
-    LDA #HIGH(currentEntity)
+    LDA currentEntity+1
     CMP #$FF
     BEQ .NewSeagullDone ; no free entity slot was found :(
 
     EWriteMember entityActive, #$01
     EWriteMember entityType, #TYPE_SEAGULL
 
-    JSR RandomByte
-    EWriteAToMember entityX
-    JSR RandomByte
-    EWriteAToMember entityY
-    JSR RandomByte
-    EWriteAToMember entityX+1
-    JSR RandomByte
-    EWriteAToMember entityY+1
-
-    JSR GetSeagullSpeed
+    JSR .GetSeagullSpeed
     EWriteAToMember entityDX
     TXA
     EWriteAToMember entityDX+1
-    JSR GetSeagullSpeed
+    JSR .GetSeagullSpeed
     EWriteAToMember entityDY
     TXA
     EWriteAToMember entityDY+1
 
-    JSR SetSeagullDirection
+    JSR .SetSeagullDirAndPos
     EWriteMember entityState, #MOVING
 
     EWriteMember entityAnimationFrame, #$00
     EWriteMember entityAnimationCount, #$00
     EWriteMember entityAnimationMax, #$08
-    EWriteMember16P entityAnimationsTable, seagullAnimationsTable
+    EWriteMember16 entityAnimationsTable, seagullAnimationsTable
 
 .NewSeagullDone
     RTS
 
 ; Writes a randomized speed to the registers.
 ; The higher byte in X, the lower in A.
-GetSeagullSpeed:
+.GetSeagullSpeed:
     ; First, randomize a small number that is not zero and transfer it to X.
     JSR RandomByte
     AND #%00000111
@@ -60,16 +51,16 @@ GetSeagullSpeed:
     TYA
     NegateA
     LDX #$FF
-    JMP .Done
+    JMP .SpeedDone
 
 .Positive:
     TYA
     LDX #$00
-.Done:
+.SpeedDone:
     RTS
 
-; TODO: This subroutine could be used for all entities, really.
-SetSeagullDirection:
+; TODO: Much of this subroutine could be used for all entities, really.
+.SetSeagullDirAndPos:
     ; Check if DX is positive.
     EReadMemberToA entityDX+1
     AND #%10000000
@@ -117,18 +108,38 @@ SetSeagullDirection:
     BCS .SetRight
     JMP .SetDown
 
-.SetUp:
-    EWriteMember entityDir, #DIR_UP
-    JMP .Done
-.SetDown:
-    EWriteMember entityDir, #DIR_DOWN
-    JMP .Done
 .SetLeft:
     EWriteMember entityDir, #DIR_LEFT
-    JMP .Done
+    EWriteMember16 entityX, #$FFFF
+    JSR RandomByte
+    EWriteAToMember entityY
+    JSR RandomByte
+    EWriteAToMember entityY+1
+    JMP .DirAndPosDone
+.SetUp:
+    EWriteMember entityDir, #DIR_UP
+    JSR RandomByte
+    EWriteAToMember entityX
+    JSR RandomByte
+    EWriteAToMember entityX+1
+    EWriteMember16 entityY, #$FFFF
+    JMP .DirAndPosDone
+.SetDown:
+    EWriteMember entityDir, #DIR_DOWN
+    JSR RandomByte
+    EWriteAToMember entityX
+    JSR RandomByte
+    EWriteAToMember entityX+1
+    EWriteMember16 entityY, #$0000
+    JMP .DirAndPosDone
 .SetRight:
     EWriteMember entityDir, #DIR_RIGHT
-    JMP .Done
+    EWriteMember16 entityX, #$0000
+    JSR RandomByte
+    EWriteAToMember entityY
+    JSR RandomByte
+    EWriteAToMember entityY+1
+    JMP .DirAndPosDone
 
-.Done:
+.DirAndPosDone:
     RTS

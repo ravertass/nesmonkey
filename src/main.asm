@@ -33,10 +33,8 @@ DIR_RIGHT = $03
 IDLE   = $00
 MOVING = $01
 
-MONKEY_SPEED_LOW  = $03
-MONKEY_SPEED_HIGH = $00
-MONKEY_NEG_SPEED_LOW  = $00 - MONKEY_SPEED_LOW
-MONKEY_NEG_SPEED_HIGH = $FF
+MONKEY_SPEED  = $0003
+MONKEY_NEG_SPEED = $0000 - MONKEY_SPEED
 
     .rsset $0
 TYPE_MONKEY    .rs 1
@@ -88,7 +86,10 @@ currentEntity    .ds 2
 firstEntity      .ds 0
 monkeyEntity     .ds entitySize
 boomerangEntity  .ds entitySize
-entitySpace      .ds entitySize*10
+; 9 seems to be the limit for entities in zero page.
+; Should probably start using memory outside of zero page.
+; And not use zero page for local variables... (how to use a stack...?)
+entitySpace      .ds entitySize*9
 endOfEntitySpace .ds 0
 
 controller1 .ds 1  ; Last input from controller 1.
@@ -109,6 +110,8 @@ rngSeed .ds 2
 ; Pointer used during graphics setup.
 bgPointerLow  .ds 1
 bgPointerHigh .ds 1
+
+    .bss
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;; Setup ;;;;;;;;;;

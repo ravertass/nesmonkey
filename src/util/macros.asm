@@ -5,9 +5,8 @@
 LoadEntity: .macro
     LDA #LOW(\1)
     STA currentEntity
-    LDY #$01
     LDA #HIGH(\1)
-    STA currentEntity,Y
+    STA currentEntity+1
     .endm
 
 EWriteAToMember: .macro
@@ -22,13 +21,6 @@ EWriteMember: .macro
     .endm
 
 EWriteMember16: .macro
-    EWriteMember \1, LOW(\2)
-    LDA HIGH(\2)
-    INY
-    STA [currentEntity],Y
-    .endm
-
-EWriteMember16P: .macro
     EWriteMember \1, #LOW(\2)
     LDA #HIGH(\2)
     INY
@@ -92,7 +84,7 @@ ComparePointer16: .macro
     CMP #LOW(\2)
     BNE .Done\@
     ; the lower byte was equal: let's check if the higher byte is equal, too.
-    LDA currentEntity+1
+    LDA \1+1
     CMP #HIGH(\2)
 .Done\@:
     .endm
