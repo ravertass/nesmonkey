@@ -99,9 +99,6 @@ currentMetaSpritePointer .ds 2
 currentMetaSpriteOffset  .ds 1
 currentAnimationsTable   .ds 2
 
-; Counter used during animation (due to lack of registers...)
-frameCounter .ds 1
-
 tempCoordinate .ds 1
 
 ; Seed for random number generation.
@@ -112,6 +109,11 @@ bgPointerLow  .ds 1
 bgPointerHigh .ds 1
 
     .bss
+
+; Counter used during animation (due to lack of registers...)
+frameCounter .ds 1
+
+DMA_GRAPHICS = $0300
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;; Setup ;;;;;;;;;;

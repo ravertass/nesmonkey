@@ -11,10 +11,10 @@
 ; Side-effects:
 ;     Draws all entities' graphics to the screen.
 UpdateGraphics:
-    ; Start DMA transfer from $0200
-    LDA #$00
+    ; Start DMA transfer from DMA_GRAPHICS address
+    LDA #LOW(DMA_GRAPHICS)
     STA $2003
-    LDA #$02
+    LDA #HIGH(DMA_GRAPHICS)
     STA $4014
 
     ; X will be the offset used to store all sprites at the correct

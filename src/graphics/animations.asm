@@ -46,20 +46,20 @@ AnimateEntitySprites:
     LDY currentMetaSpriteOffset
     ADC [currentMetaSpritePointer],Y
 
-    STA $0200,X
+    STA DMA_GRAPHICS,X
     INX
     LDY currentMetaSpriteOffset
     INY
 
     ; Tile
     LDA [currentMetaSpritePointer],Y
-    STA $0200,X
+    STA DMA_GRAPHICS,X
     INX
     INY
 
     ; Attribute
     LDA [currentMetaSpritePointer],Y
-    STA $0200,X
+    STA DMA_GRAPHICS,X
     INX
     INY
 
@@ -72,7 +72,7 @@ AnimateEntitySprites:
     LDY currentMetaSpriteOffset
     ADC [currentMetaSpritePointer],Y
 
-    STA $0200,X
+    STA DMA_GRAPHICS,X
     INX
     LDY currentMetaSpriteOffset
     INY
