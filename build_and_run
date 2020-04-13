@@ -3,4 +3,5 @@
 export NES_INCLUDE="src"
 NESASM3 main.asm -l 2 -s
 ./fns2nl.py main.fns > main.nes.0.nl
+./asm2ramnl.py src/main.asm > main.nes.ram.nl
 fceux main.nes

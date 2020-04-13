@@ -82,6 +82,8 @@ animationsRightMoving .rs 2
 ;;;;;; RAM variables ;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+; RAM start (parseable line! don't remove!)
+
     .zp
 
 currentEntity    .ds 2
@@ -116,6 +118,8 @@ tempCoordinate .ds 1
     .org $0700
 
 DMA_GRAPHICS .ds $FF
+
+; RAM end (parseable line! don't remove!)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;; Setup ;;;;;;;;;;
