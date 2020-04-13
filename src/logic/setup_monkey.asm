@@ -8,8 +8,8 @@ SetupMonkey:
     EWriteMember entityType, #TYPE_MONKEY
     EWriteMember16 entityX, #$0002
     EWriteMember16 entityY, #$0002
-    EWriteMember entityDX, #$00
-    EWriteMember entityDY, #$00
+    EWriteMember16 entityDX, #$0000
+    EWriteMember16 entityDY, #$0000
     EWriteMember entityDir, #DIR_DOWN
     EWriteMember entityState, #IDLE
     EWriteMember entityAnimationFrame, #00

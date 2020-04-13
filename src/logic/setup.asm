@@ -10,7 +10,8 @@ SetupGame:
     JSR SetupMonkey
     JSR SetupBoomerang
 
-    LDA #$04 ; number chosen randomly
+    LDA #$04 ; chosen by fair dice roll.
+             ; guaranteed to be random.
     STA rngSeed
     LDA #$E0
     STA rngSeed+1

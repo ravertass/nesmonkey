@@ -96,3 +96,9 @@ ComparePointer16: .macro
     CMP #HIGH(\2)
 .Done\@:
     .endm
+
+NegateA: .macro
+    EOR #$FF
+    CLC
+    ADC #$01
+    .endm
