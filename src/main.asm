@@ -83,26 +83,11 @@ animationsRightMoving .rs 2
     .zp
 
 currentEntity    .ds 2
-firstEntity      .ds 0
-monkeyEntity     .ds entitySize
-boomerangEntity  .ds entitySize
-; 9 seems to be the limit for entities in zero page.
-; Should probably start using memory outside of zero page.
-; And not use zero page for local variables... (how to use a stack...?)
-entitySpace      .ds entitySize*9
-endOfEntitySpace .ds 0
-
-controller1 .ds 1  ; Last input from controller 1.
 
 ; Variables set before updating sprites
 currentMetaSpritePointer .ds 2
 currentMetaSpriteOffset  .ds 1
 currentAnimationsTable   .ds 2
-
-tempCoordinate .ds 1
-
-; Seed for random number generation.
-rngSeed .ds 2
 
 ; Pointer used during graphics setup.
 bgPointerLow  .ds 1
@@ -110,10 +95,25 @@ bgPointerHigh .ds 1
 
     .bss
 
+firstEntity      .ds 0
+monkeyEntity     .ds entitySize
+boomerangEntity  .ds entitySize
+entitySpace      .ds entitySize*22
+endOfEntitySpace .ds 0
+
+controller1 .ds 1  ; Last input from controller 1.
+
 ; Counter used during animation (due to lack of registers...)
 frameCounter .ds 1
 
-DMA_GRAPHICS = $0300
+; Seed for random number generation.
+rngSeed .ds 2
+
+tempCoordinate .ds 1
+
+    .org $0700
+
+DMA_GRAPHICS .ds $FF
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;; Setup ;;;;;;;;;;

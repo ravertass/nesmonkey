@@ -5,15 +5,16 @@
 ; for each byte in entity space.
 SetupEntitySpace:
     LoadEntity entitySpace
+    LDY #$00
 
 .SetupEntitySpaceLoop:
     LDA #$00
     STA [currentEntity],Y
 
 .NextByte:
-    INY
+    IncrementPointer currentEntity
     ; if we have looped through all of entity space: break loop.
-    CPY #(endOfEntitySpace - entitySpace)
+    ComparePointer16 currentEntity, endOfEntitySpace
     BEQ .SetupEntitySpaceDone
     JMP .SetupEntitySpaceLoop
 
