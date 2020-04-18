@@ -41,13 +41,11 @@ UpdateGame:
     ; to DX and DY, and updating the animationCount value.
     JSR UpdateEntityMoving
 
-
 .NextEntity:
     ; increment currentEntity pointer so we point to the next entity.
     AddToPointer16 currentEntity, #entitySize
 
     ; if we have looped through all entities: break loop.
-    ; we must check both the low and the high byte of the currentEntity pointer.
     ComparePointer16 currentEntity, endOfEntitySpace
     BEQ .UpdateEntitiesDone
     JMP .UpdateEntitiesLoop

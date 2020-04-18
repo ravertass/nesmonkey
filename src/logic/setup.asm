@@ -3,7 +3,6 @@
 
     .include "logic/setup_boomerang.asm"
     .include "logic/setup_monkey.asm"
-    .include "logic/setup_entity_space.asm"
     .include "logic/new_seagull.asm"
 
 SetupGame:
@@ -15,8 +14,6 @@ SetupGame:
     STA rngSeed
     LDA #$E0
     STA rngSeed+1
-
-    JSR SetupEntitySpace
 
     ; TODO: Seagulls should be added dynamically.
     JSR NewSeagull

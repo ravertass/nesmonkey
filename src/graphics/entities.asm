@@ -112,7 +112,9 @@ UpdateEntitySprites:
     LDY #$FF
     JMP .SetCurrentAnimationLengthLoop
 .SetCurrentAnimationLengthIncrement:
+    STY currentMetaSpriteOffset
     EIncrementMember entityAnimationLength
+    LDY currentMetaSpriteOffset
 .SetCurrentAnimationLengthLoop:
     INY
     LDA [currentMetaSpritePointer],Y

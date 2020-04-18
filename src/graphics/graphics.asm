@@ -33,18 +33,11 @@ UpdateGraphics:
 
 .NextEntity:
     ; increment currentEntity pointer so we point to the next entity.
-    LDA currentEntity
-    CLC
-    ADC #entitySize
-    STA currentEntity
-    LDA currentEntity+1
-    ADC #$00 ; add carry to high byte of pointer
-    STA currentEntity+1
+    AddToPointer16 currentEntity, #entitySize
 
     ; if we have looped through all entities: break loop.
     ComparePointer16 currentEntity, endOfEntitySpace
     BEQ .UpdateGraphicsDone
-
     JMP .UpdateGraphicsLoop
 
 .UpdateGraphicsDone:

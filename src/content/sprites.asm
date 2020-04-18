@@ -11,7 +11,9 @@
 ; +-------- Flip sprite vertically
 
 ; To be used in cases that are not relevant (e.g. seagull has no idle animations)
+; (draw a banana peel because funny)
 dummySprites:
+    .db $00, $2F, %00000000, $00
     .db $FF
 
 monkeyAnimationsTable:
@@ -161,4 +163,27 @@ sprSeagullRightMoving:
     ; Sprite
     .db $00, $88, %00000000, $00
     ; End of animation
+    .db $FF
+
+
+boomerangAnimationsTable:
+    .dw dummySprites, dummySprites, dummySprites, dummySprites
+    .dw sprBoomerangMoving, sprBoomerangMoving, sprBoomerangMoving, sprBoomerangMoving
+
+sprBoomerangMoving:
+    .db $00, $7C, %00000000, $00
+    .db $FE
+    .db $00, $7D, %00000000, $00
+    .db $FE
+    .db $00, $7E, %00000000, $00
+    .db $FE
+    .db $00, $7F, %00000000, $00
+    .db $FE
+    .db $00, $8C, %00000000, $00
+    .db $FE
+    .db $00, $8D, %00000000, $00
+    .db $FE
+    .db $00, $8E, %00000000, $00
+    .db $FE
+    .db $00, $8F, %00000000, $00
     .db $FF

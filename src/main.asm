@@ -38,6 +38,9 @@ MOVING = $01
 MONKEY_SPEED  = $0003
 MONKEY_NEG_SPEED = $0000 - MONKEY_SPEED
 
+BOOMERANG_SPEED  = $0008
+BOOMERANG_NEG_SPEED = $0000 - MONKEY_SPEED
+
     .rsset $0
 TYPE_MONKEY    .rs 1
 TYPE_SEAGULL   .rs 1
@@ -114,6 +117,8 @@ frameCounter .ds 1
 rngSeed .ds 2
 
 tempCoordinate .ds 1
+
+tempMonkeyCoordinate .ds 2
 
     .org $0700
 
