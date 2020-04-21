@@ -6,39 +6,41 @@ UpdateBoomerang:
     ; TODO: Using entityActive like this does not work...
     ;       Since UpdateBoomerang won't be called if the boomerang is not active... >___<
     LoadEntity boomerangEntity
-    EReadMemberToA entityActive
-    CMP #$00
-    BNE .BoomerangActive
+    EReadMemberToA entityState
+    CMP #MOVING
+    BEQ .BoomerangMoving
 
-    ; Boomerang not active
+    ; Boomerang is idle.
+    ; So, let's check if it is thrown.
     LDA controller1
     AND #BUTTON_B
-    BNE .BoomerangDone
+    BEQ .BoomerangDone
 
-    ; B button was pressed
-    EWriteMember entityActive, #$01
+    ; B button was pressed.
+    EWriteMember entityState, #MOVING
+    EWriteMember entityAnimationFrame, #$00
 
     ; Set boomerang's coordinates to monkey's coordinates.
     LoadEntity monkeyEntity
-    EReadMemberToA entityX, tempMonkeyCoordinate
+    EReadMember16ToP entityX, tempMonkeyCoordinate
     LoadEntity boomerangEntity
-    EWriteMember16 entityX, tempMonkeyCoordinate
+    EWriteMember16P entityX, tempMonkeyCoordinate
 
     LoadEntity monkeyEntity
-    EReadMemberToA entityY, tempMonkeyCoordinate
+    EReadMember16ToP entityY, tempMonkeyCoordinate
     LoadEntity boomerangEntity
-    EWriteMember16 entityY, tempMonkeyCoordinate
+    EWriteMember16P entityY, tempMonkeyCoordinate
 
     JSR .SetBoomerangVelocity
 
     JMP .BoomerangDone
 
-    ; If active:
+.BoomerangMoving:
+    ; If moving:
     ; - Update dx and dy according to ddx and ddy
     ;   (should probably be generally done for entities)
     ; - If boomerang collision-detects with monkey:
     ;   - Kill boomerang
-.BoomerangActive:
 
 .BoomerangDone:
     RTS
@@ -46,22 +48,23 @@ UpdateBoomerang:
 .SetBoomerangVelocity:
     LDA controller1
     AND #BUTTON_LEFT
-    BNE .NotLeft
+    BEQ .NotLeft
     EWriteMember16 entityDX, #BOOMERANG_NEG_SPEED ; TODO: Should write DDX
 .NotLeft:
     LDA controller1
     AND #BUTTON_RIGHT
-    BNE .NotRight
+    BEQ .NotRight
     EWriteMember16 entityDX, #BOOMERANG_SPEED     ; TODO: Should write DDX
 .NotRight:
     LDA controller1
     AND #BUTTON_UP
-    BNE .NotUp
+    BEQ .NotUp
     EWriteMember16 entityDY, #BOOMERANG_NEG_SPEED ; TODO: Should write DDY
 .NotUp:
     LDA controller1
     AND #BUTTON_DOWN
-    BNE .NotUp
+    BEQ .NotDown
     EWriteMember16 entityDY, #BOOMERANG_SPEED     ; TODO: Should write DDY
+.NotDown:
 
     RTS

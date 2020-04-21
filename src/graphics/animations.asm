@@ -2,6 +2,12 @@
 ;; General logic for animations and loading sprites into memory goes here.
 
 AnimateEntitySprites:
+    ; First check if the entity even has an animation: if not, return early.
+    EReadMemberToA entityAnimationLength
+    BNE .DoAnimate
+    RTS
+
+.DoAnimate:
     LDA #$00
     STA currentMetaSpriteOffset
 
@@ -10,7 +16,7 @@ AnimateEntitySprites:
     EReadMemberToA entityAnimationFrame
     BEQ .UpdateEntitySpritesFrameFound
 
-.UpdateEntitySpritesFindFrame:
+;UpdateEntitySpritesFindFrame:
     EReadMemberToA entityAnimationFrame
     STA frameCounter
 .UpdateEntitySpritesFindFrameLoop:

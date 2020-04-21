@@ -20,23 +20,5 @@ SetupGame:
     JSR NewSeagull
     JSR NewSeagull
     JSR NewSeagull
-    JSR NewSeagull
-    JSR NewSeagull
-    JSR NewSeagull
-    JSR NewSeagull
-    JSR NewSeagull
-    JSR NewSeagull
-    JSR NewSeagull
-    JSR NewSeagull
-    JSR NewSeagull
-    JSR NewSeagull
-    JSR NewSeagull
-    JSR NewSeagull
-    JSR NewSeagull
-    JSR NewSeagull
-    JSR NewSeagull
-    JSR NewSeagull
-    JSR NewSeagull
-    JSR NewSeagull
 
     RTS

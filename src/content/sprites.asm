@@ -11,9 +11,7 @@
 ; +-------- Flip sprite vertically
 
 ; To be used in cases that are not relevant (e.g. seagull has no idle animations)
-; (draw a banana peel because funny)
 dummySprites:
-    .db $00, $2F, %00000000, $00
     .db $FF
 
 monkeyAnimationsTable:
@@ -27,6 +25,7 @@ sprMonkeyUpIdle:
     ; Lower sprite
     .db $08, $26, %00000000, $00
     ; End of animation
+    .db $FE
     .db $FF
 
 sprMonkeyDownIdle:
@@ -36,6 +35,7 @@ sprMonkeyDownIdle:
     ; Lower sprite
     .db $08, $24, %00000000, $00
     ; End of animation
+    .db $FE
     .db $FF
 
 sprMonkeyLeftIdle:
@@ -45,6 +45,7 @@ sprMonkeyLeftIdle:
     ; Lower sprite
     .db $08, $28, %01000000, $00
     ; End of animation
+    .db $FE
     .db $FF
 
 sprMonkeyRightIdle:
@@ -54,6 +55,7 @@ sprMonkeyRightIdle:
     ; Lower sprite
     .db $08, $28, %00000000, $00
     ; End of animation
+    .db $FE
     .db $FF
 
 sprMonkeyUpMoving:
@@ -69,6 +71,7 @@ sprMonkeyUpMoving:
     ; Lower sprite
     .db $08, $27, %01000000, $00
     ; End of animation
+    .db $FE
     .db $FF
 
 sprMonkeyDownMoving:
@@ -84,6 +87,7 @@ sprMonkeyDownMoving:
     ; Lower sprite
     .db $08, $25, %01000000, $00
     ; End of animation
+    .db $FE
     .db $FF
 
 sprMonkeyLeftMoving:
@@ -99,6 +103,7 @@ sprMonkeyLeftMoving:
     ; Lower sprite
     .db $08, $2A, %01000000, $00
     ; End of animation
+    .db $FE
     .db $FF
 
 sprMonkeyRightMoving:
@@ -114,6 +119,7 @@ sprMonkeyRightMoving:
     ; Lower sprite
     .db $08, $2A, %00000000, $00
     ; End of animation
+    .db $FE
     .db $FF
 
 
@@ -130,6 +136,7 @@ sprSeagullUpMoving:
     ; Sprite
     .db $00, $8A, %01000000, $00
     ; End of animation
+    .db $FE
     .db $FF
 
 sprSeagullDownMoving:
@@ -141,6 +148,7 @@ sprSeagullDownMoving:
     ; Sprite
     .db $00, $89, %01000000, $00
     ; End of animation
+    .db $FE
     .db $FF
 
 sprSeagullLeftMoving:
@@ -152,6 +160,7 @@ sprSeagullLeftMoving:
     ; Sprite
     .db $00, $88, %01000000, $00
     ; End of animation
+    .db $FE
     .db $FF
 
 sprSeagullRightMoving:
@@ -163,6 +172,7 @@ sprSeagullRightMoving:
     ; Sprite
     .db $00, $88, %00000000, $00
     ; End of animation
+    .db $FE
     .db $FF
 
 
@@ -186,4 +196,5 @@ sprBoomerangMoving:
     .db $00, $8E, %00000000, $00
     .db $FE
     .db $00, $8F, %00000000, $00
+    .db $FE
     .db $FF

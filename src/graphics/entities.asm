@@ -107,8 +107,7 @@ UpdateEntitySprites:
     JMP .SetCurrentAnimationLength
 
 .SetCurrentAnimationLength:
-    ; Animation is at least of length 1
-    EWriteMember entityAnimationLength, #$01
+    EWriteMember entityAnimationLength, #$00
     LDY #$FF
     JMP .SetCurrentAnimationLengthLoop
 .SetCurrentAnimationLengthIncrement:

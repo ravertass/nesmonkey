@@ -27,6 +27,13 @@ EWriteMember16: .macro
     STA [currentEntity],Y
     .endm
 
+EWriteMember16P: .macro
+    EWriteMember \1, \2
+    LDA \2+1
+    INY
+    STA [currentEntity],Y
+    .endm
+
 EReadMemberToA: .macro
     LDY #\1
     LDA [currentEntity],Y

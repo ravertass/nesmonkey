@@ -11,7 +11,7 @@ SetupBoomerang:
     EWriteMember16 entityDX, #$0000
     EWriteMember16 entityDY, #$0000
     EWriteMember entityDir, #DIR_DOWN
-    EWriteMember entityState, #MOVING
+    EWriteMember entityState, #IDLE
     EWriteMember entityAnimationFrame, #00
     EWriteMember entityAnimationCount, #00
     EWriteMember entityAnimationMax, #08
