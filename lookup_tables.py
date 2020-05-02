@@ -108,7 +108,7 @@ def _minimize(vec):
 
 
 def _calc_angle(vector):
-    return math.degrees(math.atan2(vector.x, vector.y))
+    return math.degrees(math.atan2(vector.y, vector.x))
 
 
 NUM_PER_OCT = 4

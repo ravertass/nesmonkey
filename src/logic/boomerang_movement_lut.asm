@@ -110,36 +110,36 @@ BoomerangMovementLookup:
     CMP #$08
     BEQ .XEq2SpeedEq8
 .XEq2SpeedEq1
-    LDX #$00
-    LDY #$01
+    LDX #$01
+    LDY #$00
     RTS
 .XEq2SpeedEq2
-    LDX #$01
-    LDY #$02
+    LDX #$02
+    LDY #$01
     RTS
 .XEq2SpeedEq3
-    LDX #$01
-    LDY #$03
+    LDX #$03
+    LDY #$01
     RTS
 .XEq2SpeedEq4
-    LDX #$02
-    LDY #$04
+    LDX #$04
+    LDY #$02
     RTS
 .XEq2SpeedEq5
-    LDX #$02
-    LDY #$04
+    LDX #$04
+    LDY #$02
     RTS
 .XEq2SpeedEq6
-    LDX #$03
-    LDY #$05
+    LDX #$05
+    LDY #$03
     RTS
 .XEq2SpeedEq7
-    LDX #$03
-    LDY #$06
+    LDX #$06
+    LDY #$03
     RTS
 .XEq2SpeedEq8
-    LDX #$04
-    LDY #$07
+    LDX #$07
+    LDY #$04
     RTS
 
 .XEquals3:
@@ -161,36 +161,36 @@ BoomerangMovementLookup:
     CMP #$08
     BEQ .XEq3SpeedEq8
 .XEq3SpeedEq1
-    LDX #$00
-    LDY #$01
+    LDX #$01
+    LDY #$00
     RTS
 .XEq3SpeedEq2
-    LDX #$01
-    LDY #$02
+    LDX #$02
+    LDY #$01
     RTS
 .XEq3SpeedEq3
-    LDX #$01
-    LDY #$03
+    LDX #$03
+    LDY #$01
     RTS
 .XEq3SpeedEq4
-    LDX #$01
-    LDY #$04
+    LDX #$04
+    LDY #$01
     RTS
 .XEq3SpeedEq5
-    LDX #$02
-    LDY #$05
+    LDX #$05
+    LDY #$02
     RTS
 .XEq3SpeedEq6
-    LDX #$02
-    LDY #$06
+    LDX #$06
+    LDY #$02
     RTS
 .XEq3SpeedEq7
-    LDX #$02
-    LDY #$07
+    LDX #$07
+    LDY #$02
     RTS
 .XEq3SpeedEq8
-    LDX #$03
-    LDY #$08
+    LDX #$08
+    LDY #$03
     RTS
 
 .XEquals4:
@@ -212,36 +212,36 @@ BoomerangMovementLookup:
     CMP #$08
     BEQ .XEq4SpeedEq8
 .XEq4SpeedEq1
-    LDX #$00
-    LDY #$01
+    LDX #$01
+    LDY #$00
     RTS
 .XEq4SpeedEq2
-    LDX #$00
-    LDY #$02
+    LDX #$02
+    LDY #$00
     RTS
 .XEq4SpeedEq3
-    LDX #$01
-    LDY #$03
+    LDX #$03
+    LDY #$01
     RTS
 .XEq4SpeedEq4
-    LDX #$01
-    LDY #$04
+    LDX #$04
+    LDY #$01
     RTS
 .XEq4SpeedEq5
-    LDX #$01
-    LDY #$05
+    LDX #$05
+    LDY #$01
     RTS
 .XEq4SpeedEq6
-    LDX #$01
-    LDY #$06
+    LDX #$06
+    LDY #$01
     RTS
 .XEq4SpeedEq7
-    LDX #$02
-    LDY #$07
+    LDX #$07
+    LDY #$02
     RTS
 .XEq4SpeedEq8
-    LDX #$02
-    LDY #$08
+    LDX #$08
+    LDY #$02
     RTS
 
 .XEquals5:
@@ -263,36 +263,36 @@ BoomerangMovementLookup:
     CMP #$08
     BEQ .XEq5SpeedEq8
 .XEq5SpeedEq1
-    LDX #$00
-    LDY #$01
+    LDX #$01
+    LDY #$00
     RTS
 .XEq5SpeedEq2
-    LDX #$00
-    LDY #$02
+    LDX #$02
+    LDY #$00
     RTS
 .XEq5SpeedEq3
-    LDX #$01
-    LDY #$03
+    LDX #$03
+    LDY #$01
     RTS
 .XEq5SpeedEq4
-    LDX #$01
-    LDY #$04
+    LDX #$04
+    LDY #$01
     RTS
 .XEq5SpeedEq5
-    LDX #$01
-    LDY #$05
+    LDX #$05
+    LDY #$01
     RTS
 .XEq5SpeedEq6
-    LDX #$01
-    LDY #$06
+    LDX #$06
+    LDY #$01
     RTS
 .XEq5SpeedEq7
-    LDX #$01
-    LDY #$07
+    LDX #$07
+    LDY #$01
     RTS
 .XEq5SpeedEq8
-    LDX #$02
-    LDY #$08
+    LDX #$08
+    LDY #$02
     RTS
 
 .XEquals6:
@@ -314,36 +314,36 @@ BoomerangMovementLookup:
     CMP #$08
     BEQ .XEq6SpeedEq8
 .XEq6SpeedEq1
-    LDX #$00
-    LDY #$01
+    LDX #$01
+    LDY #$00
     RTS
 .XEq6SpeedEq2
-    LDX #$00
-    LDY #$02
+    LDX #$02
+    LDY #$00
     RTS
 .XEq6SpeedEq3
-    LDX #$00
-    LDY #$03
+    LDX #$03
+    LDY #$00
     RTS
 .XEq6SpeedEq4
-    LDX #$01
-    LDY #$04
+    LDX #$04
+    LDY #$01
     RTS
 .XEq6SpeedEq5
-    LDX #$01
-    LDY #$05
+    LDX #$05
+    LDY #$01
     RTS
 .XEq6SpeedEq6
-    LDX #$01
-    LDY #$06
+    LDX #$06
+    LDY #$01
     RTS
 .XEq6SpeedEq7
-    LDX #$01
-    LDY #$07
+    LDX #$07
+    LDY #$01
     RTS
 .XEq6SpeedEq8
-    LDX #$01
-    LDY #$08
+    LDX #$08
+    LDY #$01
     RTS
 
 .XEquals7:
@@ -365,34 +365,34 @@ BoomerangMovementLookup:
     CMP #$08
     BEQ .XEq7SpeedEq8
 .XEq7SpeedEq1
-    LDX #$00
-    LDY #$01
+    LDX #$01
+    LDY #$00
     RTS
 .XEq7SpeedEq2
-    LDX #$00
-    LDY #$02
+    LDX #$02
+    LDY #$00
     RTS
 .XEq7SpeedEq3
-    LDX #$00
-    LDY #$03
+    LDX #$03
+    LDY #$00
     RTS
 .XEq7SpeedEq4
-    LDX #$00
-    LDY #$04
+    LDX #$04
+    LDY #$00
     RTS
 .XEq7SpeedEq5
-    LDX #$00
-    LDY #$05
+    LDX #$05
+    LDY #$00
     RTS
 .XEq7SpeedEq6
-    LDX #$00
-    LDY #$06
+    LDX #$06
+    LDY #$00
     RTS
 .XEq7SpeedEq7
-    LDX #$00
-    LDY #$07
+    LDX #$07
+    LDY #$00
     RTS
 .XEq7SpeedEq8
-    LDX #$00
-    LDY #$08
+    LDX #$08
+    LDY #$00
     RTS
