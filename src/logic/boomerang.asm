@@ -46,25 +46,47 @@ UpdateBoomerang:
     RTS
 
 .SetBoomerangVelocity:
+    ; Start by loading the monkey's dir into X.
+    LoadEntity monkeyEntity
+    EReadMemberToA entityDir
+    TAX
+    LoadEntity boomerangEntity
+
     LDA controller1
     AND #BUTTON_LEFT
-    BEQ .NotLeft
-    EWriteMember16 entityDX, #BOOMERANG_NEG_SPEED ; TODO: Should write DDX
+    BNE .GoLeft
+    TXA
+    CMP #DIR_LEFT
+    BNE .NotLeft
+.GoLeft:
+    EWriteMember16 entityDX, #BOOMERANG_NEG_SPEED
 .NotLeft:
     LDA controller1
     AND #BUTTON_RIGHT
-    BEQ .NotRight
-    EWriteMember16 entityDX, #BOOMERANG_SPEED     ; TODO: Should write DDX
+    BNE .GoRight
+    TXA
+    CMP #DIR_RIGHT
+    BNE .NotRight
+.GoRight:
+    EWriteMember16 entityDX, #BOOMERANG_SPEED
 .NotRight:
     LDA controller1
     AND #BUTTON_UP
-    BEQ .NotUp
-    EWriteMember16 entityDY, #BOOMERANG_NEG_SPEED ; TODO: Should write DDY
+    BNE .GoUp
+    TXA
+    CMP #DIR_UP
+    BNE .NotUp
+.GoUp:
+    EWriteMember16 entityDY, #BOOMERANG_NEG_SPEED
 .NotUp:
     LDA controller1
     AND #BUTTON_DOWN
-    BEQ .NotDown
-    EWriteMember16 entityDY, #BOOMERANG_SPEED     ; TODO: Should write DDY
+    BNE .GoDown
+    TXA
+    CMP #DIR_DOWN
+    BNE .NotDown
+.GoDown:
+    EWriteMember16 entityDY, #BOOMERANG_SPEED
 .NotDown:
 
     RTS
