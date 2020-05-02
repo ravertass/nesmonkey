@@ -41,10 +41,10 @@ MinimizeTargetVector:
     ; Now, we will shift until one value is 1.
     TXA
     CMP #$01
-    BNE .XIsOne
+    BEQ .XIsOne
     TYA
     CMP #$01
-    BNE .YIsOne
+    BEQ .YIsOne
 
     ; No value was one, so let's shift
     TXA

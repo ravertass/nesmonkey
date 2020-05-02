@@ -68,9 +68,11 @@ UpdateBoomerang:
     IsPositive boomerangTargetX
     BNE .NotHalfRight
     JSR .HalfRight
+    JMP .BoomerangVelocityDone
 .NotHalfRight:
     JSR .HalfLeft
 
+.BoomerangVelocityDone:
     ; TODO
     ; - If boomerang collision-detects with monkey:
     ;   - Kill boomerang
@@ -172,7 +174,6 @@ UpdateBoomerang:
     NegateA
     EWriteAToMember entityDY
     EWriteMember entityDY+1, #$FF
-    EWriteMember entityDY+1, #$00
     JMP .HalfRightDone
 
 .QuadrantRD:

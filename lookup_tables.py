@@ -212,6 +212,7 @@ def _jsr_x(x):
     _iprint(f"CMP #$0{x}")
     _iprint(f"BNE .XNotEquals{x}")
     _iprint(f"JSR .XEquals{x}")
+    _iprint("RTS")
     print(f".XNotEquals{x}:")
 
 

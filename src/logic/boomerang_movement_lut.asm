@@ -13,30 +13,37 @@ BoomerangMovementLookup:
     CMP #$01
     BNE .XNotEquals1
     JSR .XEquals1
+    RTS
 .XNotEquals1:
     CMP #$02
     BNE .XNotEquals2
     JSR .XEquals2
+    RTS
 .XNotEquals2:
     CMP #$03
     BNE .XNotEquals3
     JSR .XEquals3
+    RTS
 .XNotEquals3:
     CMP #$04
     BNE .XNotEquals4
     JSR .XEquals4
+    RTS
 .XNotEquals4:
     CMP #$05
     BNE .XNotEquals5
     JSR .XEquals5
+    RTS
 .XNotEquals5:
     CMP #$06
     BNE .XNotEquals6
     JSR .XEquals6
+    RTS
 .XNotEquals6:
     CMP #$07
     BNE .XNotEquals7
     JSR .XEquals7
+    RTS
 .XNotEquals7:
     RTS
 
