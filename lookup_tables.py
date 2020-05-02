@@ -14,26 +14,32 @@ Vector = collections.namedtuple("Vector", ["x", "y"])
 
 
 TEST_VECTORS = [
-    Vector(64, 0),
-    Vector(64, 8),
-    Vector(64, 16),
-    Vector(64, 24),
-    Vector(64, 32),
-    Vector(64, 40),
-    Vector(64, 48),
-    Vector(64, 56),
-    Vector(64, 64),
-    Vector(56, 64),
-    Vector(48, 64),
-    Vector(40, 64),
-    Vector(32, 64),
-    Vector(24, 64),
-    Vector(16, 64),
-    Vector(8, 64),
-    Vector(0, 64),
-    # Vector(-10, 10),
-    # Vector(10, -10),
-    # Vector(-10, -10),
+    Vector(0, 10),
+    Vector(1, 1),
+    Vector(1, 2),
+    Vector(10, 10),
+    Vector(10, 15),
+    Vector(10, 25),
+    Vector(-10, 10),
+    Vector(10, -10),
+    Vector(-10, -10),
+    # Vector(64, 0),
+    # Vector(64, 8),
+    # Vector(64, 16),
+    # Vector(64, 24),
+    # Vector(64, 32),
+    # Vector(64, 40),
+    # Vector(64, 48),
+    # Vector(64, 56),
+    # Vector(64, 64),
+    # Vector(56, 64),
+    # Vector(48, 64),
+    # Vector(40, 64),
+    # Vector(32, 64),
+    # Vector(24, 64),
+    # Vector(16, 64),
+    # Vector(8, 64),
+    # Vector(0, 64),
 ]
 
 
@@ -62,7 +68,7 @@ def _octant(vec):
             if ax > ay:
                 return Octant.LLU
             else:
-                return Octant.LDu
+                return Octant.LUU
         else:
             if ax > ay:
                 return Octant.RRU
@@ -81,15 +87,27 @@ def _octant(vec):
                 return Octant.RDD
 
 
-LIMIT = 1
+LOWER_LIMIT = 1
+UPPER_LIMIT = 6
+XES = range(1, UPPER_LIMIT + 1)
 
 def _minimize(vec):
     vec = Vector(abs(vec.x), abs(vec.y))
 
-    while vec.x > LIMIT and vec.y > LIMIT:
+    while vec.x > LOWER_LIMIT and vec.y > LOWER_LIMIT:
         vec = Vector(vec.x >> 1, vec.y >> 1)
 
+    if (vec.x > UPPER_LIMIT):
+        vec = Vector(1, 0)
+
+    if (vec.y > UPPER_LIMIT):
+        vec = Vector(0, 1)
+
     return vec
+
+
+def _calc_angle(vector):
+    return math.degrees(math.atan2(vector.x, vector.y))
 
 
 NUM_PER_OCT = 4
@@ -110,6 +128,22 @@ def _speeds_lookup_table(deg):
     return lookup
 
 
+def _triangles_lookup_table():
+    lookup = {}
+
+    y = 1
+    for x in XES:
+        vector = Vector(x, y)
+        angle = _calc_angle(vector)
+        lookup[vector] = _speeds_lookup_table(angle)
+
+    inf_vec = Vector(1, 0)
+    angle = _calc_angle(inf_vec)
+    lookup[Vector(7, 1)] = _speeds_lookup_table(angle)
+
+    return lookup
+
+
 def _angles_lookup_table():
     lookup = {}
     for deg in DEGREES:
@@ -117,25 +151,103 @@ def _angles_lookup_table():
     return lookup
 
 
-def _main():
-    for vector in TEST_VECTORS:
-        octant = _octant(vector)
-        min_vector = _minimize(vector)
-        angle = math.degrees(math.atan2(vector.x, vector.y))
-        print(f"{vector} -> {octant}; {min_vector}; {angle:.2f}")
+def _set_signs(vector, octant):
+    x = vector.x if octant in [Octant.RUU, Octant.RRU, Octant.RRD, Octant.RDD] else -vector.x
+    y = vector.y if octant in [Octant.RRD, Octant.RDD, Octant.LDD, Octant.LLD] else -vector.x
+    return Vector(x, y)
 
-    print()
-    lookup = _angles_lookup_table()
-    for angle, speed_lookup in lookup.items():
-        print(f"angle {angle}")
+
+def _test_print():
+    triangles_lookup = _triangles_lookup_table()
+    for vector in TEST_VECTORS:
+        for speed in SPEEDS:
+            octant = _octant(vector)
+            min_vector = _minimize(vector)
+            lookup_vector = (
+                min_vector
+                if octant in [Octant.RRU, Octant.RRD, Octant.LLU, Octant.LLD]
+                else Vector(min_vector.y, min_vector.x)
+            )
+            speed_lookup = triangles_lookup[lookup_vector]
+
+            movement_vector = speed_lookup[speed]
+            final_vector = _set_signs(movement_vector, octant)
+
+            print(
+                f"({vector.x}, {vector.y}), speed {speed} ->"
+                f"({final_vector.x}, {final_vector.y});"
+            )
+
+
+def _iprint(line):
+    print(f"    {line}")
+
+
+def _beq_speed(x, speed):
+    _iprint(f"CMP #$0{speed}")
+    _iprint(f"BEQ .XEq{x}SpeedEq{speed}")
+
+
+def _set_velocity(x, speed):
+    print(f".XEq{x}SpeedEq{speed}")
+    speed_lookup_table = _triangles_lookup_table()[Vector(x, 1)]
+    movement_vec = speed_lookup_table[speed]
+    _iprint(f"LDX #$0{movement_vec.x}")
+    _iprint(f"LDY #$0{movement_vec.y}")
+    _iprint(f"RTS")
+
+
+def _speed_table(x):
+    print("")
+    print(f".XEquals{x}:")
+    _iprint(f"TXA")
+    for speed in SPEEDS:
+        _beq_speed(x, speed)
+    for speed in SPEEDS:
+        _set_velocity(x, speed)
+
+
+def _jsr_x(x):
+    _iprint(f"CMP #$0{x}")
+    _iprint(f"JSR .XEquals{x}")
+
+
+def _print_asm_header():
+    print(""";;;;;;;; Boomerang movement lookup table ;;;;;;;;
+;; Generated file with subroutine for calculating the boomerang's movement vector.
+
+; SUBROUTINE
+; Calculates movement vector for boomerang based on a minimized, positive difference vector.
+; Input:
+;     A: x in them minimized, positive difference vector.
+;     X: Boomerang's current speed.
+; Output:
+;     X: Positive X speed.
+;     Y: Positive Y speed.""")
+
+
+def _print_asm_lookup_table():
+    _print_asm_header()
+    print(f"BoomerangMovementLookup:")
+    for x in XES:
+        _jsr_x(x)
+    _iprint("RTS")
+    for x in XES:
+        _speed_table(x)
+
+
+def _print_lookup_table():
+    triangles_lookup = _triangles_lookup_table()
+    for vector, speed_lookup in triangles_lookup.items():
+        print(f"input ({vector.x}, {vector.y})")
         print("  " +
               ", ".join(f"s{speed}: ({vec.x}; {vec.y})" for speed, vec in speed_lookup.items()))
 
-    print()
-    for deg in DEGREES:
-        x = round((1 / math.tan(math.radians(deg)) if deg != 0 else 128) * LIMIT)
-        y = (1 if deg != 0 else 0) * LIMIT
-        print(f"deg: {deg:.2f}; x: {x}; y: {y}")
+
+def _main():
+    # _test_print()
+    # _print_lookup_table()
+    _print_asm_lookup_table()
 
 
 if __name__ == "__main__":
