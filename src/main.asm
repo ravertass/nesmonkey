@@ -120,6 +120,13 @@ tempCoordinate .ds 1
 
 tempMonkeyCoordinate .ds 2
 
+boomerangSpeed .ds 1
+boomerangSpeedCounter .ds 1
+boomerangTargetX .ds 1
+boomerangTargetY .ds 1
+boomerangMinAbsTargetX .ds 1
+boomerangMinAbsTargetY .ds 1
+
     .org $0700
 
 DMA_GRAPHICS .ds $FF

@@ -75,6 +75,11 @@ EAddAToMember: .macro
 
 ;;; Other macros
 
+WritePointer: .macro
+    LDA \2
+    STA \1
+    .endm
+
 AddToPointer16: .macro
     LDA \1
     CLC
@@ -86,8 +91,15 @@ AddToPointer16: .macro
     STA \1+1
     .endm
 
-IncrementPointer: .macro
-    AddToPointer16 \1, #$01
+DecrementPointer16: .macro
+    AddToPointer16 \1, #$FF
+    .endm
+
+DecrementPointer: .macro
+    LDA \1
+    CLC
+    ADC #$FF
+    STA \1
     .endm
 
 ComparePointer16: .macro
@@ -104,4 +116,13 @@ NegateA: .macro
     EOR #$FF
     CLC
     ADC #$01
+    .endm
+
+IsPositive: .macro
+    LDA \1
+    AND #%10000000
+    .endm
+
+PointerIsPositive16: .macro
+    IsPositive \1+1
     .endm

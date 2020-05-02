@@ -2,10 +2,12 @@
 ;; All game logic goes here.
 ;; Graphics and input logic does NOT go here.
 
-    .include "logic/boomerang.asm"
-    .include "logic/monkey.asm"
     .include "logic/entity.asm"
     .include "logic/entity_space.asm"
+    .include "logic/monkey.asm"
+    .include "logic/boomerang.asm"
+    .include "logic/boomerang_movement_lut.asm"
+    .include "logic/minimize_vector.asm"
     .include "util/random.asm"
 
 UpdateGame:

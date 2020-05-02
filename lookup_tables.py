@@ -90,6 +90,7 @@ def _octant(vec):
 LOWER_LIMIT = 1
 UPPER_LIMIT = 6
 XES = range(1, UPPER_LIMIT + 1)
+XES_PLUS = range(1, UPPER_LIMIT + 2)
 
 def _minimize(vec):
     vec = Vector(abs(vec.x), abs(vec.y))
@@ -209,11 +210,13 @@ def _speed_table(x):
 
 def _jsr_x(x):
     _iprint(f"CMP #$0{x}")
+    _iprint(f"BNE .XNotEquals{x}")
     _iprint(f"JSR .XEquals{x}")
+    print(f".XNotEquals{x}:")
 
 
 def _print_asm_header():
-    print(""";;;;;;;; Boomerang movement lookup table ;;;;;;;;
+    print(""";;;;;;;; Boomerang movement - lookup table ;;;;;;;;
 ;; Generated file with subroutine for calculating the boomerang's movement vector.
 
 ; SUBROUTINE
@@ -229,10 +232,10 @@ def _print_asm_header():
 def _print_asm_lookup_table():
     _print_asm_header()
     print(f"BoomerangMovementLookup:")
-    for x in XES:
+    for x in XES_PLUS:
         _jsr_x(x)
     _iprint("RTS")
-    for x in XES:
+    for x in XES_PLUS:
         _speed_table(x)
 
 

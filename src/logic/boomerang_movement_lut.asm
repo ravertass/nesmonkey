@@ -1,4 +1,4 @@
-;;;;;;;; Boomerang movement lookup table ;;;;;;;;
+;;;;;;;; Boomerang movement - lookup table ;;;;;;;;
 ;; Generated file with subroutine for calculating the boomerang's movement vector.
 
 ; SUBROUTINE
@@ -11,17 +11,33 @@
 ;     Y: Positive Y speed.
 BoomerangMovementLookup:
     CMP #$01
+    BNE .XNotEquals1
     JSR .XEquals1
+.XNotEquals1:
     CMP #$02
+    BNE .XNotEquals2
     JSR .XEquals2
+.XNotEquals2:
     CMP #$03
+    BNE .XNotEquals3
     JSR .XEquals3
+.XNotEquals3:
     CMP #$04
+    BNE .XNotEquals4
     JSR .XEquals4
+.XNotEquals4:
     CMP #$05
+    BNE .XNotEquals5
     JSR .XEquals5
+.XNotEquals5:
     CMP #$06
+    BNE .XNotEquals6
     JSR .XEquals6
+.XNotEquals6:
+    CMP #$07
+    BNE .XNotEquals7
+    JSR .XEquals7
+.XNotEquals7:
     RTS
 
 .XEquals1:
@@ -327,5 +343,56 @@ BoomerangMovementLookup:
     RTS
 .XEq6SpeedEq8
     LDX #$01
+    LDY #$08
+    RTS
+
+.XEquals7:
+    TXA
+    CMP #$01
+    BEQ .XEq7SpeedEq1
+    CMP #$02
+    BEQ .XEq7SpeedEq2
+    CMP #$03
+    BEQ .XEq7SpeedEq3
+    CMP #$04
+    BEQ .XEq7SpeedEq4
+    CMP #$05
+    BEQ .XEq7SpeedEq5
+    CMP #$06
+    BEQ .XEq7SpeedEq6
+    CMP #$07
+    BEQ .XEq7SpeedEq7
+    CMP #$08
+    BEQ .XEq7SpeedEq8
+.XEq7SpeedEq1
+    LDX #$00
+    LDY #$01
+    RTS
+.XEq7SpeedEq2
+    LDX #$00
+    LDY #$02
+    RTS
+.XEq7SpeedEq3
+    LDX #$00
+    LDY #$03
+    RTS
+.XEq7SpeedEq4
+    LDX #$00
+    LDY #$04
+    RTS
+.XEq7SpeedEq5
+    LDX #$00
+    LDY #$05
+    RTS
+.XEq7SpeedEq6
+    LDX #$00
+    LDY #$06
+    RTS
+.XEq7SpeedEq7
+    LDX #$00
+    LDY #$07
+    RTS
+.XEq7SpeedEq8
+    LDX #$00
     LDY #$08
     RTS
