@@ -7,7 +7,10 @@ NewSeagull:
     CMP #$FF
     BEQ .NewSeagullDone ; no free entity slot was found :(
 
-    EWriteMember entityActive, #$01
+    EWriteMember entityFlags, #$00
+    ESetFlag #FLAG_IS_ACTIVE
+    ESetFlag #FLAG_IS_MOVING
+
     EWriteMember entityType, #TYPE_SEAGULL
 
     JSR .GetSeagullSpeed
@@ -20,7 +23,6 @@ NewSeagull:
     EWriteAToMember entityDY+1
 
     JSR .SetSeagullDirAndPos
-    EWriteMember entityState, #MOVING
 
     EWriteMember entityAnimationFrame, #$00
     EWriteMember entityAnimationCount, #$00

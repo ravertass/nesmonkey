@@ -20,6 +20,34 @@ EWriteMember: .macro
     STA [currentEntity],Y
     .endm
 
+EOrMember: .macro
+    LDA \2
+    LDY #\1
+    ORA [currentEntity],Y
+    .endm
+
+EAndAWithMember: .macro
+    LDY #\1
+    AND [currentEntity],Y
+    .endm
+
+ESetFlag: .macro
+    EOrMember entityFlags, \1
+    EWriteAToMember entityFlags
+    .endm
+
+EUnsetFlag: .macro
+    LDA \1
+    EOR #$FF
+    EAndAWithMember entityFlags
+    EWriteAToMember entityFlags
+    .endm
+
+ECheckFlag: .macro
+    EReadMemberToA entityFlags
+    AND \1
+    .endm
+
 EWriteMember16: .macro
     EWriteMember \1, #LOW(\2)
     LDA #HIGH(\2)

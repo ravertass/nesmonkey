@@ -3,12 +3,9 @@
 
 ;; Move the boomerang if it is active
 UpdateBoomerang:
-    ; TODO: Using entityActive like this does not work...
-    ;       Since UpdateBoomerang won't be called if the boomerang is not active... >___<
     LoadEntity boomerangEntity
-    EReadMemberToA entityState
-    CMP #MOVING
-    BNE .BoomerangNotMoving
+    ECheckFlag #FLAG_IS_MOVING
+    BEQ .BoomerangNotMoving
     JSR .BoomerangMoving
 
 .BoomerangNotMoving:
@@ -19,7 +16,7 @@ UpdateBoomerang:
     BEQ .BoomerangDone
 
     ; B button was pressed.
-    EWriteMember entityState, #MOVING
+    ESetFlag #FLAG_IS_MOVING
     EWriteMember entityAnimationFrame, #$00
 
     ; Set boomerang's coordinates to monkey's coordinates.

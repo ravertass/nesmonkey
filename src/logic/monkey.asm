@@ -12,7 +12,7 @@ UpdateMonkey:
     AND #BUTTON_DIRS
     BEQ .UpdateMonkeyNotMoving ; if monkey isn't moving, skip most of the code below
 
-    EWriteMember entityState, #MOVING
+    ESetFlag #FLAG_IS_MOVING
 
 ; Is monkey going down?
     LDA controller1
@@ -45,9 +45,7 @@ UpdateMonkey:
     RTS
 
 .UpdateMonkeyNotMoving:
-    LDA #IDLE
-    LDY #entityState
-    STA [currentEntity],Y
+    EUnsetFlag #FLAG_IS_MOVING
     EWriteMember entityAnimationCount, #$00
     EWriteMember entityAnimationFrame, #$00
     RTS

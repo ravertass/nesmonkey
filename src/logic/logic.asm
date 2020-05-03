@@ -15,7 +15,7 @@ UpdateGame:
 
 .UpdateEntitiesLoop:
     ; if entity is not active: continue to next entity.
-    EReadMemberToA entityActive
+    ECheckFlag #FLAG_IS_ACTIVE
     BEQ .NextEntity
 
     EReadMemberToA entityType

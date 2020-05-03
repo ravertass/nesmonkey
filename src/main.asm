@@ -38,9 +38,6 @@ MOVING = $01
 MONKEY_SPEED  = $0003
 MONKEY_NEG_SPEED = $0000 - MONKEY_SPEED
 
-BOOMERANG_SPEED  = $0008
-BOOMERANG_NEG_SPEED = $0000 - BOOMERANG_SPEED
-
     .rsset $0
 TYPE_MONKEY    .rs 1
 TYPE_SEAGULL   .rs 1
@@ -52,15 +49,24 @@ TYPE_BOOMERANG .rs 1
 
 ;; Entity
 
+FLAG_IS_ACTIVE = %00000001
+FLAG_IS_MOVING = %00000010
+
+; Entity flags:
+; 0 0 0 0 | 0 0 0 0
+;               ^ ^
+; is moving ____| |
+; is active ______|
+
     .rsset $0
-entityActive          .rs 1 ; TODO: Change this into entityFlags
+
+entityFlags           .rs 1
 entityType            .rs 1
 entityX               .rs 2
 entityY               .rs 2
 entityDX              .rs 2
 entityDY              .rs 2
 entityDir             .rs 1 ; TODO: Dir and State could be one.
-entityState           .rs 1 ; They could also be put into entityFlags.
 entityAnimationCount  .rs 1
 entityAnimationMax    .rs 1
 entityAnimationFrame  .rs 1

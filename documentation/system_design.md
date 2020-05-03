@@ -1,5 +1,8 @@
 # System design
 
+**NOTE**: This document is not up-to-date, and will possibly never be again.
+Its purpose has mainly been to practice technical writing.
+
 This document outlines the system design for the game, describing architecture, source file structure, data structures, algorithms, memory structure, and more.
 
 ## Source code file structure

@@ -26,7 +26,7 @@ UpdateGraphics:
 ; The loop here is more or less copy-pasted from the game logic update subroutine.
 .UpdateGraphicsLoop:
     ; if entity is not active: continue to next entity.
-    EReadMemberToA entityActive
+    ECheckFlag #FLAG_IS_ACTIVE
     BEQ .NextEntity
 
     JSR UpdateEntitySprites

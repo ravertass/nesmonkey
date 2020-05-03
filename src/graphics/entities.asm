@@ -32,8 +32,7 @@ UpdateEntitySprites:
     RTS
 
 .SetEntitySpritesUp:
-    EReadMemberToA entityState
-    CMP #IDLE
+    ECheckFlag #FLAG_IS_MOVING
     BEQ .SetEntitySpritesUpIdle
     ; Else: monkeyState == #MOVING
 .SetEntitySpritesUpMoving:
@@ -46,8 +45,7 @@ UpdateEntitySprites:
     JMP .EntitySpritesSet
 
 .SetEntitySpritesDown:
-    EReadMemberToA entityState
-    CMP #IDLE
+    ECheckFlag #FLAG_IS_MOVING
     BEQ .SetEntitySpritesDownIdle
     ; Else: monkeyState == #MOVING
 .SetEntitySpritesDownMoving:
@@ -60,8 +58,7 @@ UpdateEntitySprites:
     JMP .EntitySpritesSet
 
 .SetEntitySpritesLeft:
-    EReadMemberToA entityState
-    CMP #IDLE
+    ECheckFlag #FLAG_IS_MOVING
     BEQ .SetEntitySpritesLeftIdle
     ; Else: monkeyState == #MOVING
 .SetEntitySpritesLeftMoving:
@@ -74,8 +71,7 @@ UpdateEntitySprites:
     JMP .EntitySpritesSet
 
 .SetEntitySpritesRight:
-    EReadMemberToA entityState
-    CMP #IDLE
+    ECheckFlag #FLAG_IS_MOVING
     BEQ .SetEntitySpritesRightIdle
     ; Else: monkeyState == #MOVING
 .SetEntitySpritesRightMoving:
