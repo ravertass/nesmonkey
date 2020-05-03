@@ -75,7 +75,7 @@ UpdateBoomerang:
     ECheckFlag #BOOMERANG_FLAG_IS_RETURNING
     BEQ .SetBoomerangVelocity
     ; Boomerang is returning, so let's set the boomerangTargetX and boomerangTargetY values.
-    JSR CalculateMonkeyTarget
+    JSR .CalculateMonkeyTarget
 
 .SetBoomerangVelocity
     LDX boomerangTargetX
@@ -112,11 +112,13 @@ UpdateBoomerang:
     TYA
     NegateA
     EWriteAToMember entityDY
-    EWriteMember entityDY+1, #$FF
+    JSR GetHigherNegativeByte
+    EWriteAToMember entityDY+1
     TXA
     NegateA
     EWriteAToMember entityDX
-    EWriteMember entityDX+1, #$FF
+    JSR GetHigherNegativeByte
+    EWriteAToMember entityDX+1
     JMP .HalfLeftDone
 .OctantLUU:
     LDA boomerangMinAbsTargetY
@@ -125,11 +127,13 @@ UpdateBoomerang:
     TYA
     NegateA
     EWriteAToMember entityDX
-    EWriteMember entityDX+1, #$FF
+    JSR GetHigherNegativeByte
+    EWriteAToMember entityDX+1
     TXA
     NegateA
     EWriteAToMember entityDY
-    EWriteMember entityDY+1, #$FF
+    JSR GetHigherNegativeByte
+    EWriteAToMember entityDY+1
     JMP .HalfLeftDone
 
 .QuadrantLD:
@@ -146,7 +150,8 @@ UpdateBoomerang:
     TXA
     NegateA
     EWriteAToMember entityDX
-    EWriteMember entityDX+1, #$FF
+    JSR GetHigherNegativeByte
+    EWriteAToMember entityDX+1
     JMP .HalfLeftDone
 .OctantLDD:
     LDA boomerangMinAbsTargetY
@@ -155,7 +160,8 @@ UpdateBoomerang:
     TYA
     NegateA
     EWriteAToMember entityDX
-    EWriteMember entityDX+1, #$FF
+    JSR GetHigherNegativeByte
+    EWriteAToMember entityDX+1
     TXA
     EWriteAToMember entityDY
     EWriteMember entityDY+1, #$00
@@ -177,7 +183,8 @@ UpdateBoomerang:
     TYA
     NegateA
     EWriteAToMember entityDY
-    EWriteMember entityDY+1, #$FF
+    JSR GetHigherNegativeByte
+    EWriteAToMember entityDY+1
     TXA
     EWriteAToMember entityDX
     EWriteMember entityDX+1, #$00
@@ -192,7 +199,8 @@ UpdateBoomerang:
     TXA
     NegateA
     EWriteAToMember entityDY
-    EWriteMember entityDY+1, #$FF
+    JSR GetHigherNegativeByte
+    EWriteAToMember entityDY+1
     JMP .HalfRightDone
 
 .QuadrantRD:
@@ -285,7 +293,7 @@ UpdateBoomerang:
 ;     boomerangTargetY: Difference between boomerang's Y value and monkey's Y value.
 ; Clobbers:
 ;     A, Y
-CalculateMonkeyTarget:
+.CalculateMonkeyTarget:
     LoadEntity boomerangEntity
     LDY #entityX
     JSR CoordinateToPixelSpace
@@ -311,4 +319,20 @@ CalculateMonkeyTarget:
     STA boomerangTargetY
 
     LoadEntity boomerangEntity
+    RTS
+
+
+
+; SUBROUTINE
+; If accumulator is 0, we keep it that way.
+; Otherwise, we write #$FF to the accumulator.
+; Input:
+;    A: Lower negative byte (or zero).
+; Output:
+;    A: Higher negative byte (or zero).
+GetHigherNegativeByte:
+    CMP #$00
+    BEQ .GetHigherNegativeByteDone
+    LDA #$FF
+.GetHigherNegativeByteDone:
     RTS
