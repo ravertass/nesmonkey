@@ -7,6 +7,7 @@ UpdateBoomerang:
     ECheckFlag #FLAG_IS_MOVING
     BEQ .BoomerangNotMoving
     JSR .BoomerangMoving
+    RTS
 
 .BoomerangNotMoving:
     ; Boomerang is idle.
@@ -17,6 +18,7 @@ UpdateBoomerang:
 
     ; B button was pressed.
     ESetFlag #FLAG_IS_MOVING
+    EUnsetFlag #BOOMERANG_FLAG_IS_RETURNING
     EWriteMember entityAnimationFrame, #$00
 
     ; Set boomerang's coordinates to monkey's coordinates.
@@ -37,8 +39,12 @@ UpdateBoomerang:
 
 .BoomerangMoving:
     ; First, we calculate the boomerang speed. It should initially be decremented when moving
-    ; away from the monkey, then incremented when moving towards the monkey.
-    ; TODO: Add incrementing when moving towards the monkey.
+    ; away from the monkey, then incremented when returning towards the monkey.
+
+    ECheckFlag #BOOMERANG_FLAG_IS_RETURNING
+    BNE .BoomerangIsReturning
+
+;BoomerangMovingAway:
     DecrementPointer boomerangSpeedCounter
     LDA boomerangSpeedCounter
     BNE .BoomerangAbsSpeedDone
@@ -48,8 +54,20 @@ UpdateBoomerang:
     LDA boomerangSpeed
     BNE .BoomerangAbsSpeedDone
 
-    ; Time for boomerang to turn around...
-    ; TODO: Implement
+    ; Speed hit 0, so it is time for the boomerang to return.
+    ESetFlag #BOOMERANG_FLAG_IS_RETURNING
+    JMP .BoomerangAbsSpeedDone
+
+.BoomerangIsReturning:
+    DecrementPointer boomerangSpeedCounter
+    LDA boomerangSpeedCounter
+    BNE .BoomerangAbsSpeedDone
+
+    WritePointer boomerangSpeedCounter, #$08
+    LDA boomerangSpeed
+    CMP #$08
+    BEQ .BoomerangAbsSpeedDone
+    IncrementPointer boomerangSpeed
 
 .BoomerangAbsSpeedDone:
     ; Let's calculate the monkey's directional speed.

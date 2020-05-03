@@ -119,14 +119,17 @@ AddToPointer16: .macro
     STA \1+1
     .endm
 
-DecrementPointer16: .macro
-    AddToPointer16 \1, #$FF
-    .endm
-
 DecrementPointer: .macro
     LDA \1
     CLC
     ADC #$FF
+    STA \1
+    .endm
+
+IncrementPointer: .macro
+    LDA \1
+    CLC
+    ADC #$01
     STA \1
     .endm
 

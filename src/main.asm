@@ -52,11 +52,18 @@ TYPE_BOOMERANG .rs 1
 FLAG_IS_ACTIVE = %00000001
 FLAG_IS_MOVING = %00000010
 
+BOOMERANG_FLAG_IS_RETURNING = %10000000
+
 ; Entity flags:
-; 0 0 0 0 | 0 0 0 0
-;               ^ ^
-; is moving ____| |
-; is active ______|
+; 0  0  0  0  |  0  0  0  0
+; ^  ^  ^  ^           ^  ^
+; |  |  |  |           |  |
+; Reserved for         |  |
+; different            |  |
+; entity types.        |  |
+;                      |  |
+; Is moving. __________|  |
+; Is active. _____________|
 
     .rsset $0
 
@@ -66,7 +73,7 @@ entityX               .rs 2
 entityY               .rs 2
 entityDX              .rs 2
 entityDY              .rs 2
-entityDir             .rs 1 ; TODO: Dir and State could be one.
+entityDir             .rs 1
 entityAnimationCount  .rs 1
 entityAnimationMax    .rs 1
 entityAnimationFrame  .rs 1
