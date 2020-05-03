@@ -49,7 +49,7 @@ UpdateBoomerang:
     LDA boomerangSpeedCounter
     BNE .BoomerangAbsSpeedDone
 
-    WritePointer boomerangSpeedCounter, #$08
+    WritePointer boomerangSpeedCounter, #BOOMERANG_MAX_SPEED_COUNTER
     DecrementPointer boomerangSpeed
     LDA boomerangSpeed
     BNE .BoomerangAbsSpeedDone
@@ -63,9 +63,9 @@ UpdateBoomerang:
     LDA boomerangSpeedCounter
     BNE .BoomerangAbsSpeedDone
 
-    WritePointer boomerangSpeedCounter, #$08
+    WritePointer boomerangSpeedCounter, #BOOMERANG_MAX_SPEED_COUNTER
     LDA boomerangSpeed
-    CMP #$08
+    CMP #BOOMERANG_MAX_SPEED
     BEQ .BoomerangAbsSpeedDone
     IncrementPointer boomerangSpeed
 
@@ -221,7 +221,7 @@ UpdateBoomerang:
     RTS
 
 .SetInitialBoomerangVelocity:
-    WritePointer boomerangSpeed, #$08
+    WritePointer boomerangSpeed, #BOOMERANG_MAX_SPEED
     WritePointer boomerangSpeedCounter, #$10
     WritePointer boomerangTargetX, #$00
     WritePointer boomerangTargetY, #$00
