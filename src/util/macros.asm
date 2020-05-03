@@ -95,10 +95,18 @@ ECompareMember: .macro
     CMP [currentEntity],Y
     .endm
 
+; With carry
 EAddAToMember: .macro
     LDY #\1
     ADC [currentEntity],Y
     STA [currentEntity],Y
+    .endm
+
+; Without carry
+EAddMemberToA: .macro
+    LDY #\1
+    CLC
+    ADC [currentEntity],Y
     .endm
 
 ;;; Other macros

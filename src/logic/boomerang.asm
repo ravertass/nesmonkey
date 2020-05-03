@@ -56,24 +56,28 @@ UpdateBoomerang:
 
     ; Speed hit 0, so it is time for the boomerang to return.
     ESetFlag #BOOMERANG_FLAG_IS_RETURNING
+    IncrementPointer boomerangSpeed
     JMP .BoomerangAbsSpeedDone
 
 .BoomerangIsReturning:
+    LDA boomerangSpeed
+    CMP #BOOMERANG_MAX_SPEED
+    BEQ .BoomerangAbsSpeedDone
+
     DecrementPointer boomerangSpeedCounter
     LDA boomerangSpeedCounter
     BNE .BoomerangAbsSpeedDone
 
     WritePointer boomerangSpeedCounter, #BOOMERANG_MAX_SPEED_COUNTER
-    LDA boomerangSpeed
-    CMP #BOOMERANG_MAX_SPEED
-    BEQ .BoomerangAbsSpeedDone
     IncrementPointer boomerangSpeed
 
 .BoomerangAbsSpeedDone:
-    ; Let's calculate the monkey's directional speed.
-    ; TODO: Add support for moving towards the monkey...
-    ; It's probably already supported, as long as boomerangTargetX is set correctly.
+    ECheckFlag #BOOMERANG_FLAG_IS_RETURNING
+    BEQ .SetBoomerangVelocity
+    ; Boomerang is returning, so let's set the boomerangTargetX and boomerangTargetY values.
+    JSR CalculateMonkeyTarget
 
+.SetBoomerangVelocity
     LDX boomerangTargetX
     LDY boomerangTargetY
     JSR MinimizeTargetVector
@@ -138,7 +142,7 @@ UpdateBoomerang:
     JSR BoomerangMovementLookup
     TYA
     EWriteAToMember entityDY
-    EWriteMember entityDX+1, #$00
+    EWriteMember entityDY+1, #$00
     TXA
     NegateA
     EWriteAToMember entityDX
@@ -269,4 +273,42 @@ UpdateBoomerang:
     WritePointer boomerangTargetY, #$01
 .NotDown:
 
+    RTS
+
+
+
+; SUBROUTINE
+; Calculates the difference between the boomerang's X and Y values and the monkey's X and Y
+; values (in pixel space), and put them in boomerangTargetX and boomerangTargetY.
+; Output:
+;     boomerangTargetX: Difference between boomerang's X value and monkey's X value.
+;     boomerangTargetY: Difference between boomerang's Y value and monkey's Y value.
+; Clobbers:
+;     A, Y
+CalculateMonkeyTarget:
+    LoadEntity boomerangEntity
+    LDY #entityX
+    JSR CoordinateToPixelSpace
+    STA boomerangTargetX
+
+    LoadEntity monkeyEntity
+    LDY #entityX
+    JSR CoordinateToPixelSpace
+    SEC
+    SBC boomerangTargetX
+    STA boomerangTargetX
+
+    LoadEntity boomerangEntity
+    LDY #entityY
+    JSR CoordinateToPixelSpace
+    STA boomerangTargetY
+
+    LoadEntity monkeyEntity
+    LDY #entityY
+    JSR CoordinateToPixelSpace
+    SEC
+    SBC boomerangTargetY
+    STA boomerangTargetY
+
+    LoadEntity boomerangEntity
     RTS

@@ -174,6 +174,7 @@ Forever:
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
     .include "graphics/graphics.asm"
+    .include "graphics/pixel_space.asm" ; TODO: Used by both logic and graphics...
     .include "input/input_logic.asm"
     .include "logic/logic.asm"
 
