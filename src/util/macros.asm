@@ -109,6 +109,30 @@ EAddMemberToA: .macro
     ADC [currentEntity],Y
     .endm
 
+; Signed compare with argument
+ELessThan16: .macro
+    SEC
+    EReadMemberToA \1+1
+    SBC #HIGH(\2)
+    BVC .NoOverflow1\@
+    EOR #$80
+.NoOverflow1\@:
+    BMI .IsLessThan\@
+    BVC .NoOverflow2\@
+    EOR #$80
+.NoOverflow2\@:
+    BNE .NotLessThan\@
+    EReadMemberToA \1
+    SBC #LOW(\2)
+    BCC .IsLessThan\@
+.NotLessThan\@:
+    LDA #$01
+    JMP .Done\@
+.IsLessThan\@:
+    LDA #$00
+.Done\@:
+    .endm
+
 ;;; Other macros
 
 WritePointer: .macro

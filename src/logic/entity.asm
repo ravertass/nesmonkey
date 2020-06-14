@@ -47,4 +47,24 @@ UpdateEntityMoving:
     EReadMemberToA entityDX+1
     EAddAToMember entityX+1
 
+    ELessThan16 entityX, #$0000
+    BNE .RightOfXMin
+    EWriteMember16 entityX, #$0000
+.RightOfXMin:
+
+    ELessThan16 entityY, #$001D
+    BNE .BelowYMin
+    EWriteMember16 entityY, #$001D
+.BelowYMin:
+
+    ELessThan16 entityX, #$03E0
+    BEQ .LeftOfXMax
+    EWriteMember16 entityX, #$03E0
+.LeftOfXMax:
+
+    ELessThan16 entityY, #$0372
+    BEQ .AboveYMax
+    EWriteMember16 entityY, #$0372
+.AboveYMax:
+
     RTS
