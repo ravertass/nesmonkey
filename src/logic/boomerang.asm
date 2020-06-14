@@ -304,6 +304,15 @@ UpdateBoomerang:
     JSR CoordinateToPixelSpace
     SEC
     SBC boomerangTargetX
+    BMI .XNegative
+;XPositive:
+    BCS .StoreX
+    LDA #$80
+    JMP .StoreX
+.XNegative:
+    BCC .StoreX
+    LDA #$7F
+.StoreX:
     STA boomerangTargetX
 
     LoadEntity boomerangEntity
@@ -316,6 +325,15 @@ UpdateBoomerang:
     JSR CoordinateToPixelSpace
     SEC
     SBC boomerangTargetY
+    BMI .YNegative
+;YPositive:
+    BCS .StoreY
+    LDA #$80
+    JMP .StoreY
+.YNegative:
+    BCC .StoreY
+    LDA #$7F
+.StoreY:
     STA boomerangTargetY
 
     LoadEntity boomerangEntity

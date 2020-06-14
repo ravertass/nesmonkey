@@ -1,4 +1,8 @@
 
-2
+6
 00000	0202	w	h	0	X
 00001	0204	w	h	0	Y
+00002	03B9	b	h	0	Boomerang Target X
+00003	03BA	b	h	0	Boomerang Target Y
+00004	03BB	b	h	0	Boomerang Target X Min Abs
+00005	03BC	b	h	0	Boomerang Target Y Min Abs
