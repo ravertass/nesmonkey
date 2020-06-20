@@ -9,6 +9,25 @@ LoadEntity: .macro
     STA currentEntity+1
     .endm
 
+LoadOtherEntity: .macro
+    LDA #LOW(\1)
+    STA otherEntity
+    LDA #HIGH(\1)
+    STA otherEntity+1
+    .endm
+
+SwapEntities: .macro
+    LDA currentEntity
+    LDX otherEntity
+    STX currentEntity
+    STA otherEntity
+
+    LDA currentEntity+1
+    LDX otherEntity+1
+    STX currentEntity+1
+    STA otherEntity+1
+    .endm
+
 EWriteAToMember: .macro
     LDY #\1
     STA [currentEntity],Y

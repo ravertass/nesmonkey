@@ -92,10 +92,17 @@ UpdateBoomerang:
     JSR .HalfLeft
 
 .BoomerangVelocityDone:
-    ; TODO
-    ; - If boomerang collision-detects with monkey:
-    ;   - Kill boomerang
+    ECheckFlag #BOOMERANG_FLAG_IS_RETURNING
+    BEQ .Done
 
+    ; If boomerang is returning, then we will check if boomerang and monkey collides.
+    ; If so, the boomerang stops moving.
+    LoadOtherEntity monkeyEntity
+    JSR CollisionDetect
+    BNE .Done
+    EUnsetFlag #FLAG_IS_MOVING
+
+.Done:
     RTS
 
 .HalfLeft:

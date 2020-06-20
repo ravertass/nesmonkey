@@ -76,6 +76,8 @@ entityX               .rs 2
 entityY               .rs 2
 entityDX              .rs 2
 entityDY              .rs 2
+entityWidth           .rs 1
+entityHeight          .rs 1
 entityDir             .rs 1
 entityAnimationCount  .rs 1
 entityAnimationMax    .rs 1
@@ -106,6 +108,7 @@ animationsRightMoving .rs 2
     .zp
 
 currentEntity    .ds 2
+otherEntity      .ds 2
 
 ; Variables set before updating sprites
 currentMetaSpritePointer .ds 2
@@ -135,6 +138,8 @@ rngSeed .ds 2
 tempCoordinate .ds 1
 
 tempMonkeyCoordinate .ds 2
+
+tempVariable .ds 1
 
 boomerangSpeed .ds 1
 boomerangSpeedCounter .ds 1
