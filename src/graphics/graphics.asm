@@ -45,32 +45,22 @@ UpdateGraphics:
     JMP .UpdateGraphicsLoop
 
 .UpdateGraphicsDone:
+    STX lastDmaOffset
     RTS
 
 
 ; SUBROUTINE
 .ClearDmaGraphics:
-    ; TODO: This does not work exactly right, since entities can
-    ;       consist of more than one sprite...
-    LoadEntity firstEntity
     LDX #$00
 
 .ClearDmaGraphicsLoop:
+    CPX lastDmaOffset
+    BEQ .ClearDmaGraphicsDone
+
     LDA #$00
     STA DMA_GRAPHICS,X
     INX
-    STA DMA_GRAPHICS,X
-    INX
-    STA DMA_GRAPHICS,X
-    INX
-    STA DMA_GRAPHICS,X
-    INX
 
-    AddToPointer16 currentEntity, #entitySize
-
-    ; if we have looped through all entities: break loop.
-    ComparePointer16 currentEntity, endOfEntitySpace
-    BEQ .ClearDmaGraphicsDone
     JMP .ClearDmaGraphicsLoop
 
 .ClearDmaGraphicsDone:

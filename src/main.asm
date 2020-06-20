@@ -132,6 +132,8 @@ boomerangEntity  .ds entitySize
 entitySpace      .ds entitySize*10
 endOfEntitySpace .ds 0
 
+lastDmaOffset .ds 1
+
 ; Last input from controller 1.
 controller1 .ds 1
 
