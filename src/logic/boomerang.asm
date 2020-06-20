@@ -3,7 +3,6 @@
 
 ;; Move the boomerang if it is active
 UpdateBoomerang:
-    LoadEntity boomerangEntity
     ECheckFlag #FLAG_IS_MOVING
     BEQ .BoomerangNotMoving
     JSR .BoomerangMoving

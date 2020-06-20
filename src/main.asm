@@ -58,6 +58,8 @@ FLAG_IS_VISIBLE = %00000100
 
 BOOMERANG_FLAG_IS_RETURNING = %10000000
 
+SEAGULL_FLAG_HAS_APPEARED = %10000000
+
 ; Entity flags:
 ; 0  0  0  0  |  0  0  0  0
 ; ^  ^  ^  ^        ^  ^  ^

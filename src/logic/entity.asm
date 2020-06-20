@@ -54,7 +54,7 @@ UpdateEntityMoving:
 ; SUBROUTINE
 ; Clamps the current entity's position to the screen.
 ; Input:
-;   currentEntiy
+;   currentEntity
 ; Clobbers:
 ;   A, Y
 ClampToScreen:

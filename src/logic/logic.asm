@@ -7,6 +7,7 @@
     .include "logic/monkey.asm"
     .include "logic/boomerang.asm"
     .include "logic/boomerang_movement_lut.asm"
+    .include "logic/seagull.asm"
     .include "logic/minimize_vector.asm"
     .include "logic/collision.asm"
     .include "util/random.asm"
@@ -47,6 +48,7 @@ UpdateGame:
     JMP .GeneralEntityUpdate
 
 .JsrUpdateSeagull:
+    JSR UpdateSeagull
     JSR UpdateEntityMoving
     JMP .GeneralEntityUpdate
 

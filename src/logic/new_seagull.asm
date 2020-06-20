@@ -11,6 +11,7 @@ NewSeagull:
     ESetFlag #FLAG_IS_ACTIVE
     ESetFlag #FLAG_IS_MOVING
     ESetFlag #FLAG_IS_VISIBLE
+    EUnsetFlag #SEAGULL_FLAG_HAS_APPEARED
 
     EWriteMember entityType, #TYPE_SEAGULL
 
@@ -113,36 +114,63 @@ NewSeagull:
 
 .SetLeft:
     EWriteMember entityDir, #DIR_LEFT
-    EWriteMember16 entityX, #$FFFF
-    JSR RandomByte
-    EWriteAToMember entityY
-    JSR RandomByte
-    EWriteAToMember entityY+1
+    EWriteMember16 entityX, #$03F0
+    JSR .SetRandomY
+
     JMP .DirAndPosDone
+
 .SetUp:
     EWriteMember entityDir, #DIR_UP
-    JSR RandomByte
-    EWriteAToMember entityX
-    JSR RandomByte
-    EWriteAToMember entityX+1
-    EWriteMember16 entityY, #$FFFF
+    JSR .SetRandomX
+    EWriteMember16 entityY, #$0380
+
     JMP .DirAndPosDone
+
 .SetDown:
     EWriteMember entityDir, #DIR_DOWN
-    JSR RandomByte
-    EWriteAToMember entityX
-    JSR RandomByte
-    EWriteAToMember entityX+1
+    JSR .SetRandomX
     EWriteMember16 entityY, #$0000
+
     JMP .DirAndPosDone
+
 .SetRight:
     EWriteMember entityDir, #DIR_RIGHT
     EWriteMember16 entityX, #$0000
-    JSR RandomByte
-    EWriteAToMember entityY
-    JSR RandomByte
-    EWriteAToMember entityY+1
+    JSR .SetRandomY
+
     JMP .DirAndPosDone
 
 .DirAndPosDone:
+    RTS
+
+; SUBROUTINE ;
+.SetRandomX:
+    JSR RandomByte
+    AND #%00000011
+    EWriteAToMember entityX+1
+    CMP #$03
+    BEQ .XUpperIs3
+    JSR RandomByte
+    JMP .XStoreLower
+.XUpperIs3:
+    JSR RandomByte
+    AND #%01111111
+.XStoreLower:
+    EWriteAToMember entityX
+    RTS
+
+; SUBROUTINE ;
+.SetRandomY:
+    JSR RandomByte
+    AND #%00000011
+    EWriteAToMember entityY+1
+    CMP #$03
+    BEQ .YUpperIs3
+    JSR RandomByte
+    JMP .YStoreLower
+.YUpperIs3:
+    JSR RandomByte
+    AND #%01111111
+.YStoreLower:
+    EWriteAToMember entityY
     RTS
