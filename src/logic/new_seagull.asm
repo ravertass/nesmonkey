@@ -39,11 +39,9 @@ NewSeagull:
 .GetSeagullSpeed:
     ; First, randomize a small number that is not zero and transfer it to X.
     JSR RandomByte
-    AND #%00000111
-    CMP #$00
-    BNE .NotZero
-    LDA #$01
-.NotZero:
+    AND #%00000011
+    CLC
+    ADC #$01
     TAY
 
     ; Then, see if we should do negative or positive

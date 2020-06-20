@@ -3,19 +3,6 @@
 
 ; SUBROUTINE ;
 UpdateSeagull:
-    ECheckFlag #SEAGULL_FLAG_HAS_APPEARED
-    BNE .SeagullAppeared
-
-    JSR .IsWithinScreen
-    BEQ .SetAppeared
-
-    RTS
-
-.SetAppeared:
-    ESetFlag #SEAGULL_FLAG_HAS_APPEARED
-    RTS
-
-.SeagullAppeared:
     LoadOtherEntity boomerangEntity
     SwapEntities
     ECheckFlag #FLAG_IS_MOVING
@@ -30,6 +17,19 @@ UpdateSeagull:
     SwapEntities
 .BoomerangCheckDone:
 
+    ECheckFlag #SEAGULL_FLAG_HAS_APPEARED
+    BNE .SeagullAppeared
+
+    JSR .IsWithinScreen
+    BEQ .SetAppeared
+
+    RTS
+
+.SetAppeared:
+    ESetFlag #SEAGULL_FLAG_HAS_APPEARED
+    RTS
+
+.SeagullAppeared:
     JSR .IsWithinScreen
     BNE .KillSeagull
 
@@ -48,7 +48,7 @@ UpdateSeagull:
     ELessThan16 entityY, #$001D
     BEQ .IsWithinScreenFalse
 
-    ELessThan16 entityX, #$03E0
+    ELessThan16 entityX, #$03F0
     BNE .IsWithinScreenFalse
 
     ELessThan16 entityY, #$0380
