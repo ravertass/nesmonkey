@@ -177,6 +177,17 @@ AddToPointer16: .macro
     STA \1+1
     .endm
 
+SubtractFromPointer16: .macro
+    LDA \1
+    SEC
+    SBC \2
+    STA \1
+
+    LDA \1+1
+    SBC #$00 ; subtract carry from high byte of pointer
+    STA \1+1
+    .endm
+
 DecrementPointer: .macro
     LDA \1
     CLC

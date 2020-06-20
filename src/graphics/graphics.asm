@@ -23,7 +23,8 @@ UpdateGraphics:
     ; place in memory.
     LDX #$00
 
-    LoadEntity firstEntity
+    LoadEntity endOfEntitySpace
+    SubtractFromPointer16 currentEntity, #entitySize
 
 ; The loop here is more or less copy-pasted from the game logic update subroutine.
 .UpdateGraphicsLoop:
@@ -36,11 +37,10 @@ UpdateGraphics:
     JSR UpdateEntitySprites
 
 .NextEntity:
-    ; increment currentEntity pointer so we point to the next entity.
-    AddToPointer16 currentEntity, #entitySize
+    SubtractFromPointer16 currentEntity, #entitySize
 
     ; if we have looped through all entities: break loop.
-    ComparePointer16 currentEntity, endOfEntitySpace
+    ComparePointer16 currentEntity, (#firstEntity-#entitySize)
     BEQ .UpdateGraphicsDone
     JMP .UpdateGraphicsLoop
 
