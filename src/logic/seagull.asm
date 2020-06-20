@@ -16,6 +16,20 @@ UpdateSeagull:
     RTS
 
 .SeagullAppeared:
+    LoadOtherEntity boomerangEntity
+    SwapEntities
+    ECheckFlag #FLAG_IS_MOVING
+    BEQ .NoBoomerang
+    SwapEntities
+
+    JSR CollisionDetect
+    BEQ .KillSeagull
+    JMP .BoomerangCheckDone
+
+.NoBoomerang:
+    SwapEntities
+.BoomerangCheckDone:
+
     JSR .IsWithinScreen
     BNE .KillSeagull
 
