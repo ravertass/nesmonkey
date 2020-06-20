@@ -129,7 +129,7 @@ bgPointerHigh .ds 1
 firstEntity      .ds 0
 monkeyEntity     .ds entitySize
 boomerangEntity  .ds entitySize
-entitySpace      .ds entitySize*20
+entitySpace      .ds entitySize*10
 endOfEntitySpace .ds 0
 
 ; Last input from controller 1.

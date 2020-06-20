@@ -50,6 +50,8 @@ UpdateGraphics:
 
 ; SUBROUTINE
 .ClearDmaGraphics:
+    ; TODO: This does not work exactly right, since entities can
+    ;       consist of more than one sprite...
     LoadEntity firstEntity
     LDX #$00
 

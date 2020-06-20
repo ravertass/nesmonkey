@@ -5,8 +5,12 @@ NewSeagull:
     JSR GetFreeEntitySlot
     LDA currentEntity+1
     CMP #$FF
-    BEQ .NewSeagullDone ; no free entity slot was found :(
+    BNE .SlotAvailable
 
+    ; No free slot found :(
+    RTS
+
+.SlotAvailable:
     EWriteMember entityFlags, #$00
     ESetFlag #FLAG_IS_ACTIVE
     ESetFlag #FLAG_IS_MOVING
@@ -26,12 +30,15 @@ NewSeagull:
 
     JSR .SetSeagullDirAndPos
 
+    EWriteMember entityWidth, #$08
+    EWriteMember entityHeight, #$08
+    EWriteMember entityCollisionOffset, #$00
+
     EWriteMember entityAnimationFrame, #$00
     EWriteMember entityAnimationCount, #$00
     EWriteMember entityAnimationMax, #$08
     EWriteMember16 entityAnimationsTable, seagullAnimationsTable
 
-.NewSeagullDone
     RTS
 
 ; Writes a randomized speed to the registers.
