@@ -52,19 +52,21 @@ TYPE_BOOMERANG .rs 1
 
 ;; Entity
 
-FLAG_IS_ACTIVE = %00000001
-FLAG_IS_MOVING = %00000010
+FLAG_IS_ACTIVE  = %00000001
+FLAG_IS_MOVING  = %00000010
+FLAG_IS_VISIBLE = %00000100
 
 BOOMERANG_FLAG_IS_RETURNING = %10000000
 
 ; Entity flags:
 ; 0  0  0  0  |  0  0  0  0
-; ^  ^  ^  ^           ^  ^
-; |  |  |  |           |  |
-; Reserved for         |  |
-; different            |  |
-; entity types.        |  |
-;                      |  |
+; ^  ^  ^  ^        ^  ^  ^
+; |  |  |  |        |  |  |
+; Reserved for      |  |  |
+; different         |  |  |
+; entity types.     |  |  |
+;                   |  |  |
+; Is visible _______|  |  |
 ; Is moving. __________|  |
 ; Is active. _____________|
 
@@ -125,7 +127,7 @@ bgPointerHigh .ds 1
 firstEntity      .ds 0
 monkeyEntity     .ds entitySize
 boomerangEntity  .ds entitySize
-entitySpace      .ds entitySize*22
+entitySpace      .ds entitySize*20
 endOfEntitySpace .ds 0
 
 controller1 .ds 1  ; Last input from controller 1.

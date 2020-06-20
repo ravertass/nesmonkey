@@ -10,6 +10,7 @@ NewSeagull:
     EWriteMember entityFlags, #$00
     ESetFlag #FLAG_IS_ACTIVE
     ESetFlag #FLAG_IS_MOVING
+    ESetFlag #FLAG_IS_VISIBLE
 
     EWriteMember entityType, #TYPE_SEAGULL
 

@@ -1,6 +1,8 @@
 ;;;;;;;; Game logic -- Entity ;;;;;;;;
 ;; General entity logic subroutines go here!
 
+; SUBROUTINE
+; General movement update.
 UpdateEntityMoving:
     JSR .UpdateEntityMoveCounter
     JSR .UpdateEntityPosition
@@ -47,6 +49,15 @@ UpdateEntityMoving:
     EReadMemberToA entityDX+1
     EAddAToMember entityX+1
 
+    RTS
+
+; SUBROUTINE
+; Clamps the current entity's position to the screen.
+; Input:
+;   currentEntiy
+; Clobbers:
+;   A, Y
+ClampToScreen:
     ELessThan16 entityX, #$0000
     BNE .RightOfXMin
     EWriteMember16 entityX, #$0000

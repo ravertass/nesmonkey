@@ -27,22 +27,32 @@ UpdateGame:
     CMP #TYPE_BOOMERANG
     BEQ .JsrUpdateBoomerang
 
+    EReadMemberToA entityType
+    CMP #TYPE_SEAGULL
+    BEQ .JsrUpdateSeagull
+
     ; If this entity's type has no logic implemented, simply do the general update.
     JMP .GeneralEntityUpdate
 
 .JsrUpdateMonkey:
     JSR UpdateMonkey
+    JSR UpdateEntityMoving
+    JSR ClampToScreen
     JMP .GeneralEntityUpdate
 
 .JsrUpdateBoomerang:
     JSR UpdateBoomerang
+    JSR UpdateEntityMoving
+    JSR ClampToScreen
+    JMP .GeneralEntityUpdate
+
+.JsrUpdateSeagull:
+    JSR UpdateEntityMoving
     JMP .GeneralEntityUpdate
 
 .GeneralEntityUpdate:
     ; General update for entities goes here.
-    ; UpdateEntityMoving handles X and Y movement according
-    ; to DX and DY, and updating the animationCount value.
-    JSR UpdateEntityMoving
+    ; TODO: Is this still applicable?
 
 .NextEntity:
     ; increment currentEntity pointer so we point to the next entity.

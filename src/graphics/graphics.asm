@@ -17,6 +17,8 @@ UpdateGraphics:
     LDA #HIGH(DMA_GRAPHICS)
     STA $4014
 
+    JSR .ClearDmaGraphics
+
     ; X will be the offset used to store all sprites at the correct
     ; place in memory.
     LDX #$00
@@ -25,8 +27,10 @@ UpdateGraphics:
 
 ; The loop here is more or less copy-pasted from the game logic update subroutine.
 .UpdateGraphicsLoop:
-    ; if entity is not active: continue to next entity.
+    ; if entity is not active or visible: continue to next entity.
     ECheckFlag #FLAG_IS_ACTIVE
+    BEQ .NextEntity
+    ECheckFlag #FLAG_IS_VISIBLE
     BEQ .NextEntity
 
     JSR UpdateEntitySprites
@@ -41,4 +45,31 @@ UpdateGraphics:
     JMP .UpdateGraphicsLoop
 
 .UpdateGraphicsDone:
+    RTS
+
+
+; SUBROUTINE
+.ClearDmaGraphics:
+    LoadEntity firstEntity
+    LDX #$00
+
+.ClearDmaGraphicsLoop:
+    LDA #$00
+    STA DMA_GRAPHICS,X
+    INX
+    STA DMA_GRAPHICS,X
+    INX
+    STA DMA_GRAPHICS,X
+    INX
+    STA DMA_GRAPHICS,X
+    INX
+
+    AddToPointer16 currentEntity, #entitySize
+
+    ; if we have looped through all entities: break loop.
+    ComparePointer16 currentEntity, endOfEntitySpace
+    BEQ .ClearDmaGraphicsDone
+    JMP .ClearDmaGraphicsLoop
+
+.ClearDmaGraphicsDone:
     RTS

@@ -8,6 +8,7 @@ SetupBoomerang:
     ESetFlag #FLAG_IS_ACTIVE
     EUnsetFlag #FLAG_IS_MOVING
     ; By not setting FLAG_IS_MOVING, we say that the boomerang is idle.
+    EUnsetFlag #FLAG_IS_VISIBLE
 
     EWriteMember entityType, #TYPE_BOOMERANG
     EWriteMember16 entityX, #$0000

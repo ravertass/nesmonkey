@@ -7,6 +7,7 @@ SetupMonkey:
     EWriteMember entityFlags, #$00
     ESetFlag #FLAG_IS_ACTIVE
     EUnsetFlag #FLAG_IS_MOVING
+    ESetFlag #FLAG_IS_VISIBLE
 
     EWriteMember entityType, #TYPE_MONKEY
     EWriteMember16 entityX, #$0200

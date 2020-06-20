@@ -14,10 +14,13 @@ UpdateBoomerang:
     ; So, let's check if it is thrown.
     LDA controller1
     AND #BUTTON_B
-    BEQ .BoomerangDone
+    BNE .ButtonBPressed
 
-    ; B button was pressed.
+    RTS
+
+.ButtonBPressed:
     ESetFlag #FLAG_IS_MOVING
+    ESetFlag #FLAG_IS_VISIBLE
     EUnsetFlag #BOOMERANG_FLAG_IS_RETURNING
     EWriteMember entityAnimationFrame, #$00
 
@@ -34,7 +37,6 @@ UpdateBoomerang:
 
     JSR .SetInitialBoomerangVelocity
 
-.BoomerangDone:
     RTS
 
 .BoomerangMoving:
@@ -101,6 +103,7 @@ UpdateBoomerang:
     JSR CollisionDetect
     BNE .Done
     EUnsetFlag #FLAG_IS_MOVING
+    EUnsetFlag #FLAG_IS_VISIBLE
 
 .Done:
     RTS
