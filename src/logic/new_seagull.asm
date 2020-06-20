@@ -155,6 +155,8 @@ NewSeagull:
 .XUpperIs3:
     JSR RandomByte
     AND #%01111111
+    ; TODO: We would probably like larger x values,
+    ;       but this is the easiest way to clamp the value.
 .XStoreLower:
     EWriteAToMember entityX
     RTS
@@ -171,6 +173,8 @@ NewSeagull:
 .YUpperIs3:
     JSR RandomByte
     AND #%01111111
+    ; TODO: We would probably like larger x values,
+    ;       but this is the easiest way to clamp the value.
 .YStoreLower:
     EWriteAToMember entityY
     RTS

@@ -1,5 +1,5 @@
 
-10
+12
 00000	0202	w	h	0	X
 00001	0204	w	h	0	Y
 00002	03B9	b	h	0	Boomerang Target X
@@ -10,3 +10,5 @@
 00007	022A	b	h	0	Seagull Flags
 00008	022C	w	h	0	Seagull X
 00009	022E	w	h	0	Seagull Y
+0000A	03CF	w	h	0	Game clock
+0000B	03D7	b	h	0	Temp variable

@@ -15,10 +15,8 @@ SetupGame:
     LDA #$E0
     STA rngSeed+1
 
-    ; TODO: Seagulls should be added dynamically.
-    JSR NewSeagull
-    JSR NewSeagull
-    JSR NewSeagull
-    JSR NewSeagull
+    LDA #$00
+    STA gameClock
+    STA gameClock+1
 
     RTS

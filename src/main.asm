@@ -132,18 +132,23 @@ boomerangEntity  .ds entitySize
 entitySpace      .ds entitySize*20
 endOfEntitySpace .ds 0
 
-controller1 .ds 1  ; Last input from controller 1.
+; Last input from controller 1.
+controller1 .ds 1
 
-; Counter used during animation (due to lack of registers...)
-frameCounter .ds 1
+gameClock .ds 2
 
 ; Seed for random number generation.
 rngSeed .ds 2
 
+;; Temporary variables ;;
+
+; TODO: Could probably do some cleanup among these.
+
+; Counter used during animation
+frameCounter .ds 1
+
 tempCoordinate .ds 1
-
 tempMonkeyCoordinate .ds 2
-
 tempVariable .ds 1
 
 boomerangSpeed .ds 1

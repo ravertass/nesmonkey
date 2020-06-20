@@ -191,6 +191,10 @@ IncrementPointer: .macro
     STA \1
     .endm
 
+IncrementPointer16: .macro
+    AddToPointer16 \1, #$01
+    .endm
+
 ComparePointer16: .macro
     LDA \1
     CMP #LOW(\2)
