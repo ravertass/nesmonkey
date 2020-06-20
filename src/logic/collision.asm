@@ -24,12 +24,14 @@ CollisionDetect:
 
     LDY #entityX
     JSR CoordinateToPixelSpace
+    EAddMemberToA #entityCollisionOffset
     STA tempVariable
 
     SwapEntities
     LDY #entityX
     JSR CoordinateToPixelSpace
     EAddMemberToA #entityWidth
+    ESubtractMemberToA #entityCollisionOffset
 
     CMP tempVariable
     BPL .Next1
@@ -46,11 +48,13 @@ CollisionDetect:
     LDY #entityX
     JSR CoordinateToPixelSpace
     EAddMemberToA #entityWidth
+    ESubtractMemberToA #entityCollisionOffset
     STA tempVariable
 
     SwapEntities
     LDY #entityX
     JSR CoordinateToPixelSpace
+    EAddMemberToA #entityCollisionOffset
 
     CMP tempVariable
     BMI .Next2
@@ -66,12 +70,14 @@ CollisionDetect:
 
     LDY #entityY
     JSR CoordinateToPixelSpace
+    EAddMemberToA #entityCollisionOffset
     STA tempVariable
 
     SwapEntities
     LDY #entityY
     JSR CoordinateToPixelSpace
     EAddMemberToA #entityHeight
+    ESubtractMemberToA #entityCollisionOffset
 
     CMP tempVariable
     BPL .Next3
@@ -88,11 +94,13 @@ CollisionDetect:
     LDY #entityY
     JSR CoordinateToPixelSpace
     EAddMemberToA #entityHeight
+    ESubtractMemberToA #entityCollisionOffset
     STA tempVariable
 
     SwapEntities
     LDY #entityY
     JSR CoordinateToPixelSpace
+    EAddMemberToA #entityCollisionOffset
 
     CMP tempVariable
     BMI .CollisionFound

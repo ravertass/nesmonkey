@@ -78,6 +78,7 @@ entityDX              .rs 2
 entityDY              .rs 2
 entityWidth           .rs 1
 entityHeight          .rs 1
+entityCollisionOffset .rs 1
 entityDir             .rs 1
 entityAnimationCount  .rs 1
 entityAnimationMax    .rs 1

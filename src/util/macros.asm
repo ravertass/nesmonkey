@@ -128,6 +128,13 @@ EAddMemberToA: .macro
     ADC [currentEntity],Y
     .endm
 
+; Without carry
+ESubtractMemberToA: .macro
+    LDY #\1
+    SEC
+    SBC [currentEntity],Y
+    .endm
+
 ; Signed compare with argument
 ELessThan16: .macro
     SEC

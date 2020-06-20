@@ -15,6 +15,7 @@ SetupMonkey:
     EWriteMember16 entityDY, #$0000
     EWriteMember16 entityWidth, #$08
     EWriteMember16 entityHeight, #$0A
+    EWriteMember16 entityCollisionOffset, #$04
     EWriteMember entityDir, #DIR_DOWN
     EWriteMember entityAnimationFrame, #00
     EWriteMember entityAnimationCount, #00

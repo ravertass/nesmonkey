@@ -37,7 +37,7 @@ def main(asm_path):
 
             usage_str = line.split()[2]
             if "entitySize" in usage_str:
-                usage_str = usage_str.replace("entitySize", str(0x14))  # Super hacky...
+                usage_str = usage_str.replace("entitySize", str(0x15))  # Super hacky...
                 usage = eval(usage_str)
             elif usage_str[0] == "$":
                 usage = int(usage_str[1:], 16)
