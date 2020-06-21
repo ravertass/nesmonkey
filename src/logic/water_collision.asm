@@ -22,5 +22,7 @@ WaterCollision:
     ; We find the correct tile offset using this formula:
     ; tile_offset = x - x % 8 + (y - y % 8)*32
     ;
-    ; More easy-to-use math:
+    ; More CPU-appropriate math:
     ; x - x % 8 = x AND %11111000
+
+    RTS

@@ -29,6 +29,7 @@ UpdateEntities:
     JSR UpdateMonkey
     JSR UpdateEntityMoving
     JSR ClampToScreen
+    JSR WaterCollision
     JMP .GeneralEntityUpdate
 
 .JsrUpdateBoomerang:
