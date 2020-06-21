@@ -152,6 +152,44 @@ WaterCollision:
     TAY
 
     JSR .IsWater
+    BNE .EightDownLeft
+    RTS
+
+    ; TODO: This is a hack to make this work for the monkey.
+    ;       Really, this should be rewritten as a two-depth loop,
+    ;       checking every eighth pixel in both X and Y directions,
+    ;       and finally checking the positions at x+width-1 and
+    ;       y+height-1.
+.EightDownLeft: ; TODO: Remove when the loop has been implemented...
+    LDY #entityX
+    JSR CoordinateToPixelSpace
+    TAX
+
+    LDY #entityY
+    JSR CoordinateToPixelSpace
+    CLC
+    ADC #$08
+    TAY
+
+    JSR .IsWater
+    BNE .EightDownRight
+    RTS
+
+.EightDownRight: ; TODO: Remove when the loop has been implemented...
+    LDY #entityX
+    JSR CoordinateToPixelSpace
+    EAddMemberToA #entityWidth
+    SEC
+    SBC #$01
+    TAX
+
+    LDY #entityY
+    JSR CoordinateToPixelSpace
+    CLC
+    ADC #$08
+    TAY
+
+    JSR .IsWater
     BNE .BottomLeftCorner
     RTS
 
@@ -184,7 +222,6 @@ WaterCollision:
     EAddMemberToA #entityHeight
     SEC
     SBC #$01
-    STA debugVariable
     TAY
 
     JSR .IsWater
