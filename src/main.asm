@@ -151,7 +151,8 @@ frameCounter .ds 1
 
 tempCoordinate .ds 1
 tempMonkeyCoordinate .ds 2
-tempVariable .ds 1
+tempVariable  .ds 1
+tempVariable2 .ds 1
 
 boomerangSpeed .ds 1
 boomerangSpeedCounter .ds 1

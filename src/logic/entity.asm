@@ -40,6 +40,12 @@ UpdateEntityMoving:
     EReadMemberToA entityDY+1
     EAddAToMember entityY+1
 
+    EReadMemberToA entityType
+    CMP #TYPE_MONKEY
+    BNE .NoWaterCollisionY
+    JSR WaterCollisionY
+.NoWaterCollisionY:
+
     ; Add lower DX to lower X byte
     EReadMemberToA entityDX
     CLC
@@ -48,6 +54,12 @@ UpdateEntityMoving:
     ; Add higher DX with carry to higher X byte
     EReadMemberToA entityDX+1
     EAddAToMember entityX+1
+
+    EReadMemberToA entityType
+    CMP #TYPE_MONKEY
+    BNE .NoWaterCollisionX
+    JSR WaterCollisionX
+.NoWaterCollisionX:
 
     RTS
 
