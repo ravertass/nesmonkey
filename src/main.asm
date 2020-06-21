@@ -124,6 +124,8 @@ currentAnimationsTable   .ds 2
 bgPointerLow  .ds 1
 bgPointerHigh .ds 1
 
+tempTilePointer .ds 2
+
     .bss
 
 firstEntity      .ds 0
@@ -152,7 +154,6 @@ frameCounter .ds 1
 tempCoordinate .ds 1
 tempMonkeyCoordinate .ds 2
 tempVariable  .ds 1
-tempVariable2 .ds 1
 
 boomerangSpeed .ds 1
 boomerangSpeedCounter .ds 1

@@ -1,14 +1,15 @@
 
-12
-00000	0202	w	h	0	X
-00001	0204	w	h	0	Y
-00002	03B9	b	h	0	Boomerang Target X
-00003	03BA	b	h	0	Boomerang Target Y
-00004	03BB	b	h	0	Boomerang Target X Min Abs
-00005	03BC	b	h	0	Boomerang Target Y Min Abs
-00006	0226	b	h	0	Boomerang anim length
-00007	022A	b	h	0	Seagull Flags
-00008	022C	w	h	0	Seagull X
-00009	022E	w	h	0	Seagull Y
-0000A	03CF	w	h	0	Game clock
-0000B	03D7	b	h	0	Temp variable
+13
+00000	03B9	b	h	0	Boomerang Target X
+00001	03BA	b	h	0	Boomerang Target Y
+00002	03BB	b	h	0	Boomerang Target X Min Abs
+00003	03BC	b	h	0	Boomerang Target Y Min Abs
+00004	0226	b	h	0	Boomerang anim length
+00005	022A	b	h	0	Seagull Flags
+00006	022C	w	h	0	Seagull X
+00007	022E	w	h	0	Seagull Y
+00008	03CF	w	h	0	Game clock
+00009	03D7	b	h	0	Temp variable
+0000A	000B	w	h	0	tempTilePointer
+0000B	0202	w	h	0	Monkey X
+0000C	0204	w	h	0	Monkey Y
