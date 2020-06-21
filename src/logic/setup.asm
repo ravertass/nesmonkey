@@ -12,7 +12,7 @@ SetupGame:
     LDA #$04 ; chosen by fair dice roll.
              ; guaranteed to be random.
     STA rngSeed
-    LDA #$E0
+    LDA #$00
     STA rngSeed+1
 
     LDA #$00
