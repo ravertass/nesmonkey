@@ -54,6 +54,13 @@ class Octant(enum.Enum):
     RRU = 8
 
 
+def _hex(num):
+    hexed = str(hex(num))[2:]
+    if len(hexed) == 1:
+        hexed = f"0{hexed}"
+    return hexed
+
+
 def _is_negative(num):
     # AND #%10000000
     return num < 0
@@ -113,7 +120,7 @@ def _calc_angle(vector):
 
 NUM_PER_OCT = 4
 DEGREES = [x * 45/NUM_PER_OCT for x in range(0, NUM_PER_OCT)]
-SPEEDS = [1, 2, 3, 4, 5, 6, 7, 8]
+SPEEDS = range(1, 9)
 
 
 def _velocity_vector(degrees, speed):
@@ -185,7 +192,7 @@ def _iprint(line):
 
 
 def _beq_speed(x, speed):
-    _iprint(f"CMP #$0{speed}")
+    _iprint(f"CMP #${_hex(speed)}")
     _iprint(f"BEQ .XEq{x}SpeedEq{speed}")
 
 
@@ -193,8 +200,8 @@ def _set_velocity(x, speed):
     print(f".XEq{x}SpeedEq{speed}")
     speed_lookup_table = _triangles_lookup_table()[Vector(x, 1)]
     movement_vec = speed_lookup_table[speed]
-    _iprint(f"LDX #$0{movement_vec.x}")
-    _iprint(f"LDY #$0{movement_vec.y}")
+    _iprint(f"LDX #${_hex(movement_vec.x)}")
+    _iprint(f"LDY #${_hex(movement_vec.y)}")
     _iprint(f"RTS")
 
 
@@ -209,7 +216,7 @@ def _speed_table(x):
 
 
 def _jsr_x(x):
-    _iprint(f"CMP #$0{x}")
+    _iprint(f"CMP #${_hex(x)}")
     _iprint(f"BNE .XNotEquals{x}")
     _iprint(f"JSR .XEquals{x}")
     _iprint("RTS")
