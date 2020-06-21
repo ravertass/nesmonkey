@@ -46,7 +46,9 @@ WaterCollisionY:
     ; Push the entity up
     LDY #entityY
     JSR CoordinateToPixelSpace
+    EAddMemberToA #entityHeight
     AND #%11111000
+    ESubtractMemberToA #entityHeight
     LDY #entityY
     JSR CoordinateToGameSpace
 
@@ -89,7 +91,9 @@ WaterCollisionX:
     ; Push the entity left
     LDY #entityX
     JSR CoordinateToPixelSpace
+    EAddMemberToA #entityWidth
     AND #%11111000
+    ESubtractMemberToA #entityWidth
     LDY #entityX
     JSR CoordinateToGameSpace
 
@@ -180,6 +184,7 @@ WaterCollision:
     EAddMemberToA #entityHeight
     SEC
     SBC #$01
+    STA debugVariable
     TAY
 
     JSR .IsWater

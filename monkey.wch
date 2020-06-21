@@ -1,5 +1,5 @@
 
-13
+14
 00000	03B9	b	h	0	Boomerang Target X
 00001	03BA	b	h	0	Boomerang Target Y
 00002	03BB	b	h	0	Boomerang Target X Min Abs
@@ -13,3 +13,4 @@
 0000A	000B	w	h	0	tempTilePointer
 0000B	0202	w	h	0	Monkey X
 0000C	0204	w	h	0	Monkey Y
+0000D	0302	b	h	0	Debug variable

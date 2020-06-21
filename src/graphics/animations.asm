@@ -52,6 +52,13 @@ AnimateEntitySprites:
     LDY currentMetaSpriteOffset
     ADC [currentMetaSpritePointer],Y
 
+    ; For some reason, you must subtract x from the
+    ; Y coordinate to get the sprite at the right position.
+    ; - x = 1 according to nesdev
+    ; - x = 3 seems right?
+    SEC
+    SBC #$03
+
     STA DMA_GRAPHICS,X
     INX
     LDY currentMetaSpriteOffset

@@ -144,6 +144,9 @@ gameClock .ds 2
 ; Seed for random number generation.
 rngSeed .ds 2
 
+; Only used for debugging.
+debugVariable .ds 1
+
 ;; Temporary variables ;;
 
 ; TODO: Could probably do some cleanup among these.
