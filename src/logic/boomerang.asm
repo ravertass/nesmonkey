@@ -1,7 +1,7 @@
 ;;;;;;;; Game logic -- Boomerang ;;;;;;;;
 ;; Game logic related to the boomerang goes here.
 
-;; Move the boomerang if it is active
+; SUBROUTINE ;
 UpdateBoomerang:
     ECheckFlag #FLAG_IS_MOVING
     BEQ .NotMoving
@@ -41,7 +41,7 @@ UpdateBoomerang:
     LoadEntity boomerangEntity
     EWriteMember16P entityY, tempMonkeyCoordinate
 
-    JSR .SetInitialBoomerangVelocity
+    JSR .SetInitialBoomerangTarget
 
     RTS
 
@@ -83,25 +83,22 @@ UpdateBoomerang:
 
 .BoomerangAbsSpeedDone:
     ECheckFlag #BOOMERANG_FLAG_IS_RETURNING
-    BEQ .SetBoomerangVelocity
-    ; Boomerang is returning, so let's set the boomerangTargetX and boomerangTargetY values.
+    BEQ .BoomerangFollowTarget
+
+.BoomerangTargetReturning:
     JSR .CalculateMonkeyTarget
 
-.SetBoomerangVelocity
-    LDX boomerangTargetX
-    LDY boomerangTargetY
-    JSR MinimizeTargetVector
-    STX boomerangMinAbsTargetX
-    STY boomerangMinAbsTargetY
+.BoomerangFollowTarget:
+    LDA boomerangSpeed
+    STA followSpeed
+    LDA boomerangTargetX
+    STA followTargetX
+    LDA boomerangTargetY
+    STA followTargetY
 
-    IsPositive boomerangTargetX
-    BNE .NotHalfRight
-    JSR .HalfRight
-    JMP .BoomerangVelocityDone
-.NotHalfRight:
-    JSR .HalfLeft
+    JSR FollowTarget
 
-.BoomerangVelocityDone:
+;MonkeyCollisionCheck:
     ECheckFlag #BOOMERANG_FLAG_IS_RETURNING
     BEQ .Done
 
@@ -118,145 +115,7 @@ UpdateBoomerang:
 
 
 ; SUBROUTINE ;
-.HalfLeft:
-    IsPositive boomerangTargetY
-    BEQ .QuadrantLD
-;QuadrantLU:
-    LDA boomerangMinAbsTargetX
-    CMP boomerangMinAbsTargetY
-    BCC .OctantLUU
-;OctantLLU:
-    LDA boomerangMinAbsTargetX
-    LDX boomerangSpeed
-    JSR BoomerangMovementLookup
-    TYA
-    NegateA
-    EWriteAToMember entityDY
-    JSR GetHigherNegativeByte
-    EWriteAToMember entityDY+1
-    TXA
-    NegateA
-    EWriteAToMember entityDX
-    JSR GetHigherNegativeByte
-    EWriteAToMember entityDX+1
-    JMP .HalfLeftDone
-.OctantLUU:
-    LDA boomerangMinAbsTargetY
-    LDX boomerangSpeed
-    JSR BoomerangMovementLookup
-    TYA
-    NegateA
-    EWriteAToMember entityDX
-    JSR GetHigherNegativeByte
-    EWriteAToMember entityDX+1
-    TXA
-    NegateA
-    EWriteAToMember entityDY
-    JSR GetHigherNegativeByte
-    EWriteAToMember entityDY+1
-    JMP .HalfLeftDone
-
-.QuadrantLD:
-    LDA boomerangMinAbsTargetX
-    CMP boomerangMinAbsTargetY
-    BCC .OctantLDD
-;OctantLLD:
-    LDA boomerangMinAbsTargetX
-    LDX boomerangSpeed
-    JSR BoomerangMovementLookup
-    TYA
-    EWriteAToMember entityDY
-    EWriteMember entityDY+1, #$00
-    TXA
-    NegateA
-    EWriteAToMember entityDX
-    JSR GetHigherNegativeByte
-    EWriteAToMember entityDX+1
-    JMP .HalfLeftDone
-.OctantLDD:
-    LDA boomerangMinAbsTargetY
-    LDX boomerangSpeed
-    JSR BoomerangMovementLookup
-    TYA
-    NegateA
-    EWriteAToMember entityDX
-    JSR GetHigherNegativeByte
-    EWriteAToMember entityDX+1
-    TXA
-    EWriteAToMember entityDY
-    EWriteMember entityDY+1, #$00
-
-.HalfLeftDone:
-    RTS
-
-
-; SUBROUTINE ;
-.HalfRight:
-    IsPositive boomerangTargetY
-    BEQ .QuadrantRD
-;QuadrantRU:
-    LDA boomerangMinAbsTargetX
-    CMP boomerangMinAbsTargetY
-    BCC .OctantRUU
-;OctantRRU:
-    LDA boomerangMinAbsTargetX
-    LDX boomerangSpeed
-    JSR BoomerangMovementLookup
-    TYA
-    NegateA
-    EWriteAToMember entityDY
-    JSR GetHigherNegativeByte
-    EWriteAToMember entityDY+1
-    TXA
-    EWriteAToMember entityDX
-    EWriteMember entityDX+1, #$00
-    JMP .HalfRightDone
-.OctantRUU:
-    LDA boomerangMinAbsTargetY
-    LDX boomerangSpeed
-    JSR BoomerangMovementLookup
-    TYA
-    EWriteAToMember entityDX
-    EWriteMember entityDX+1, #$00
-    TXA
-    NegateA
-    EWriteAToMember entityDY
-    JSR GetHigherNegativeByte
-    EWriteAToMember entityDY+1
-    JMP .HalfRightDone
-
-.QuadrantRD:
-    LDA boomerangMinAbsTargetX
-    CMP boomerangMinAbsTargetY
-    BCC .OctantRDD
-;OctantRRD:
-    LDA boomerangMinAbsTargetX
-    LDX boomerangSpeed
-    JSR BoomerangMovementLookup
-    TYA
-    EWriteAToMember entityDY
-    EWriteMember entityDY+1, #$00
-    TXA
-    EWriteAToMember entityDX
-    EWriteMember entityDX+1, #$00
-    JMP .HalfRightDone
-.OctantRDD:
-    LDA boomerangMinAbsTargetY
-    LDX boomerangSpeed
-    JSR BoomerangMovementLookup
-    TYA
-    EWriteAToMember entityDX
-    EWriteMember entityDX+1, #$00
-    TXA
-    EWriteAToMember entityDY
-    EWriteMember entityDY+1, #$00
-
-.HalfRightDone:
-    RTS
-
-
-; SUBROUTINE ;
-.SetInitialBoomerangVelocity:
+.SetInitialBoomerangTarget:
     WritePointer boomerangSpeed, #BOOMERANG_MAX_SPEED
     WritePointer boomerangSpeedCounter, #$10
     WritePointer boomerangTargetX, #$00
@@ -361,20 +220,4 @@ UpdateBoomerang:
     STA boomerangTargetY
 
     LoadEntity boomerangEntity
-    RTS
-
-
-
-; SUBROUTINE
-; If accumulator is 0, we keep it that way.
-; Otherwise, we write #$FF to the accumulator.
-; Input:
-;    A: Lower negative byte (or zero).
-; Output:
-;    A: Higher negative byte (or zero).
-GetHigherNegativeByte:
-    CMP #$00
-    BEQ .GetHigherNegativeByteDone
-    LDA #$FF
-.GetHigherNegativeByteDone:
     RTS

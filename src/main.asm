@@ -158,12 +158,16 @@ tempCoordinate .ds 1
 tempMonkeyCoordinate .ds 2
 tempVariable  .ds 1
 
-boomerangSpeed .ds 1
 boomerangSpeedCounter .ds 1
+boomerangSpeed .ds 1
 boomerangTargetX .ds 1
 boomerangTargetY .ds 1
-boomerangMinAbsTargetX .ds 1
-boomerangMinAbsTargetY .ds 1
+
+followSpeed .ds 1
+followTargetX .ds 1
+followTargetY .ds 1
+followMinAbsTargetX .ds 1
+followMinAbsTargetY .ds 1
 
     .org $0700
 

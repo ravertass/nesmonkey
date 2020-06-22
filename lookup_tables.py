@@ -224,14 +224,14 @@ def _jsr_x(x):
 
 
 def _print_asm_header():
-    print(""";;;;;;;; Boomerang movement - lookup table ;;;;;;;;
-;; Generated file with subroutine for calculating the boomerang's movement vector.
+    print(""";;;;;;;; Game logic - Follow lookup table ;;;;;;;;
+;; Generated file with subroutine for calculating the a follow movement vector.
 
 ; SUBROUTINE
-; Calculates movement vector for boomerang based on a minimized, positive difference vector.
+; Calculates movement vector for following based on a minimized, positive difference vector.
 ; Input:
-;     A: x in them minimized, positive difference vector.
-;     X: Boomerang's current speed.
+;     A: x in the minimized, positive difference vector.
+;     X: Entity's speed.
 ; Output:
 ;     X: Positive X speed.
 ;     Y: Positive Y speed.""")
@@ -239,7 +239,7 @@ def _print_asm_header():
 
 def _print_asm_lookup_table():
     _print_asm_header()
-    print(f"BoomerangMovementLookup:")
+    print(f"FollowMovementLookup:")
     for x in XES_PLUS:
         _jsr_x(x)
     _iprint("RTS")

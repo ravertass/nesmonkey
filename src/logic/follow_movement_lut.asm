@@ -1,15 +1,15 @@
-;;;;;;;; Boomerang movement - lookup table ;;;;;;;;
-;; Generated file with subroutine for calculating the boomerang's movement vector.
+;;;;;;;; Game logic - Follow lookup table ;;;;;;;;
+;; Generated file with subroutine for calculating the a follow movement vector.
 
 ; SUBROUTINE
-; Calculates movement vector for boomerang based on a minimized, positive difference vector.
+; Calculates movement vector for following based on a minimized, positive difference vector.
 ; Input:
-;     A: x in them minimized, positive difference vector.
-;     X: Boomerang's current speed.
+;     A: x in the minimized, positive difference vector.
+;     X: Entity's speed.
 ; Output:
 ;     X: Positive X speed.
 ;     Y: Positive Y speed.
-BoomerangMovementLookup:
+FollowMovementLookup:
     CMP #$01
     BNE .XNotEquals1
     JSR .XEquals1
