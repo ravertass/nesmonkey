@@ -3,7 +3,6 @@
 
     .include "logic/setup_boomerang.asm"
     .include "logic/setup_monkey.asm"
-    .include "logic/new_seagull.asm"
 
 SetupGame:
     JSR SetupMonkey

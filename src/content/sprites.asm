@@ -198,3 +198,56 @@ sprBoomerangMoving:
     .db $00, $8F, %00000000, $00
     .db $FE
     .db $FF
+
+
+teethAnimationsTable:
+    .dw dummySprites, dummySprites, dummySprites, dummySprites
+    .dw sprTeethUpMoving, sprTeethDownMoving, sprTeethLeftMoving, sprTeethRightMoving
+
+sprTeethUpMoving:
+    ; Format: $y-offs, $tile-no, %attr, $x-offs
+    ; Sprite
+    .db $00, $3C, %00000000, $00
+    ; End of animation frame
+    .db $FE
+    ; Sprite
+    .db $00, $4C, %00000000, $00
+    ; End of animation
+    .db $FE
+    .db $FF
+
+sprTeethDownMoving:
+    ; Format: $y-offs, $tile-no, %attr, $x-offs
+    ; Sprite
+    .db $00, $1C, %00000000, $00
+    ; End of animation frame
+    .db $FE
+    ; Sprite
+    .db $00, $2C, %00000000, $00
+    ; End of animation
+    .db $FE
+    .db $FF
+
+sprTeethLeftMoving:
+    ; Format: $y-offs, $tile-no, %attr, $x-offs
+    ; Sprite
+    .db $00, $1B, %01000000, $00
+    ; End of animation frame
+    .db $FE
+    ; Sprite
+    .db $00, $2B, %01000000, $00
+    ; End of animation
+    .db $FE
+    .db $FF
+
+sprTeethRightMoving:
+    ; Format: $y-offs, $tile-no, %attr, $x-offs
+    ; Sprite
+    .db $00, $1B, %00000000, $00
+    ; End of animation frame
+    .db $FE
+    ; Sprite
+    .db $00, $2B, %00000000, $00
+    ; End of animation
+    .db $FE
+    .db $FF

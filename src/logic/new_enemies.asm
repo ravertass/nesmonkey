@@ -13,6 +13,18 @@ GenerateEnemies:
     BCS .NoNewSeagull
 
     JSR NewSeagull
-
 .NoNewSeagull:
+
+    LDA gameClock+1
+    CLC
+    ADC #$02
+    STA tempVariable
+
+    JSR RandomByte
+    CMP tempVariable
+    BCS .NoNewTeeth
+
+    JSR NewTeeth
+.NoNewTeeth:
+
     RTS

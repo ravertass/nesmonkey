@@ -45,6 +45,7 @@ BOOMERANG_MAX_SPEED_COUNTER = $04
 TYPE_MONKEY    .rs 1
 TYPE_SEAGULL   .rs 1
 TYPE_BOOMERANG .rs 1
+TYPE_TEETH     .rs 1
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;; Structs ;;;;;;;;;;

@@ -12,6 +12,8 @@
     .include "logic/minimize_vector.asm"
     .include "logic/collision.asm"
     .include "logic/water_collision.asm"
+    .include "logic/new_seagull.asm"
+    .include "logic/new_teeth.asm"
     .include "logic/new_enemies.asm"
     .include "util/random.asm"
 
