@@ -42,7 +42,11 @@ UpdateEntityMoving:
 
     EReadMemberToA entityType
     CMP #TYPE_MONKEY
-    BNE .NoWaterCollisionY
+    BEQ .DoWaterCollisionY
+    CMP #TYPE_TEETH
+    BEQ .DoWaterCollisionY
+    JMP .NoWaterCollisionY
+.DoWaterCollisionY:
     JSR WaterCollisionY
 .NoWaterCollisionY:
 
@@ -57,7 +61,11 @@ UpdateEntityMoving:
 
     EReadMemberToA entityType
     CMP #TYPE_MONKEY
-    BNE .NoWaterCollisionX
+    BEQ .DoWaterCollisionX
+    CMP #TYPE_TEETH
+    BEQ .DoWaterCollisionX
+    JMP .NoWaterCollisionX
+.DoWaterCollisionX:
     JSR WaterCollisionX
 .NoWaterCollisionX:
 

@@ -17,7 +17,7 @@ GenerateEnemies:
 
     LDA gameClock+1
     CLC
-    ADC #$02
+    ADC #$01
     STA tempVariable
 
     JSR RandomByte
