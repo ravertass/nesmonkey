@@ -83,18 +83,21 @@ UpdateBoomerang:
 
 .BoomerangAbsSpeedDone:
     ECheckFlag #BOOMERANG_FLAG_IS_RETURNING
-    BEQ .BoomerangFollowTarget
+    BNE .BoomerangTargetReturning
 
-.BoomerangTargetReturning:
-    JSR .CalculateMonkeyTarget
-
-.BoomerangFollowTarget:
-    LDA boomerangSpeed
-    STA followSpeed
     LDA boomerangTargetX
     STA followTargetX
     LDA boomerangTargetY
     STA followTargetY
+
+    JMP .BoomerangFollowTarget
+
+.BoomerangTargetReturning:
+    JSR SetMonkeyTarget
+
+.BoomerangFollowTarget:
+    LDA boomerangSpeed
+    STA followSpeed
 
     JSR FollowTarget
 
@@ -164,60 +167,4 @@ UpdateBoomerang:
     WritePointer boomerangTargetY, #$01
 .NotDown:
 
-    RTS
-
-
-
-; SUBROUTINE
-; Calculates the difference between the boomerang's X and Y values and the monkey's X and Y
-; values (in pixel space), and put them in boomerangTargetX and boomerangTargetY.
-; Output:
-;     boomerangTargetX: Difference between boomerang's X value and monkey's X value.
-;     boomerangTargetY: Difference between boomerang's Y value and monkey's Y value.
-; Clobbers:
-;     A, Y
-.CalculateMonkeyTarget:
-    LoadEntity boomerangEntity
-    LDY #entityX
-    JSR CoordinateToPixelSpace
-    STA boomerangTargetX
-
-    LoadEntity monkeyEntity
-    LDY #entityX
-    JSR CoordinateToPixelSpace
-    SEC
-    SBC boomerangTargetX
-    BMI .XNegative
-;XPositive:
-    BCS .StoreX
-    LDA #$80
-    JMP .StoreX
-.XNegative:
-    BCC .StoreX
-    LDA #$7F
-.StoreX:
-    STA boomerangTargetX
-
-    LoadEntity boomerangEntity
-    LDY #entityY
-    JSR CoordinateToPixelSpace
-    STA boomerangTargetY
-
-    LoadEntity monkeyEntity
-    LDY #entityY
-    JSR CoordinateToPixelSpace
-    SEC
-    SBC boomerangTargetY
-    BMI .YNegative
-;YPositive:
-    BCS .StoreY
-    LDA #$80
-    JMP .StoreY
-.YNegative:
-    BCC .StoreY
-    LDA #$7F
-.StoreY:
-    STA boomerangTargetY
-
-    LoadEntity boomerangEntity
     RTS

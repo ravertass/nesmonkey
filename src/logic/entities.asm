@@ -22,6 +22,10 @@ UpdateEntities:
     CMP #TYPE_SEAGULL
     BEQ .JsrUpdateSeagull
 
+    EReadMemberToA entityType
+    CMP #TYPE_TEETH
+    BEQ .JsrUpdateTeeth
+
     ; If this entity's type has no logic implemented, simply do the general update.
     JMP .GeneralEntityUpdate
 
@@ -39,6 +43,11 @@ UpdateEntities:
 
 .JsrUpdateSeagull:
     JSR UpdateSeagull
+    JSR UpdateEntityMoving
+    JMP .GeneralEntityUpdate
+
+.JsrUpdateTeeth:
+    JSR UpdateTeeth
     JSR UpdateEntityMoving
     JMP .GeneralEntityUpdate
 

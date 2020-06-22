@@ -9,6 +9,7 @@
     .include "logic/boomerang.asm"
     .include "logic/follow_movement_lut.asm"
     .include "logic/seagull.asm"
+    .include "logic/teeth.asm"
     .include "logic/minimize_vector.asm"
     .include "logic/collision.asm"
     .include "logic/water_collision.asm"

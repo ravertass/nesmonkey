@@ -171,3 +171,60 @@ FollowTarget:
     LDA #$FF
 .GetHigherNegativeByteDone:
     RTS
+
+
+; SUBROUTINE
+; Calculates the difference between the current entity's X and Y coordinates and
+; the monkey's X and Y coordinates (in pixel space), and put them in
+; followTargetX and followTargetY.
+; Output:
+;     followTargetX: Difference between current entity's X coordinate and monkey's X coordinate.
+;     followTargetY: Difference between current entity's Y coordinate and monkey's Y coordinate.
+; Clobbers:
+;     A, Y
+SetMonkeyTarget:
+    LoadOtherEntity monkeyEntity
+
+    LDY #entityX
+    JSR CoordinateToPixelSpace
+    STA followTargetX
+
+    SwapEntities
+    LDY #entityX
+    JSR CoordinateToPixelSpace
+    SEC
+    SBC followTargetX
+    BMI .XNegative
+;XPositive:
+    BCS .StoreX
+    LDA #$80
+    JMP .StoreX
+.XNegative:
+    BCC .StoreX
+    LDA #$7F
+.StoreX:
+    STA followTargetX
+
+    SwapEntities
+    LDY #entityY
+    JSR CoordinateToPixelSpace
+    STA followTargetY
+
+    SwapEntities
+    LDY #entityY
+    JSR CoordinateToPixelSpace
+    SEC
+    SBC followTargetY
+    BMI .YNegative
+;YPositive:
+    BCS .StoreY
+    LDA #$80
+    JMP .StoreY
+.YNegative:
+    BCC .StoreY
+    LDA #$7F
+.StoreY:
+    STA followTargetY
+
+    SwapEntities
+    RTS
