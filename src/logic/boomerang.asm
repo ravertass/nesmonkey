@@ -4,10 +4,17 @@
 ;; Move the boomerang if it is active
 UpdateBoomerang:
     ECheckFlag #FLAG_IS_MOVING
-    BEQ .BoomerangNotMoving
+    BEQ .NotMoving
+
     JSR .BoomerangMoving
     RTS
 
+.NotMoving:
+    JSR .BoomerangNotMoving
+    RTS
+
+
+; SUBROUTINE ;
 .BoomerangNotMoving:
     ; Boomerang is idle.
     ; So, let's check if it is thrown.
@@ -38,6 +45,8 @@ UpdateBoomerang:
 
     RTS
 
+
+; SUBROUTINE ;
 .BoomerangMoving:
     ; First, we calculate the boomerang speed. It should initially be decremented when moving
     ; away from the monkey, then incremented when returning towards the monkey.
@@ -107,6 +116,8 @@ UpdateBoomerang:
 .Done:
     RTS
 
+
+; SUBROUTINE ;
 .HalfLeft:
     IsPositive boomerangTargetY
     BEQ .QuadrantLD
@@ -178,6 +189,8 @@ UpdateBoomerang:
 .HalfLeftDone:
     RTS
 
+
+; SUBROUTINE ;
 .HalfRight:
     IsPositive boomerangTargetY
     BEQ .QuadrantRD
@@ -241,6 +254,8 @@ UpdateBoomerang:
 .HalfRightDone:
     RTS
 
+
+; SUBROUTINE ;
 .SetInitialBoomerangVelocity:
     WritePointer boomerangSpeed, #BOOMERANG_MAX_SPEED
     WritePointer boomerangSpeedCounter, #$10
