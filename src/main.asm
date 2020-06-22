@@ -121,8 +121,7 @@ currentMetaSpriteOffset  .ds 1
 currentAnimationsTable   .ds 2
 
 ; Pointer used during graphics setup.
-bgPointerLow  .ds 1
-bgPointerHigh .ds 1
+bgPointer  .ds 2
 
 tempTilePointer .ds 2
 
