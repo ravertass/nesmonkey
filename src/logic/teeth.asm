@@ -3,12 +3,17 @@
 
 ; SUBROUTINE ;
 UpdateTeeth:
+    ; Try to save some cycles by not setting the target each frame.
+    LDA gameClock
+    AND currentEntity
+    BEQ .DoNotSetTarget
     JSR SetMonkeyTarget
     LDA #$01
     STA followSpeed
     JSR FollowTarget
+.DoNotSetTarget:
 
-    JMP .SetDirection
+    JSR .SetDirection
 
     LoadOtherEntity boomerangEntity
     SwapEntities
