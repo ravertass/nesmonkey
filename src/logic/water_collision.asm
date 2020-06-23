@@ -1,6 +1,10 @@
 ;;;;;;;; Game logic -- Water collisions ;;;;;;;;
 ;; Logic making an entity stay on land goes here.
 
+; TODO: The subroutines in this file have become extremely costly.
+;       WaterCollisionY and WaterCollisionX each takes ~1500 cycles,
+;       which is far from reasonable...
+
 ;  ____ ____
 ; |    | ^ ^|
 ; |    |    |
