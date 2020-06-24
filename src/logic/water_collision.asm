@@ -40,17 +40,35 @@
 ;     ...
 WaterCollisionY:
     EReadMemberToA #entityDY
-    BEQ .Done
+    BNE .CheckCollision
+    RTS
+
+.CheckCollision:
+    LDY #entityX
+    JSR CoordinateToPixelSpace
+    STA tempX
+
+    LDY #entityY
+    JSR CoordinateToPixelSpace
+    STA tempY
+
+    EReadMemberToA #entityDY
     BMI .NegativeY
 
 ;PositiveY:
-    JSR WaterCollision
+    LDA tempY ; already pointing to y + height - 1
+    EAddMemberToA #entityHeight
+    SEC
+    SBC #$01
+    STA tempY
+
+    JSR .WaterCollisionYDim
     BNE .Done
 
     ; Push the entity up
-    LDY #entityY
-    JSR CoordinateToPixelSpace
-    EAddMemberToA #entityHeight
+    LDA tempY
+    CLC
+    ADC #$01
     AND #%11111000
     ESubtractMemberToA #entityHeight
     LDY #entityY
@@ -59,12 +77,11 @@ WaterCollisionY:
     JMP .Done
 
 .NegativeY:
-    JSR WaterCollision
+    JSR .WaterCollisionYDim
     BNE .Done
 
     ; Push the entity down
-    LDY #entityY
-    JSR CoordinateToPixelSpace
+    LDA tempY
     CLC
     ADC #$08
     AND #%11111000
@@ -73,6 +90,51 @@ WaterCollisionY:
 
 .Done:
     RTS
+
+; SUBROUTINE ;
+; Checks if the current entity collides with a water tile on one side in the Y dimension.
+; Input:
+;     tempX: The entity's X coordinate.
+;     tempY: The entity's Y coordinate on the side which should be checked.
+.WaterCollisionYDim:
+    LDA #$00
+    STA tempOffset
+
+.WaterCollisionYLoop:
+    LDA tempX
+    CLC
+    ADC tempOffset
+    TAX
+    LDY tempY
+
+    JSR IsWater
+    BEQ .WaterCollisionYDone
+
+    LDA tempOffset
+    CLC
+    ADC #$08
+    ECompareMember #entityWidth
+    BPL .WaterCollisionYLast
+
+    STA tempOffset
+    JMP .WaterCollisionYLoop
+
+.WaterCollisionYLast:
+    LDA tempX
+    EAddMemberToA #entityWidth
+    SEC
+    SBC #$01
+    TAX
+    LDY tempY
+    JSR IsWater
+    BEQ .WaterCollisionYDone
+
+    ; No water found
+    LDA #$01
+
+.WaterCollisionYDone:
+    RTS
+
 
 ; SUBROUTINE ;
 ; Checks if the current entity collides with a water tile.
@@ -85,17 +147,35 @@ WaterCollisionY:
 ;     ...
 WaterCollisionX:
     EReadMemberToA #entityDX
-    BEQ .Done
+    BNE .CheckCollision
+    RTS
+
+.CheckCollision:
+    LDY #entityX
+    JSR CoordinateToPixelSpace
+    STA tempX
+
+    LDY #entityY
+    JSR CoordinateToPixelSpace
+    STA tempY
+
+    EReadMemberToA #entityDX
     BMI .NegativeX
 
 ;PositiveX:
-    JSR WaterCollision
+    LDA tempX
+    EAddMemberToA #entityWidth
+    SEC
+    SBC #$01
+    STA tempX
+
+    JSR .WaterCollisionXDim
     BNE .Done
 
     ; Push the entity left
-    LDY #entityX
-    JSR CoordinateToPixelSpace
-    EAddMemberToA #entityWidth
+    LDA tempX ; already pointing to x + width - 1
+    CLC
+    ADC #$01
     AND #%11111000
     ESubtractMemberToA #entityWidth
     LDY #entityX
@@ -104,12 +184,11 @@ WaterCollisionX:
     JMP .Done
 
 .NegativeX:
-    JSR WaterCollision
+    JSR .WaterCollisionXDim
     BNE .Done
 
     ; Push the entity right
-    LDY #entityX
-    JSR CoordinateToPixelSpace
+    LDA tempX
     CLC
     ADC #$08
     AND #%11111000
@@ -119,117 +198,50 @@ WaterCollisionX:
 .Done:
     RTS
 
-
 ; SUBROUTINE ;
-; Checks if the current entity collides with a water tile.
+; Checks if the current entity collides with a water tile on one side in the X dimension.
 ; Input:
-;     currentEntity
-; Output:
-;     A: 0 if collides with water,
-;        >0 otherwise
-; Clobbers:
-;     ...
-WaterCollision:
-;TopLeftCorner:
-    LDY #entityX
-    JSR CoordinateToPixelSpace
-    TAX
+;     tempX: The entity's X coordinate on the side which should be checked.
+;     tempY: The entity's Y coordinate.
+.WaterCollisionXDim:
+    LDA #$00
+    STA tempOffset
 
-    LDY #entityY
-    JSR CoordinateToPixelSpace
+.WaterCollisionXLoop:
+    LDX tempX
+    LDA tempY
+    CLC
+    ADC tempOffset
     TAY
 
-    JSR .IsWater
-    BNE .TopRightCorner
-    RTS
+    JSR IsWater
+    BEQ .WaterCollisionXDone
 
-.TopRightCorner:
-    LDY #entityX
-    JSR CoordinateToPixelSpace
-    EAddMemberToA #entityWidth
-    SEC
-    SBC #$01
-    TAX
-
-    LDY #entityY
-    JSR CoordinateToPixelSpace
-    TAY
-
-    JSR .IsWater
-    BNE .EightDownLeft
-    RTS
-
-    ; TODO: This is a hack to make this work for the monkey.
-    ;       Really, this should be rewritten as a two-depth loop,
-    ;       checking every eighth pixel in both X and Y directions,
-    ;       and finally checking the positions at x+width-1 and
-    ;       y+height-1.
-.EightDownLeft: ; TODO: Remove when the loop has been implemented...
-    LDY #entityX
-    JSR CoordinateToPixelSpace
-    TAX
-
-    LDY #entityY
-    JSR CoordinateToPixelSpace
+    LDA tempOffset
     CLC
     ADC #$08
-    TAY
+    ECompareMember #entityHeight
+    BPL .WaterCollisionXLast
 
-    JSR .IsWater
-    BNE .EightDownRight
-    RTS
+    STA tempOffset
+    JMP .WaterCollisionXLoop
 
-.EightDownRight: ; TODO: Remove when the loop has been implemented...
-    LDY #entityX
-    JSR CoordinateToPixelSpace
-    EAddMemberToA #entityWidth
-    SEC
-    SBC #$01
-    TAX
-
-    LDY #entityY
-    JSR CoordinateToPixelSpace
-    CLC
-    ADC #$08
-    TAY
-
-    JSR .IsWater
-    BNE .BottomLeftCorner
-    RTS
-
-.BottomLeftCorner:
-    LDY #entityX
-    JSR CoordinateToPixelSpace
-    TAX
-
-    LDY #entityY
-    JSR CoordinateToPixelSpace
+.WaterCollisionXLast:
+    LDX tempX
+    LDA tempY
     EAddMemberToA #entityHeight
     SEC
     SBC #$01
     TAY
+    JSR IsWater
+    BEQ .WaterCollisionXDone
 
-    JSR .IsWater
-    BNE .BottomRightCorner
+    ; No water found
+    LDA #$01
+
+.WaterCollisionXDone:
     RTS
 
-.BottomRightCorner:
-    LDY #entityX
-    JSR CoordinateToPixelSpace
-    EAddMemberToA #entityWidth
-    SEC
-    SBC #$01
-    TAX
-
-    LDY #entityY
-    JSR CoordinateToPixelSpace
-    EAddMemberToA #entityHeight
-    SEC
-    SBC #$01
-    TAY
-
-    JSR .IsWater
-    RTS
 
 ; SUBROUTINE
 ; Checks if tile at X, Y (in pixel space) is a water tile.
@@ -240,7 +252,7 @@ WaterCollision:
 ;        >0 otherwise
 ; Clobbers:
 ;     X, Y, tempTilePointer
-.IsWater:
+IsWater:
     LDA #LOW(background)
     STA tempTilePointer
     LDA #HIGH(background)
